@@ -1,0 +1,21 @@
+---
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import SkipLink from "@/components/SkipLink.astro";
+import type { Locale } from "@/i18n/locales";
+
+interface Props {
+  locale: Locale;
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+---
+
+<SkipLink locale={locale} />
+<Header locale={locale} path={path} />
+<!-- tabindex="-1": o link de pular move o foco para cá em todos os navegadores. -->
+<main id="conteudo" tabindex="-1" class="flex-1 outline-none">
+  <slot />
+</main>
+<Footer locale={locale} />

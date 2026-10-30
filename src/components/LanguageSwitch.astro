@@ -1,0 +1,48 @@
+---
+import { LOCALES, type Locale } from "@/i18n/locales";
+import { t } from "@/lib/i18n";
+
+interface Props {
+  locale: Locale;
+  // Destino de cada idioma, calculado pelo Header com `alternatePath`.
+  hrefs: Record<Locale, string>;
+}
+
+const { locale, hrefs } = Astro.props;
+const dict = t(locale);
+---
+
+<div
+  role="group"
+  aria-label={dict.language.switchLabel}
+  class="inline-flex items-center font-mono text-sm"
+>
+  {LOCALES.map((code, index) => (
+    <>
+      {index > 0 && (
+        <span aria-hidden="true" class="text-faint">
+          /
+        </span>
+      )}
+      {code === locale ? (
+        <span
+          aria-current="true"
+          lang={code}
+          class="inline-flex min-h-10 min-w-8 items-center justify-center text-fg"
+        >
+          {code.toUpperCase()}
+        </span>
+      ) : (
+        <a
+          href={hrefs[code]}
+          hreflang={code === "pt" ? "pt-BR" : code}
+          lang={code}
+          aria-label={dict.language[code]}
+          class="inline-flex min-h-10 min-w-8 items-center justify-center rounded-(--radius-control) text-muted transition-colors duration-(--duration-fast) hover:text-fg"
+        >
+          {code.toUpperCase()}
+        </a>
+      )}
+    </>
+  ))}
+</div>

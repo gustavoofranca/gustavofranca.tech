@@ -1,4 +1,6 @@
 ---
+import Seo from "@/components/Seo.astro";
+import Shell from "@/components/Shell.astro";
 import ThemeScript from "@/components/ThemeScript.astro";
 import type { Locale } from "@/i18n/locales";
 import "@/styles/global.css";
@@ -10,22 +12,30 @@ interface Props {
   path: string;
   ogImage?: string;
   jsonLd?: object[];
+  noindex?: boolean;
+  // A 404 monta o próprio cabeçalho e rodapé nos dois idiomas.
+  shell?: boolean;
 }
 
-const { locale, title, description } = Astro.props;
+const { locale, shell = true, ...seo } = Astro.props;
 const htmlLang = locale === "pt" ? "pt-BR" : "en";
-// Esqueleto: canonical, hreflang, Open Graph e JSON-LD (path, ogImage, jsonLd) entram na Task 6.
 ---
 
+<!doctype html>
 <html lang={htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <Seo locale={locale} {...seo} />
     <ThemeScript />
   </head>
-  <body class="bg-bg text-fg font-sans antialiased">
-    <slot />
+  <body class="flex min-h-dvh flex-col bg-bg font-sans text-fg antialiased">
+    {shell ? (
+      <Shell locale={locale} path={seo.path}>
+        <slot />
+      </Shell>
+    ) : (
+      <slot />
+    )}
   </body>
 </html>

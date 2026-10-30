@@ -4,6 +4,9 @@
 const pt = {
   meta: {
     siteName: "Gustavo França",
+    jobTitle: "Engenheiro de Software",
+    homeDescription:
+      "Portfólio de Gustavo França, engenheiro de software: projetos, estudos de caso e contato.",
   },
   a11y: {
     skipToContent: "Pular para o conteúdo",
@@ -89,7 +92,7 @@ const pt = {
   },
   notFound: {
     title: "404",
-    command: "comando não encontrado",
+    command: "command not found",
     description: "Essa página não existe ou mudou de lugar.",
     backHome: "Voltar ao início",
   },

@@ -3,6 +3,9 @@ import type { Dictionary } from "./pt";
 const en = {
   meta: {
     siteName: "Gustavo França",
+    jobTitle: "Software Engineer",
+    homeDescription:
+      "Portfolio of Gustavo França, software engineer: projects, case studies and contact.",
   },
   a11y: {
     skipToContent: "Skip to content",

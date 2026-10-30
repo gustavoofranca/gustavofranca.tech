@@ -1,0 +1,105 @@
+---
+import LanguageSwitch from "@/components/LanguageSwitch.astro";
+import { ThemeToggle } from "@/components/islands/ThemeToggle";
+import type { Locale } from "@/i18n/locales";
+import { getProjects, projectSlug } from "@/lib/content";
+import { t } from "@/lib/i18n";
+import { alternatePath, matchRoute, routePath } from "@/lib/routes";
+
+interface Props {
+  locale: Locale;
+  path: string;
+}
+
+const { locale, path } = Astro.props;
+const dict = t(locale);
+const other: Locale = locale === "pt" ? "en" : "pt";
+
+// Só vale trocar para o projeto se ele existe no outro idioma. Ler os getters aqui
+// também faz todo build validar o conteúdo (pares PT/EN, destaques, stack).
+const otherSlugs = new Set(
+  (await getProjects(other)).map((project) => projectSlug(project.id)),
+);
+const hrefs = {
+  [locale]: path,
+  [other]: alternatePath(path, other, otherSlugs),
+} as Record<Locale, string>;
+
+const current = matchRoute(path)?.key;
+const links = [
+  { label: dict.nav.projects, key: "projects" },
+  { label: dict.nav.about, key: "about" },
+  { label: dict.nav.contact, key: "contact" },
+] as const;
+
+// Sem JS (antes do ThemeScript definir data-theme) estes controles não fariam nada.
+const needsJs = "[html:not([data-theme])_&]:hidden";
+---
+
+<header class="border-b border-line">
+  <div class="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-2 sm:px-6">
+    <a
+      href={routePath("home", locale)}
+      aria-label={dict.a11y.homeLink}
+      class="inline-flex min-h-10 items-center rounded-(--radius-control) font-mono text-base text-fg"
+    >
+      <span class="text-accent" aria-hidden="true">
+        ~/
+      </span>
+      gustavo
+    </a>
+
+    <nav
+      aria-label={dict.a11y.mainNav}
+      class="order-last w-full sm:order-none sm:w-auto"
+    >
+      <ul class="flex items-center gap-1 text-sm">
+        {links.map((link) => (
+          <li>
+            <a
+              href={routePath(link.key, locale)}
+              aria-current={
+                current === link.key ||
+                (current === "project" && link.key === "projects")
+                  ? "page"
+                  : undefined
+              }
+              class="inline-flex min-h-10 items-center rounded-(--radius-control) px-3 text-muted transition-colors duration-(--duration-fast) hover:text-fg aria-[current=page]:text-fg"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <LanguageSwitch locale={locale} hrefs={hrefs} />
+      <button
+        type="button"
+        data-open-palette
+        aria-label={dict.palette.open}
+        aria-keyshortcuts="Meta+K Control+K"
+        class:list={[
+          "inline-flex h-10 items-center rounded-(--radius-control) border border-line px-3 font-mono text-sm text-muted transition-colors duration-(--duration-fast) hover:text-fg",
+          needsJs,
+        ]}
+      >
+        <kbd class="font-mono">⌘K</kbd>
+      </button>
+      <span class={needsJs}>
+        <!-- client:load: o botão precisa responder já no primeiro toque. -->
+        <ThemeToggle client:load label={dict.theme.toggle} />
+      </span>
+    </div>
+  </div>
+</header>
+
+<script>
+  // A paleta ⌘K (Task 10) escuta este evento; o botão só pede para abrir.
+  document.querySelectorAll("[data-open-palette]").forEach((button) => {
+    button.addEventListener("click", () => {
+      window.dispatchEvent(new CustomEvent("gf:open-palette"));
+    });
+  });
+</script>

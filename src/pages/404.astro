@@ -1,0 +1,82 @@
+---
+import Shell from "@/components/Shell.astro";
+import { LOCALES } from "@/i18n/locales";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { t } from "@/lib/i18n";
+import { routePath } from "@/lib/routes";
+
+// A página é estática: o servidor não sabe qual URL errada o visitante pediu.
+// Os dois idiomas vão no HTML (inglês oculto) e o script do fim do <body> deixa só o certo.
+const dict = t("pt");
+const linkClass =
+  "inline-flex min-h-10 items-center rounded-(--radius-control) text-accent underline underline-offset-4 hover:text-fg";
+---
+
+<BaseLayout
+  locale="pt"
+  title={dict.notFound.title}
+  description={dict.notFound.description}
+  path="/404"
+  noindex
+  shell={false}
+>
+  {LOCALES.map((locale) => {
+    const text = t(locale);
+    return (
+      <div
+        data-locale={locale}
+        lang={locale === "pt" ? "pt-BR" : "en"}
+        hidden={locale !== "pt"}
+        class="flex flex-1 flex-col"
+      >
+        <Shell locale={locale} path="/404">
+          <section class="mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 sm:py-24">
+            <h1 class="text-4xl font-semibold">{text.notFound.title}</h1>
+            <div class="mt-6 rounded-(--radius-card) border border-line bg-surface p-4 font-mono text-sm break-words text-muted">
+              <span class="text-accent" aria-hidden="true">
+                ${" "}
+              </span>
+              {`${text.notFound.command}: `}
+              <span data-path />
+            </div>
+            <p class="mt-6 max-w-prose text-lg text-muted">
+              {text.notFound.description}
+            </p>
+            <ul class="mt-6 flex flex-wrap gap-x-6 gap-y-1">
+              <li>
+                <a href={routePath("home", locale)} class={linkClass}>
+                  {text.notFound.backHome}
+                </a>
+              </li>
+              <li>
+                <a href={routePath("projects", locale)} class={linkClass}>
+                  {text.nav.projects}
+                </a>
+              </li>
+            </ul>
+          </section>
+        </Shell>
+      </div>
+    );
+  })}
+
+  <!-- Sem imports de propósito: precisa rodar antes da pintura e ter conteúdo fixo (hash da CSP).
+       A regra do idioma repete getLocaleFromPath (src/lib/routes.ts); tests/e2e/shell.spec.ts cobre os dois. -->
+  <script is:inline>
+    (function () {
+      const path = location.pathname;
+      const locale = /^\/en(\/|$)/.test(path) ? "en" : "pt";
+      document.documentElement.lang = locale === "en" ? "en" : "pt-BR";
+      document.querySelectorAll("[data-locale]").forEach(function (block) {
+        if (block.getAttribute("data-locale") === locale) {
+          block.hidden = false;
+        } else {
+          block.remove();
+        }
+      });
+      document.querySelectorAll("[data-path]").forEach(function (el) {
+        el.textContent = path;
+      });
+    })();
+  </script>
+</BaseLayout>

@@ -1,0 +1,39 @@
+---
+import type { Locale } from "@/i18n/locales";
+import { buildSeo } from "@/lib/seo";
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  path: string;
+  ogImage?: string | undefined;
+  jsonLd?: object[] | undefined;
+  noindex?: boolean | undefined;
+}
+
+const { jsonLd = [], noindex = false, ...input } = Astro.props;
+const seo = buildSeo(input);
+// "<" escapado para o JSON nunca fechar o <script> por engano.
+const serialize = (data: object) =>
+  JSON.stringify(data).replace(/</g, "\\u003c");
+---
+
+<title>{seo.title}</title>
+<meta name="description" content={input.description} />
+{noindex && <meta name="robots" content="noindex" />}
+{!noindex && <link rel="canonical" href={seo.canonical} />}
+{!noindex &&
+  seo.alternates.map((alt) => (
+    <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+  ))}
+{Object.entries(seo.og).map(([key, content]) =>
+  key.startsWith("og:") ? (
+    <meta property={key} content={content} />
+  ) : (
+    <meta name={key} content={content} />
+  ),
+)}
+{jsonLd.map((data) => (
+  <script type="application/ld+json" set:html={serialize(data)} />
+))}
