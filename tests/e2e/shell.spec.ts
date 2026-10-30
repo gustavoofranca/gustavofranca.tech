@@ -90,6 +90,14 @@ test.describe("404", () => {
     ).toHaveAttribute("href", "/en/");
     await expect(page.locator("h1")).toHaveCount(1);
   });
+
+  // A 404 não monta a paleta: um botão ⌘K ali não faria nada.
+  for (const path of ["/nao-existe", "/en/nao-existe"]) {
+    test(`${path} não mostra o botão da paleta`, async ({ page }) => {
+      await page.goto(path);
+      await expect(page.locator("[data-open-palette]")).toHaveCount(0);
+    });
+  }
 });
 
 test("robots.txt aponta para o sitemap", async ({ request }) => {

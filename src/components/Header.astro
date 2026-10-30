@@ -9,9 +9,11 @@ import { alternatePath, matchRoute, routePath } from "@/lib/routes";
 interface Props {
   locale: Locale;
   path: string;
+  // Só mostra o botão ⌘K quando a página monta a ilha da paleta.
+  palette: boolean;
 }
 
-const { locale, path } = Astro.props;
+const { locale, path, palette } = Astro.props;
 const dict = t(locale);
 const other: Locale = locale === "pt" ? "en" : "pt";
 
@@ -75,22 +77,24 @@ const needsJs = "[html:not([data-theme])_&]:hidden";
 
     <div class="flex items-center gap-2">
       <LanguageSwitch locale={locale} hrefs={hrefs} />
-      <button
-        type="button"
-        data-open-palette
-        aria-keyshortcuts="Meta+K Control+K"
-        class:list={[
-          "inline-flex h-10 items-center rounded-(--radius-control) border border-line px-3 font-mono text-sm text-muted transition-colors duration-(--duration-fast) hover:text-fg",
-          needsJs,
-        ]}
-      >
-        {/* Nome pelo texto oculto, não por aria-label: o "⌘K" visível é símbolo e
-            não casaria com o nome (WCAG 2.5.3); o atalho vai em aria-keyshortcuts. */}
-        <span class="sr-only">{dict.palette.open}</span>
-        <kbd aria-hidden="true" class="font-mono">
-          ⌘K
-        </kbd>
-      </button>
+      {palette && (
+        <button
+          type="button"
+          data-open-palette
+          aria-keyshortcuts="Meta+K Control+K"
+          class:list={[
+            "inline-flex h-10 items-center rounded-(--radius-control) border border-line px-3 font-mono text-sm text-muted transition-colors duration-(--duration-fast) hover:text-fg",
+            needsJs,
+          ]}
+        >
+          {/* Nome pelo texto oculto, não por aria-label: o "⌘K" visível é símbolo e
+              não casaria com o nome (WCAG 2.5.3); o atalho vai em aria-keyshortcuts. */}
+          <span class="sr-only">{dict.palette.open}</span>
+          <kbd aria-hidden="true" class="font-mono">
+            ⌘K
+          </kbd>
+        </button>
+      )}
       <span class={needsJs}>
         <ThemeToggle label={dict.theme.toggle} />
       </span>

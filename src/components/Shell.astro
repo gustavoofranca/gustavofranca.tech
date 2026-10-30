@@ -7,14 +7,16 @@ import type { Locale } from "@/i18n/locales";
 interface Props {
   locale: Locale;
   path: string;
+  // Falso onde a paleta ⌘K não é montada (a 404): sem ela, o botão não faria nada.
+  palette?: boolean;
 }
 
-const { locale, path } = Astro.props;
+const { locale, path, palette = true } = Astro.props;
 ---
 
 <SkipLink locale={locale} />
-<Header locale={locale} path={path} />
-<!-- tabindex="-1": o link de pular move o foco para cá em todos os navegadores. -->
+<Header locale={locale} path={path} palette={palette} />
+{/* tabindex="-1": o link de pular move o foco para cá em todos os navegadores. */}
 <main id="conteudo" tabindex="-1" class="flex-1 outline-none">
   <slot />
 </main>
