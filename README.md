@@ -114,8 +114,9 @@ docker run --init -p 4321:4321 --env-file .env portfolio
 
 ## Pendências conhecidas
 
+- **Compressão no Caddy de borda (fase 2):** o Caddy de borda precisa de `encode zstd gzip`. O LHCI mede com compressão (o servidor estático dele comprime) e a imagem Docker serve `dist/client` sem comprimir; sem o `encode`, o JS da home chega com ~209 KB em vez de ~65 KB e o orçamento deixa de valer em produção.
 - **Caddy de borda (fase 2):** cabeçalhos que não cabem na `<meta>`: `frame-ancestors 'none'`, `Strict-Transport-Security`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (câmera, microfone e geolocalização desligados). E redirecionar `www` para o domínio sem `www`: `allowedDomains` só confia em `gustavofranca.tech`, então um POST do formulário vindo de `www` recebe 403.
 - **Deploy:** o contêiner precisa rodar com `NODE_ENV=production` (a imagem já define; não sobrescreva no compose) e com o `.env` de produção no VPS.
 - **Checkpoint:** a demo em `checkpoint.gustavofranca.tech` ainda não existe (plano próprio); o projeto aparece como `offline`.
-- **`TODO(gustavo)`:** 37 pendências de conteúdo (empresa atual, papel no Conexão, textos em primeira pessoa, CV, LinkedIn, WhatsApp, foto). O build de produção e a imagem Docker falham até elas serem respondidas.
+- **`TODO(gustavo)`:** pendências de conteúdo (a lista completa sai de `npm run build` com `CONTENT_STRICT=true`; empresa atual, papel no Conexão, textos em primeira pessoa, CV, LinkedIn, WhatsApp, foto). O build de produção e a imagem Docker falham até elas serem respondidas.
 - **LCP no 4G simulado:** a home fica em 1,66 s, `/sobre` e `/contato` em 1,51 s (limite: 1,5 s); `/projetos/lumina` passa (1,21 s) e o resto do orçamento passa em todas. Opções e números no [ADR 0003](docs/adr/0003-orcamento-de-performance.md); a escolha é do Gustavo.

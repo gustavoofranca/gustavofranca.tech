@@ -1,7 +1,7 @@
 # 0003. Orçamento de performance: como medir e o que mudou para cumprir
 
 - **Data:** 2026-10-30
-- **Status:** aceita (com o LCP da home em aberto, ver Consequências)
+- **Status:** aceita (com o LCP de `/`, `/sobre` e `/contato` em aberto, ver Consequências)
 
 ## Contexto
 
@@ -40,8 +40,11 @@ De verdade:
 ## Consequências
 
 - Resultado (mediana de 3 execuções, `chrome-headless-shell`, 2026-10-30): Performance 99–100, Acessibilidade 100, Boas práticas 100, SEO 100, CLS 0 e TBT 0 nas quatro páginas. LCP: `/projetos/lumina` 1,21 s (passa); `/sobre` 1,508 s e `/contato` 1,511 s (no limite, 8–11 ms acima); **a home 1,66 s**. O que sobra é banda: antes da pintura cada página baixa o HTML, o CSS e as duas fontes (~89 KB só de fonte), e a home ainda a capa do Lumina. Só a Inter responde por ~0,3 s da estimativa na home (medido sem ela: LCP 1,4 s; sem a mono: 1,4–1,6 s).
+- **Pendente no Caddy de borda: `encode zstd gzip`.** O LHCI mede `dist/client` com compressão (o servidor estático dele usa `compression()`), mas o contêiner Node serve os arquivos sem comprimir. Se o Caddy não comprimir, o JS da home chega com ~209 KB (e não ~65 KB do `client.js`) e nenhum número deste ADR vale em produção. Listado no README e no ADR 0002.
+- **O gate de LCP pode oscilar no runner Ubuntu.** `/sobre` (1,508 s) e `/contato` (1,511 s) estão 8–11 ms acima do limite, dentro do ruído do Lantern; num runner diferente do `chrome-headless-shell` local eles podem passar ou falhar de uma execução para outra. A home (1,66 s) falha com folga.
+- **Fallback de fonte só onde há Arial.** O `Inter Fallback` usa `local("Arial")`, `local("ArialMT")` e `local("Liberation Sans")`. No Android essas fontes costumam não existir, então lá o fallback com métricas ajustadas não entra e a troca da Inter pode mover o layout (CLS) como antes. Medido só em Windows e no runner Linux; não medido em Android.
 - Enquanto o Gustavo não decidir (subconjunto de fontes, mono do sistema ou outro limite para o LCP simulado), `npm run lhci` falha no LCP de `/`, `/sobre` e `/contato`, e o CI também.
-- O React só chega depois do `load`: quem aperta ⌘K antes disso espera a paleta hidratar (o atalho é ouvido pela própria ilha).
+- O React só chega depois do `load`: o atalho de teclado é ouvido pela própria ilha, então antes disso não faz nada. O clique no botão do cabeçalho não se perde: o `Header` marca o pedido em `data-palette-requested` no `<html>` e a ilha, ao montar, abre a paleta e apaga a marca.
 - Fonte nova ou arquivo de fonte maior pesa direto no LCP: medir com `npm run lhci` antes.
 - Se o Lighthouse mudar como trata fontes no Lantern, ou se o Astro passar a emitir a `<meta>` da CSP no início do `<head>`, reavaliar.
 
