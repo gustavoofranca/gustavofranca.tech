@@ -7,9 +7,23 @@ async function openPage(page: Page, path = "/") {
   await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
 }
 
+// Nome do arquivo do corpo da paleta (chunk à parte, com hash no nome).
+const BODY_CHUNK = /\/_astro\/PaletteBody[^/]*\.js$/;
+
 // O corpo da paleta vem em um chunk à parte: só digita depois que o campo existe.
+// O atributo ssr some um instante antes de o React registrar o atalho (o efeito roda
+// depois da hidratação). Repete o atalho até o diálogo abrir, sem nunca fechá-lo.
+async function pressShortcut(page: Page) {
+  await expect(async () => {
+    if (!(await page.locator("dialog[open]").count())) {
+      await page.keyboard.press("Control+K");
+    }
+    await expect(page.locator("dialog[open]")).toHaveCount(1, { timeout: 500 });
+  }).toPass();
+}
+
 async function openPalette(page: Page) {
-  await page.keyboard.press("Control+K");
+  await pressShortcut(page);
   await expect(page.getByRole("combobox")).toBeFocused();
 }
 
@@ -23,7 +37,7 @@ test.describe("paleta de comandos", () => {
     page,
   }) => {
     await openPage(page);
-    await page.keyboard.press("Control+K");
+    await pressShortcut(page);
     await expect(dialog(page)).toBeVisible();
     await expect(page.getByRole("combobox")).toBeFocused();
     await page.keyboard.type("check");
@@ -50,7 +64,7 @@ test.describe("paleta de comandos", () => {
     page,
   }) => {
     await openPage(page);
-    await page.keyboard.press("Control+K");
+    await pressShortcut(page);
     await expect(page.getByRole("combobox")).toBeFocused();
     for (let i = 0; i < 4; i++) await page.keyboard.press("Tab");
     const inside = await page.evaluate(
@@ -91,7 +105,7 @@ test.describe("paleta de comandos", () => {
 
   test("em inglês, a paleta fala inglês", async ({ page }) => {
     await openPage(page, "/en/");
-    await page.keyboard.press("Control+K");
+    await pressShortcut(page);
     await expect(
       page.getByRole("dialog", { name: "Command palette" }),
     ).toBeVisible();
@@ -121,9 +135,63 @@ test.describe("paleta de comandos", () => {
     await expect(page).toHaveURL(/\/contato$/);
   });
 
+  test("com Ctrl+K a partir de um link, Esc devolve o foco ao link", async ({
+    page,
+  }) => {
+    await openPage(page);
+    const link = page
+      .getByRole("navigation", { name: "Navegação principal" })
+      .getByRole("link", { name: "Sobre" });
+    await link.focus();
+    await openPalette(page);
+    await page.keyboard.press("Escape");
+    await expect(dialog(page)).toBeHidden();
+    await expect(link).toBeFocused();
+  });
+
+  test("falha ao carregar o corpo mostra mensagem e permite tentar de novo", async ({
+    page,
+  }) => {
+    const errors: Error[] = [];
+    page.on("pageerror", (error) => errors.push(error));
+    await page.route(BODY_CHUNK, (route) => route.abort());
+    await openPage(page);
+    await pressShortcut(page);
+    const alert = dialog(page).getByRole("alert");
+    await expect(alert).toHaveText("Não consegui carregar a paleta.");
+    const retry = dialog(page).getByRole("button", { name: "Tentar de novo" });
+    await expect(retry).toBeFocused();
+    expect(errors).toEqual([]);
+
+    await page.unroute(BODY_CHUNK);
+    await retry.click();
+    await expect(page.getByRole("combobox")).toBeFocused();
+    await page.keyboard.type("check");
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/projetos\/checkpoint$/);
+  });
+
+  test("o que se digita antes de o corpo carregar não se perde", async ({
+    page,
+  }) => {
+    await page.route(BODY_CHUNK, async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await route.continue();
+    });
+    await openPage(page);
+    // Sem esperar foco nem o campo do cmdk: digita logo após o atalho.
+    await pressShortcut(page);
+    await page.keyboard.type("check");
+    const field = page.getByRole("combobox");
+    await expect(field).toHaveValue("check");
+    await expect(field).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/projetos\/checkpoint$/);
+  });
+
   test("clicar no fundo fecha a paleta", async ({ page }) => {
     await openPage(page);
-    await page.keyboard.press("Control+K");
+    await pressShortcut(page);
     await expect(dialog(page)).toBeVisible();
     await page.mouse.click(2, 2);
     await expect(dialog(page)).toBeHidden();
@@ -135,7 +203,7 @@ test.describe("paleta de comandos", () => {
     }) => {
       await page.emulateMedia({ colorScheme });
       await openPage(page);
-      await page.keyboard.press("Control+K");
+      await pressShortcut(page);
       await expect(page.getByRole("option").first()).toBeVisible();
       const results = await new AxeBuilder({ page }).analyze();
       expect(

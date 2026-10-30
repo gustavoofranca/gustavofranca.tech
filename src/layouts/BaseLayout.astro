@@ -49,7 +49,12 @@ const paletteProjects = shell
         <CommandPalette
           client:idle
           locale={locale}
-          label={t(locale).palette.label}
+          labels={{
+            label: t(locale).palette.label,
+            placeholder: t(locale).palette.placeholder,
+            loadError: t(locale).palette.loadError,
+            retry: t(locale).palette.retry,
+          }}
           pathname={seo.path}
           projects={paletteProjects}
         />

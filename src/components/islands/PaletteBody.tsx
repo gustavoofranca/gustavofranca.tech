@@ -9,12 +9,15 @@ import {
 } from "@/lib/commands";
 import { t, type Locale } from "@/lib/i18n";
 import { CONTACT_EMAIL } from "@/lib/site";
+import { paletteInputClass } from "@/components/islands/paletteStyles";
 import { toggleTheme } from "@/lib/theme";
 
 type Props = {
   locale: Locale;
   pathname: string;
   projects: { slug: string; title: string }[];
+  // O que foi digitado no campo provisório enquanto este chunk carregava.
+  initialSearch: string;
   onClose: () => void;
 };
 
@@ -33,10 +36,16 @@ const headingClass =
 // Corpo da paleta, carregado só na primeira abertura (cmdk + Radix pesam ~20 KB gzip
 // e não podem entrar no orçamento de JS da home). Desmonta ao fechar, então a busca
 // e a mensagem de status começam zeradas a cada abertura.
-export function PaletteBody({ locale, pathname, projects, onClose }: Props) {
+export function PaletteBody({
+  locale,
+  pathname,
+  projects,
+  initialSearch,
+  onClose,
+}: Props) {
   const dict = t(locale).palette;
   const inputRef = useRef<HTMLInputElement>(null);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(initialSearch);
   const [status, setStatus] = useState("");
 
   const commands = useMemo(
@@ -81,7 +90,7 @@ export function PaletteBody({ locale, pathname, projects, onClose }: Props) {
         value={search}
         onValueChange={setSearch}
         placeholder={dict.placeholder}
-        className="w-full rounded-t-(--radius-card) border-b border-line bg-transparent px-4 py-3 font-mono text-sm text-fg placeholder:text-faint focus-visible:-outline-offset-2"
+        className={paletteInputClass}
       />
       <Cmdk.List className="max-h-[min(24rem,50dvh)] overflow-y-auto p-2">
         <Cmdk.Empty className="px-3 py-6 text-center text-sm text-muted">

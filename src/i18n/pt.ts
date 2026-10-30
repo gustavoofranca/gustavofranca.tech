@@ -153,6 +153,8 @@ const pt = {
     open: "Abrir paleta de comandos",
     placeholder: "Digite um comando ou busque...",
     label: "Paleta de comandos",
+    loadError: "Não consegui carregar a paleta.",
+    retry: "Tentar de novo",
     copied: "E-mail copiado",
     copyFailed: "Não foi possível copiar. O e-mail é",
     empty: "Nada encontrado.",

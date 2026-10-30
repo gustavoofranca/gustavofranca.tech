@@ -145,6 +145,8 @@ const en = {
     open: "Open command palette",
     placeholder: "Type a command or search...",
     label: "Command palette",
+    loadError: "Couldn't load the palette.",
+    retry: "Try again",
     copied: "Email copied",
     copyFailed: "Couldn't copy. The email is",
     empty: "Nothing found.",
