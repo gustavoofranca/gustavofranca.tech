@@ -23,10 +23,58 @@ const REGRAS = [
     motivo: "--no-verify é proibido: os hooks (lint, varredura de segredos) existem para rodar. Corrija a causa.",
   },
   {
-    teste: (c) => /\bgit\s+add\b[^\n]*(\s-f\b|\s--force\b|(^|[\s/\\])\.env(?!\.example)\b)/i.test(c),
+    // Olha só os argumentos do próprio `git add`: texto em outro comando da linha
+    // ou dentro de uma mensagem entre aspas não conta (falsos positivos anteriores).
+    teste: (c) => comandos(c).some(addPerigoso),
     motivo: "Tentativa de versionar .env ou forçar arquivo ignorado. Segredos nunca entram no Git (repositório público).",
   },
 ];
+
+// Quebra a linha em comandos (; & | e quebra de linha fora de aspas) e cada
+// comando em palavras, sem as aspas.
+function comandos(linha) {
+  const lista = [[]];
+  let palavra = null;
+  let aspa = null;
+  const fecha = () => {
+    if (palavra !== null) lista.at(-1).push(palavra);
+    palavra = null;
+  };
+  for (const ch of linha) {
+    if (aspa) {
+      if (ch === aspa) aspa = null;
+      else palavra += ch;
+    } else if (ch === '"' || ch === "'") {
+      aspa = ch;
+      palavra ??= "";
+    } else if (/[;&|\n]/.test(ch)) {
+      fecha();
+      lista.push([]);
+    } else if (/\s/.test(ch)) {
+      fecha();
+    } else {
+      palavra = (palavra ?? "") + ch;
+    }
+  }
+  fecha();
+  return lista;
+}
+
+// git [-C dir | -c chave=valor | --opção]... add <args>
+function addPerigoso(palavras) {
+  if (palavras[0] !== "git") return false;
+  let i = 1;
+  while (i < palavras.length && palavras[i].startsWith("-")) {
+    i += palavras[i] === "-C" || palavras[i] === "-c" ? 2 : 1;
+  }
+  if (palavras[i] !== "add") return false;
+  return palavras.slice(i + 1).some(
+    (arg) =>
+      arg === "--force" ||
+      /^-[A-Za-z]*f[A-Za-z]*$/.test(arg) || // -f e combinações como -uf; -F não é força
+      /(^|[/\\])\.env(?!\.example$)/.test(arg),
+  );
+}
 
 let entrada;
 try {

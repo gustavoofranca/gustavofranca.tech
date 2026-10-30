@@ -12,4 +12,5 @@ Registro da regra dos 3 (ver `.claude/rules/erros-recorrentes.md`). Uma linha po
 
 | Padrão | Virou | Onde |
 |---|---|---|
+| Hook guarda-git com falso positivo na regra do `git add` (3 ocorrências em 2026-10-30: T1, T13 e nota do controller) | Correção do hook, autorizada pelo Gustavo: só os argumentos do próprio `git add`, fora de aspas, com `-f` sensível a maiúscula; teste | `.claude/hooks/guarda-git.mjs`, `tests/unit/guardaGit.test.ts` |
 | Atribuição ao Claude em commit (regra global, sem exceção) | Hook | `.claude/hooks/guarda-git.mjs` |
