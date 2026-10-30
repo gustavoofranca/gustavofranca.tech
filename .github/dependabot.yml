@@ -8,3 +8,8 @@ updates:
     directory: /
     schedule:
       interval: weekly
+  # Imagem base do Dockerfile (fixada por digest).
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly

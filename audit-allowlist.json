@@ -1,0 +1,26 @@
+[
+  {
+    "id": "GHSA-jmr9-qjv8-65gv",
+    "package": "extract-zip",
+    "reason": "Só em @lhci/cli > lighthouse > puppeteer-core > @puppeteer/browsers (dev, CI). Descompacta navegador baixado; o lhci usa o Chrome já instalado. Sem versão corrigida (2.0.1 é a última).",
+    "reviewBy": "2027-01-30"
+  },
+  {
+    "id": "GHSA-7pqw-9j4j-h8q3",
+    "package": "extract-zip",
+    "reason": "Mesmo caminho e mesmo motivo do GHSA-jmr9-qjv8-65gv. Sem versão corrigida.",
+    "reviewBy": "2027-01-30"
+  },
+  {
+    "id": "GHSA-c475-qrg2-pj4r",
+    "package": "basic-ftp",
+    "reason": "Só em @lhci/cli > proxy-agent > pac-proxy-agent > get-uri (dev, CI). Só roda com proxy PAC via ftp://, que o CI não usa. A correção é a 6.x, major fora da faixa que o get-uri aceita (^5).",
+    "reviewBy": "2027-01-30"
+  },
+  {
+    "id": "GHSA-mrhx-c7xc-m3w5",
+    "package": "zod",
+    "reason": "Só no zod 3 de @lhci/cli > lighthouse > puppeteer-core > chromium-bidi (dev, CI), que valida mensagens do próprio navegador local. A correção é o zod 4, que o chromium-bidi não aceita. O zod do site (Astro) já é 4.6.7.",
+    "reviewBy": "2027-01-30"
+  }
+]

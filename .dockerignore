@@ -1,0 +1,10 @@
+# Lista do que entra (o resto fica de fora): só o necessário para o build. Assim um
+# .env, o .git ou relatórios de teste nunca chegam ao contexto da imagem.
+*
+!package.json
+!package-lock.json
+!astro.config.mjs
+!tsconfig.json
+!public/
+!scripts/
+!src/

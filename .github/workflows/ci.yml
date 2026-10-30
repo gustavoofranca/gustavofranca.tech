@@ -26,10 +26,14 @@ jobs:
       - run: npm run lint
       - run: npm run test
       - run: npm run build
+      # Conferências do build que não precisam de navegador: CSP de cada página e JS da home.
+      - run: npm run audit:dist
+      - run: npm run budget
       - run: npx playwright install --with-deps
       - run: npm run test:e2e
+      # Lighthouse sobre dist/client com compressão (lighthouserc.json); orçamento em
+      # .claude/rules/qualidade.md.
       - run: npm run lhci
-      - run: npm run budget
 
   seguranca:
     runs-on: ubuntu-latest
@@ -43,4 +47,6 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
-      - run: npm audit --audit-level=high
+      # Produção sem nenhum alerta alto; ferramentas de CI só com exceção listada e
+      # dentro do prazo (audit-allowlist.json). scripts/audit-deps.mjs
+      - run: npm run audit:deps
