@@ -1,13 +1,16 @@
 @import "tailwindcss";
 @import "./tokens.css";
 
-/* Só o subset latino (o site é PT/EN): evita baixar e publicar cirílico, grego e vietnamita. */
+/* Subconjuntos próprios (scripts/subset-fonts.mjs, npm run fonts:subset): só latim, pesos
+   400–600 e os recursos OpenType de forma. Cortam ~36 KB das fontes que o Lighthouse conta
+   antes da primeira pintura (docs/adr/0003-orcamento-de-performance.md). Peso novo fora de
+   400–600 exige gerar de novo e mudar o font-weight abaixo. */
 @font-face {
   font-family: "Inter Variable";
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  src: url("@fontsource-variable/inter/files/inter-latin-wght-normal.woff2")
+  font-weight: 400 600;
+  src: url("../assets/fonts/inter-latin-wght-400-600.woff2")
     format("woff2-variations");
 }
 
@@ -15,8 +18,8 @@
   font-family: "JetBrains Mono Variable";
   font-style: normal;
   font-display: swap;
-  font-weight: 100 800;
-  src: url("@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2")
+  font-weight: 400 600;
+  src: url("../assets/fonts/jetbrains-mono-latin-wght-400-600.woff2")
     format("woff2-variations");
 }
 

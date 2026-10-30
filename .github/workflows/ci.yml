@@ -26,8 +26,10 @@ jobs:
       - run: npm run lint
       - run: npm run test
       - run: npm run build
-      # Conferências do build que não precisam de navegador: CSP de cada página e JS da home.
+      # Conferências do build que não precisam de navegador: CSP de cada página, glifos das
+      # fontes subconjunto e JS da home.
       - run: npm run audit:dist
+      - run: npm run audit:fonts
       - run: npm run budget
       - run: npx playwright install --with-deps
       - run: npm run test:e2e
