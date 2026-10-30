@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import en from "@/i18n/en";
 import pt from "@/i18n/pt";
-import { formatMonth, t } from "@/lib/i18n";
+import { formatList, formatMonth, t } from "@/lib/i18n";
 
 describe("t", () => {
   it("devolve o dicionário do idioma", () => {
@@ -36,5 +36,21 @@ describe("formatMonth", () => {
   it("rejeita formato inválido", () => {
     expect(() => formatMonth("2023-13", "pt")).toThrow();
     expect(() => formatMonth("fev 2023", "pt")).toThrow();
+  });
+});
+
+describe("formatList", () => {
+  it("junta itens com a conjunção do idioma", () => {
+    expect(formatList(["Lumina", "Checkpoint", "Rental App"], "pt")).toBe(
+      "Lumina, Checkpoint e Rental App",
+    );
+    expect(formatList(["Lumina", "Checkpoint", "Rental App"], "en")).toBe(
+      "Lumina, Checkpoint, and Rental App",
+    );
+  });
+
+  it("um item sai sozinho e lista vazia sai vazia", () => {
+    expect(formatList(["Lumina"], "pt")).toBe("Lumina");
+    expect(formatList([], "en")).toBe("");
   });
 });

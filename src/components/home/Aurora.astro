@@ -1,0 +1,75 @@
+---
+// Fundo decorativo do hero: grade que esmaece a partir do topo e dois brilhos
+// desfocados que se movem devagar (só transform). Sem movimento reduzido, parados.
+---
+
+<div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
+  <div class="aurora-grid absolute inset-0"></div>
+  <div class="aurora-blob aurora-blob-1"></div>
+  <div class="aurora-blob aurora-blob-2"></div>
+</div>
+
+<style>
+  .aurora-grid {
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 36px 36px;
+    /* A máscara só usa o alfa: qualquer cor opaca serve, então vai o token de texto. */
+    -webkit-mask-image: radial-gradient(
+      ellipse at 50% 0%,
+      var(--fg) 30%,
+      transparent 75%
+    );
+    mask-image: radial-gradient(
+      ellipse at 50% 0%,
+      var(--fg) 30%,
+      transparent 75%
+    );
+  }
+
+  .aurora-blob {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(72px);
+  }
+
+  .aurora-blob-1 {
+    top: -140px;
+    left: 6%;
+    width: 420px;
+    height: 260px;
+    background: var(--aurora-1);
+  }
+
+  .aurora-blob-2 {
+    top: -130px;
+    right: 4%;
+    width: 360px;
+    height: 240px;
+    background: var(--aurora-2);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .aurora-blob-1 {
+      animation: aurora-drift-1 var(--duration-aurora) ease-in-out infinite;
+    }
+
+    .aurora-blob-2 {
+      animation: aurora-drift-2 calc(var(--duration-aurora) * 1.15) ease-in-out
+        infinite;
+    }
+  }
+
+  @keyframes aurora-drift-1 {
+    50% {
+      transform: translate(60px, 30px) scale(1.15);
+    }
+  }
+
+  @keyframes aurora-drift-2 {
+    50% {
+      transform: translate(-50px, 40px) scale(0.9);
+    }
+  }
+</style>

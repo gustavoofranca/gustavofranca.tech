@@ -1,0 +1,75 @@
+---
+import { Picture } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { getStack, projectSlug } from "@/lib/content";
+import { t, type Locale } from "@/lib/i18n";
+import { routePath } from "@/lib/routes";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  locale: Locale;
+  // Capa acima da dobra (destaques da home): carrega já e com prioridade, porque
+  // no desktop ela vira o LCP. O padrão é carregar ao rolar.
+  priority?: boolean;
+}
+
+const { project, locale, priority = false } = Astro.props;
+const { data } = project;
+const dict = t(locale);
+
+// Poucas tags no cartão; a stack completa fica no estudo de caso.
+const MAX_TAGS = 4;
+const stack = await getStack();
+const names = new Map(
+  stack.areas.flatMap((area) => area.items.map((i) => [i.id, i.name] as const)),
+);
+const tags = data.stack.slice(0, MAX_TAGS).map((id) => names.get(id) ?? id);
+const hidden = data.stack.length - tags.length;
+const href = routePath("project", locale, projectSlug(project.id));
+---
+
+<article
+  data-testid="project-card"
+  class="relative flex h-full flex-col overflow-hidden rounded-(--radius-card) border border-line bg-surface transition-colors duration-(--duration-fast) hover:border-accent has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-accent"
+>
+  <Picture
+    src={data.cover}
+    alt={data.coverAlt}
+    formats={["avif", "webp"]}
+    widths={[400, 800]}
+    sizes="(min-width: 768px) 20rem, 100vw"
+    loading={priority ? "eager" : "lazy"}
+    fetchpriority={priority ? "high" : "auto"}
+    class="aspect-16/10 w-full border-b border-line object-cover object-top"
+  />
+  <div class="flex flex-1 flex-col gap-2 p-4">
+    <div class="flex items-baseline justify-between gap-3">
+      <h3 class="text-base font-semibold">
+        <!-- O ::after estica o link sobre o cartão inteiro; o foco aparece no cartão. -->
+        <a
+          href={href}
+          class="after:absolute after:inset-0 focus-visible:outline-none"
+        >
+          {data.title}
+        </a>
+      </h3>
+      {data.status === "live" && (
+        <span class="inline-flex shrink-0 items-center gap-1.5 font-mono text-sm text-live">
+          <span aria-hidden="true" class="size-1.5 rounded-full bg-live" />
+          {dict.projects.live}
+        </span>
+      )}
+    </div>
+    <p class="text-sm text-muted">{data.summary}</p>
+    <ul translate="no" class="mt-auto flex flex-wrap gap-1.5 pt-2">
+      {tags.map((tag) => (
+        <li class="rounded-full border border-line px-2 font-mono text-sm text-muted">
+          {tag}
+        </li>
+      ))}
+      {hidden > 0 && (
+        <li class="px-1 font-mono text-sm text-faint">+{hidden}</li>
+      )}
+    </ul>
+  </div>
+</article>

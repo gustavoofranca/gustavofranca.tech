@@ -1,0 +1,37 @@
+---
+import ProjectCard from "@/components/home/ProjectCard.astro";
+import SectionTitle from "@/components/home/SectionTitle.astro";
+import { getFeaturedProjects } from "@/lib/content";
+import { t, type Locale } from "@/lib/i18n";
+import { routePath } from "@/lib/routes";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+const projects = await getFeaturedProjects(locale);
+---
+
+<section
+  aria-labelledby="featured-title"
+  class="mx-auto w-full max-w-5xl px-4 pb-16 sm:px-6 md:pb-24"
+>
+  <div class="flex items-center justify-between gap-4">
+    <SectionTitle id="featured-title" label={dict.sections.featuredProjects} />
+    <a
+      href={routePath("projects", locale)}
+      class="inline-flex min-h-10 items-center rounded-(--radius-control) text-sm text-muted transition-colors duration-(--duration-fast) hover:text-fg"
+    >
+      {dict.home.allProjects}
+    </a>
+  </div>
+  <ul class="mt-2 grid gap-4 md:grid-cols-3">
+    {projects.map((project) => (
+      <li>
+        <ProjectCard project={project} locale={locale} priority />
+      </li>
+    ))}
+  </ul>
+</section>

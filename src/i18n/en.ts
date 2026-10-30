@@ -29,8 +29,23 @@ const en = {
     en: "English",
   },
   hero: {
-    seeProjects: "See projects",
+    available: "open to opportunities",
+    role: "Full\u2011stack software engineer: web, APIs and mobile.",
+    seeProjects: "View projects",
+    downloadCv: "Download CV",
     talkToMe: "Get in touch",
+  },
+  terminal: {
+    title: "gustavo@franca: ~",
+    firstCommand: "cat stack.json",
+    secondCommand: "open lumina --live",
+  },
+  home: {
+    allProjects: "All projects",
+    fullStack: "Complete stack",
+    fullTimeline: "Full timeline",
+    present: "present",
+    contactText: "Have a role or a project in mind? Write to me.",
   },
   sections: {
     featuredProjects: "// featured projects",

@@ -16,6 +16,16 @@ Variante 1: minimal escuro + terminal + aurora. Todos os valores vivem em `src/s
 | `accent-strong`         | `#7c3aed` | `#6d28d9` | Fundos de destaque, estados de hover |
 | `accent-2`              | `#67e8f9` | `#0e7490` | Segundo destaque (ciano)             |
 | `live`                  | `#4ade80` | `#15803d` | Só para o status "no ar"             |
+| `code-string`           | `#86efac` | `#166534` | Strings no terminal do hero          |
+
+Tokens do hero, sem classe Tailwind (usados como `var(--...)` ou `shadow-(--...)`); a cor já leva o alfa porque cada tema pede outra intensidade:
+
+| Token               | Escuro                          | Claro                               | Uso                       |
+| ------------------- | ------------------------------- | ----------------------------------- | ------------------------- |
+| `--aurora-1`        | violeta `#7c3aed` a 45%         | violeta `#8b5cf6` a 22%             | Brilho esquerdo da aurora |
+| `--aurora-2`        | ciano `#06b6d4` a 30%           | ciano `#06b6d4` a 16%               | Brilho direito da aurora  |
+| `--grid-line`       | branco a 4,5%                   | `#18181b` a 6%                      | Linhas da grade do hero   |
+| `--shadow-terminal` | `0 24px 64px -24px` preto a 90% | `0 24px 56px -28px` `#18181b` a 28% | Sombra do terminal        |
 
 No tema claro, ciano e verde são mais escuros que os da paleta original (`#06b6d4`) para passar contraste AA de texto. O escuro é o padrão; o claro vale quando o visitante escolheu, ou quando o sistema pede e nada está salvo.
 
@@ -32,7 +42,8 @@ No tema claro, ciano e verde são mais escuros que os da paleta original (`#06b6
 
 ## Movimento
 
-- Durações: `--duration-fast` 150 ms (hover, cor), `--duration-base` 250 ms (entradas).
+- Durações: `--duration-fast` 150 ms (hover, cor), `--duration-base` 250 ms (entradas), `--duration-type` 65 ms (por caractere digitado no terminal), `--duration-aurora` 16 s (ciclo de um brilho da aurora).
+- Terminal do hero: o estado padrão já é o texto completo; a digitação é uma máscara que anda com `steps()` (só `transform`/`opacity`) e só existe com `prefers-reduced-motion: no-preference`. O cursor pisca 4 vezes e para (WCAG 2.2.2).
 - Só `transform` e `opacity`. Um momento orquestrado por página (hero); a aurora se move devagar; o terminal digita uma vez.
 - `prefers-reduced-motion: reduce`: animações e transições reduzidas a quase zero em `global.css`; conteúdo completo visível, nunca começa com `opacity: 0`.
 
@@ -40,3 +51,6 @@ No tema claro, ciano e verde são mais escuros que os da paleta original (`#06b6
 
 - Primário: fundo `fg`, texto `bg`. Contorno: borda `line`, texto `fg`/`muted`, hover em `fg`. Alvo mínimo de 40 px. Foco visível com contorno `accent` de 2 px.
 - Cartão (borda `line` + fundo `surface` + `--radius-card`) só para objetos separados: projeto e terminal. Seções não viram cartão.
+- Cartão de projeto: o link do título se estica sobre o cartão (`::after`) e o anel de foco aparece no cartão inteiro.
+- Títulos de seção da home são o próprio rótulo mono (`// projetos em destaque`), com as barras ocultas do leitor de tela. Sem rótulo acima de título.
+- Selo "disponível para oportunidades": ponto em `accent-2`, não em `live` (verde só para "no ar").

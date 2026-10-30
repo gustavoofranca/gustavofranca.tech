@@ -134,10 +134,10 @@ test.describe("sem JavaScript", () => {
     await expect(
       page.getByRole("button", { name: "Alternar tema" }),
     ).toBeHidden();
-    await expect(page.getByRole("link", { name: "Projetos" })).toHaveAttribute(
-      "href",
-      "/projetos",
-    );
+    // exact: a home também tem "Ver projetos" e "Todos os projetos".
+    await expect(
+      page.getByRole("link", { name: "Projetos", exact: true }),
+    ).toHaveAttribute("href", "/projetos");
     await expect(page.getByRole("link", { name: "Sobre" })).toBeVisible();
     await page.getByRole("link", { name: "EN — English" }).click();
     await expect(page).toHaveURL(/\/en\/$/);

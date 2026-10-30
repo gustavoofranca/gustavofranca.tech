@@ -1,0 +1,64 @@
+---
+import { join } from "node:path";
+import Aurora from "@/components/home/Aurora.astro";
+import HeroTerminal from "@/components/home/HeroTerminal.astro";
+import { CV_HREF, hasCv } from "@/lib/cv";
+import { t, type Locale } from "@/lib/i18n";
+import { routePath } from "@/lib/routes";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+// Decidido no build (a página é estática): o build roda na raiz do projeto.
+const showCv = hasCv(join(process.cwd(), "public"));
+const buttonClass =
+  "inline-flex min-h-10 items-center rounded-(--radius-control) px-4 text-sm font-medium transition-colors duration-(--duration-fast)";
+---
+
+<section aria-labelledby="hero-title" class="relative isolate overflow-hidden">
+  <Aurora />
+  <div class="mx-auto grid w-full max-w-5xl items-center gap-12 px-4 pt-16 pb-14 sm:px-6 md:grid-cols-[1.1fr_1fr] md:gap-8 md:pt-24 md:pb-20">
+    <div class="min-w-0">
+      <p class="inline-flex items-center gap-2 rounded-full border border-line bg-bg/80 px-3 py-1 font-mono text-sm text-muted">
+        <span
+          aria-hidden="true"
+          class="size-2 rounded-full bg-accent-2 shadow-[0_0_8px_var(--accent-2)]"
+        ></span>
+        {dict.hero.available}
+      </p>
+      <h1
+        id="hero-title"
+        class="mt-5 text-4xl font-semibold tracking-tight lg:text-6xl"
+      >
+        {dict.meta.siteName}
+      </h1>
+      <p class="mt-3 text-lg text-balance text-faint md:text-2xl">
+        {dict.hero.role}
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a
+          href={routePath("projects", locale)}
+          class:list={[buttonClass, "bg-fg text-bg hover:bg-muted"]}
+        >
+          {dict.hero.seeProjects}
+        </a>
+        {showCv && (
+          <a
+            href={CV_HREF}
+            download
+            class:list={[
+              buttonClass,
+              "border border-line text-fg hover:border-faint",
+            ]}
+          >
+            {dict.hero.downloadCv}
+          </a>
+        )}
+      </div>
+    </div>
+    <HeroTerminal locale={locale} />
+  </div>
+</section>

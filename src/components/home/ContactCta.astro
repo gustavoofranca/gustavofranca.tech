@@ -1,0 +1,37 @@
+---
+import { t, type Locale } from "@/lib/i18n";
+import { routePath } from "@/lib/routes";
+import { CONTACT_EMAIL } from "@/lib/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+---
+
+<section
+  aria-labelledby="contact-title"
+  class="mx-auto w-full max-w-5xl px-4 pb-20 sm:px-6 md:pb-28"
+>
+  <h2 id="contact-title" class="text-4xl font-semibold tracking-tight">
+    {dict.contact.title}
+  </h2>
+  <p class="mt-3 max-w-prose text-lg text-muted">{dict.home.contactText}</p>
+  <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+    <a
+      href={routePath("contact", locale)}
+      class="inline-flex min-h-10 items-center rounded-(--radius-control) bg-fg px-4 text-sm font-medium text-bg transition-colors duration-(--duration-fast) hover:bg-muted"
+    >
+      {dict.hero.talkToMe}
+    </a>
+    <a
+      href={`mailto:${CONTACT_EMAIL}`}
+      translate="no"
+      class="inline-flex min-h-10 items-center rounded-(--radius-control) font-mono text-sm text-muted underline-offset-4 transition-colors duration-(--duration-fast) hover:text-fg hover:underline"
+    >
+      {CONTACT_EMAIL}
+    </a>
+  </div>
+</section>

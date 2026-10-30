@@ -1,0 +1,51 @@
+---
+import SectionTitle from "@/components/home/SectionTitle.astro";
+import { getExperience } from "@/lib/content";
+import { formatMonth, t, type Locale } from "@/lib/i18n";
+import { routePath } from "@/lib/routes";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+// getExperience já vem do mais recente para o mais antigo.
+const entries = (await getExperience()).slice(0, 3);
+---
+
+<section
+  aria-labelledby="timeline-title"
+  class="mx-auto w-full max-w-5xl px-4 pb-16 sm:px-6 md:pb-24"
+>
+  <div class="flex items-center justify-between gap-4">
+    <SectionTitle id="timeline-title" label={dict.sections.timeline} />
+    <a
+      href={routePath("about", locale)}
+      class="inline-flex min-h-10 items-center rounded-(--radius-control) text-sm text-muted transition-colors duration-(--duration-fast) hover:text-fg"
+    >
+      {dict.home.fullTimeline}
+    </a>
+  </div>
+  <ol class="mt-4 max-w-2xl border-l border-line">
+    {entries.map(({ data }) => (
+      <li class="relative pb-8 pl-6 last:pb-0">
+        <span
+          aria-hidden="true"
+          class="absolute top-2 -left-[5px] size-2.5 rounded-full border border-faint bg-bg"
+        />
+        <p class="font-mono text-sm text-faint">
+          <time datetime={data.start}>{formatMonth(data.start, locale)}</time>
+          {" – "}
+          {data.end ? (
+            <time datetime={data.end}>{formatMonth(data.end, locale)}</time>
+          ) : (
+            dict.home.present
+          )}
+        </p>
+        <h3 class="mt-1 text-base font-medium">{data.role[locale]}</h3>
+        <p class="text-sm text-muted">{data.org}</p>
+      </li>
+    ))}
+  </ol>
+</section>

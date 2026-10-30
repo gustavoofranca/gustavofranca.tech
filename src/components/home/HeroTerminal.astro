@@ -1,0 +1,197 @@
+---
+import { getStack } from "@/lib/content";
+import { t, type Locale } from "@/lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { terminal } = t(locale);
+
+// Amostra da stack real (stack.json), curta o bastante para caber em 360 px.
+const SAMPLE = [
+  ["front", ["react", "angular"]],
+  ["back", ["nestjs", "flask"]],
+  ["mobile", ["flutter"]],
+] as const;
+
+const stack = await getStack();
+const names = new Map(
+  stack.areas.flatMap((area) => area.items.map((i) => [i.id, i.name] as const)),
+);
+// Cada linha da saída vira tokens (texto + cor). Só o texto do token preserva
+// espaços: a indentação do markup não vaza para o terminal.
+type Token = { text: string; tone?: "key" | "string" };
+const lines: Token[][] = SAMPLE.map(([area, ids], index) => {
+  const values = ids.flatMap((id, i): Token[] => {
+    const name = names.get(id);
+    if (!name)
+      throw new Error(`HeroTerminal: "${id}" não existe em stack.json.`);
+    return [
+      ...(i > 0 ? [{ text: ", " }] : []),
+      { text: `"${name}"`, tone: "string" },
+    ];
+  });
+  return [
+    { text: index === 0 ? "{ " : "  " },
+    { text: `"${area}"`, tone: "key" },
+    { text: ": [" },
+    ...values,
+    { text: index === SAMPLE.length - 1 ? "] }" : "]," },
+  ];
+});
+const TONE = { key: "text-accent-2", string: "text-code-string" } as const;
+
+// O número de passos do steps() precisa ser o número de caracteres digitados.
+const timing = {
+  "--n1": terminal.firstCommand.length,
+  "--n2": terminal.secondCommand.length,
+};
+---
+
+<!-- Vitrine decorativa: o conteúdo real (stack e projetos) está na página. -->
+<div
+  data-testid="hero-terminal"
+  aria-hidden="true"
+  translate="no"
+  style={timing}
+  class="terminal min-w-0 overflow-hidden rounded-(--radius-card) border border-line bg-surface font-mono shadow-(--shadow-terminal)"
+>
+  <div class="flex items-center gap-1.5 border-b border-line px-3 py-2.5 text-sm text-faint">
+    <span class="size-2.5 rounded-full bg-faint/40"></span>
+    <span class="size-2.5 rounded-full bg-faint/40"></span>
+    <span class="size-2.5 rounded-full bg-faint/40"></span>
+    <span class="ml-2 truncate">{terminal.title}</span>
+  </div>
+
+  <div class="px-4 py-4 text-sm leading-7 whitespace-nowrap">
+    <div>
+      <span class="text-accent">❯</span>{" "}
+      <span class="typed">
+        {terminal.firstCommand}
+        <span class="typing-mask typing-mask-1"></span>
+      </span>
+    </div>
+    <div class="output text-muted">
+      {lines.map((line) => (
+        <div>
+          {line.map((token) => (
+            <span
+              class:list={["whitespace-pre", token.tone && TONE[token.tone]]}
+            >
+              {token.text}
+            </span>
+          ))}
+        </div>
+      ))}
+    </div>
+    <div class="second-line">
+      <span class="text-accent">❯</span>{" "}
+      <span class="typed">
+        {terminal.secondCommand}
+        <span class="typing-mask typing-mask-2"></span>
+      </span>{" "}
+      <span class="check text-live">✓</span> <span class="cursor"></span>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Estado padrão = estado final (texto completo). A animação só existe sem
+     movimento reduzido e só mexe em transform e opacity. */
+  .terminal {
+    --t1-start: 500ms;
+    --t1-end: calc(var(--t1-start) + var(--n1) * var(--duration-type));
+    --t2-line: calc(var(--t1-end) + 450ms);
+    --t2-start: calc(var(--t1-end) + 750ms);
+    --t2-end: calc(var(--t2-start) + var(--n2) * var(--duration-type));
+  }
+
+  .typed {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Cobre o texto ainda não digitado e anda um caractere por passo; a borda
+     esquerda é o cursor em bloco. Some quando termina. */
+  .typing-mask {
+    position: absolute;
+    inset: 0;
+    background: var(--surface);
+    opacity: 0;
+  }
+
+  .typing-mask::before {
+    content: "";
+    position: absolute;
+    top: 20%;
+    bottom: 20%;
+    left: 0;
+    width: 1ch;
+    background: var(--accent);
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 1ch;
+    height: 1.1em;
+    vertical-align: -0.2em;
+    background: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .typing-mask-1 {
+      animation: type calc(var(--n1) * var(--duration-type))
+        steps(var(--n1), end) var(--t1-start) backwards;
+    }
+
+    .output {
+      animation: appear 1ms calc(var(--t1-end) + 150ms) backwards;
+    }
+
+    .second-line {
+      animation: appear 1ms var(--t2-line) backwards;
+    }
+
+    .typing-mask-2 {
+      animation: type calc(var(--n2) * var(--duration-type))
+        steps(var(--n2), end) var(--t2-start) backwards;
+    }
+
+    .check {
+      animation: appear 1ms var(--t2-end) backwards;
+    }
+
+    /* Pisca 4 vezes e para (WCAG 2.2.2: nada piscando por mais de 5 s). */
+    .cursor {
+      animation:
+        appear 1ms var(--t2-end) backwards,
+        blink 1s steps(1) calc(var(--t2-end) + 1ms) 4;
+    }
+  }
+
+  @keyframes type {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes appear {
+    from,
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+</style>

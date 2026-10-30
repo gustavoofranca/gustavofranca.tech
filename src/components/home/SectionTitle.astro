@@ -1,0 +1,16 @@
+---
+interface Props {
+  id: string;
+  // Rótulo do dicionário no formato "// texto".
+  label: string;
+}
+
+const { id, label } = Astro.props;
+// As barras são sotaque visual; o leitor de tela anuncia só o texto.
+const text = label.replace(/^\/\/\s*/, "");
+---
+
+<h2 id={id} class="font-mono text-sm font-normal text-faint">
+  <span aria-hidden="true">// </span>
+  {text}
+</h2>

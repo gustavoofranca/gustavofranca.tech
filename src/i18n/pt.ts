@@ -30,8 +30,25 @@ const pt = {
     en: "English",
   },
   hero: {
+    available: "disponível para oportunidades",
+    // \u2011 é hífen inseparável: a linha não quebra em "full-/stack".
+    role: "Engenheiro de Software full\u2011stack: web, APIs e mobile.",
     seeProjects: "Ver projetos",
+    downloadCv: "Baixar CV",
     talkToMe: "Falar comigo",
+  },
+  // Saída de terminal: igual nos dois idiomas, decorativa (aria-hidden).
+  terminal: {
+    title: "gustavo@franca: ~",
+    firstCommand: "cat stack.json",
+    secondCommand: "open lumina --live",
+  },
+  home: {
+    allProjects: "Todos os projetos",
+    fullStack: "Stack completa",
+    fullTimeline: "Trajetória completa",
+    present: "atual",
+    contactText: "Tem uma vaga ou um projeto em mente? Me escreva.",
   },
   sections: {
     featuredProjects: "// projetos em destaque",

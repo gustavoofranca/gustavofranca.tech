@@ -12,6 +12,14 @@ export function t(locale: Locale): Dictionary {
 
 const INTL_LOCALE: Record<Locale, string> = { pt: "pt-BR", en: "en-US" };
 
+// ["A", "B", "C"] → "A, B e C" (pt) / "A, B, and C" (en).
+export function formatList(items: readonly string[], locale: Locale): string {
+  return new Intl.ListFormat(INTL_LOCALE[locale], {
+    style: "long",
+    type: "conjunction",
+  }).format(items);
+}
+
 // "2023-02" → "fev. 2023" (pt) / "Feb 2023" (en). Monta mês + ano à mão porque
 // o pt-BR do Intl insere "de" ("fev. de 2023"). UTC evita que o fuso desloque o mês.
 export function formatMonth(isoMonth: string, locale: Locale): string {

@@ -13,8 +13,17 @@
   --accent-strong: #7c3aed;
   --accent-2: #67e8f9;
   --live: #4ade80;
+  --code-string: #86efac;
+  /* Aurora e grade do hero: cor com alfa embutido, porque cada tema pede intensidade diferente. */
+  --aurora-1: rgb(124 58 237 / 0.45);
+  --aurora-2: rgb(6 182 212 / 0.3);
+  --grid-line: rgb(255 255 255 / 0.045);
+  --shadow-terminal: 0 24px 64px -24px rgb(0 0 0 / 0.9);
   --duration-fast: 150ms;
   --duration-base: 250ms;
+  /* Tempo por caractere digitado no terminal do hero e ciclo de um blob da aurora. */
+  --duration-type: 65ms;
+  --duration-aurora: 16s;
 }
 
 /* Claro: mesmos tokens, redefinidos. Ciano e verde escurecidos para manter contraste de texto (WCAG AA). */
@@ -30,6 +39,11 @@
   --accent-strong: #6d28d9;
   --accent-2: #0e7490;
   --live: #15803d;
+  --code-string: #166534;
+  --aurora-1: rgb(139 92 246 / 0.22);
+  --aurora-2: rgb(6 182 212 / 0.16);
+  --grid-line: rgb(24 24 27 / 0.06);
+  --shadow-terminal: 0 24px 56px -28px rgb(24 24 27 / 0.28);
 }
 
 /* Manter em sincronia com o bloco :root[data-theme="light"] acima (CSS não deixa compartilhar). */
@@ -47,6 +61,11 @@
     --accent-strong: #6d28d9;
     --accent-2: #0e7490;
     --live: #15803d;
+    --code-string: #166534;
+    --aurora-1: rgb(139 92 246 / 0.22);
+    --aurora-2: rgb(6 182 212 / 0.16);
+    --grid-line: rgb(24 24 27 / 0.06);
+    --shadow-terminal: 0 24px 56px -28px rgb(24 24 27 / 0.28);
   }
 }
 
@@ -62,6 +81,7 @@
   --color-accent-strong: var(--accent-strong);
   --color-accent-2: var(--accent-2);
   --color-live: var(--live);
+  --color-code-string: var(--code-string);
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono:
     "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
