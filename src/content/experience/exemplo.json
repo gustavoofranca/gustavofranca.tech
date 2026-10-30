@@ -1,0 +1,12 @@
+{
+  "kind": "education",
+  "org": "Exemplo",
+  "role": { "pt": "Cargo de exemplo", "en": "Example role" },
+  "start": "2024-01",
+  "end": null,
+  "description": {
+    "pt": "Entrada de exemplo, removida na Task 5.",
+    "en": "Example entry, removed in Task 5."
+  },
+  "stack": ["astro"]
+}

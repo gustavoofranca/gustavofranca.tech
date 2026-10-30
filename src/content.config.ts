@@ -1,0 +1,93 @@
+import { defineCollection } from "astro:content";
+import { file, glob } from "astro/loaders";
+import { z } from "astro/zod";
+
+const month = z
+  .string()
+  .regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Use o formato YYYY-MM.");
+const bilingual = z.object({ pt: z.string(), en: z.string() });
+
+const projects = defineCollection({
+  // O id é o nome do arquivo sem extensão ("lumina.pt"). O gerador padrão faria
+  // slug do caminho e engoliria o ponto ("luminapt"), perdendo o idioma.
+  loader: glob({
+    base: "./src/content/projects",
+    pattern: "*.mdx",
+    generateId: ({ entry }) => entry.replace(/\.mdx$/, ""),
+  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      summary: z.string().max(160),
+      locale: z.enum(["pt", "en"]),
+      kind: z.enum(["web", "api", "mobile"]),
+      role: z.enum(["solo", "team"]),
+      roleNote: z.string().optional(),
+      period: z.object({ start: month, end: month.optional() }),
+      stack: z.array(z.string()),
+      status: z.enum(["live", "offline", "archived"]),
+      featured: z.boolean(),
+      order: z.number(),
+      links: z.object({
+        demo: z.url().optional(),
+        repo: z.array(z.url()).optional(),
+      }),
+      cover: image(),
+      coverAlt: z.string(),
+    }),
+});
+
+const experience = defineCollection({
+  loader: glob({ base: "./src/content/experience", pattern: "*.json" }),
+  schema: z.object({
+    kind: z.enum(["work", "education", "incubator", "venture"]),
+    org: z.string(),
+    role: bilingual,
+    start: month,
+    end: month.nullable(),
+    description: bilingual,
+    stack: z.array(z.string()),
+  }),
+});
+
+// O loader `file` exige array com `id` ou objeto indexado por id. Os JSONs de
+// stack e archive têm o formato natural do conteúdo ({ areas } e lista de
+// repositórios), então o `parser` os adapta ao que o loader espera.
+const stack = defineCollection({
+  loader: file("src/content/stack.json", {
+    parser: (text) => [{ id: "stack", ...JSON.parse(text) }],
+  }),
+  schema: z.object({
+    areas: z.array(
+      z.object({
+        id: z.string(),
+        label: bilingual,
+        items: z.array(
+          z.object({
+            id: z.string(),
+            name: z.string(),
+            icon: z.string().optional(),
+          }),
+        ),
+      }),
+    ),
+  }),
+});
+
+const archive = defineCollection({
+  loader: file("src/content/archive.json", {
+    parser: (text) =>
+      (JSON.parse(text) as Record<string, unknown>[]).map((repo) => ({
+        id: String(repo["name"]),
+        ...repo,
+      })),
+  }),
+  schema: z.object({
+    name: z.string(),
+    repo: z.url(),
+    stack: z.array(z.string()),
+    year: z.number().int(),
+  }),
+});
+
+export const collections = { projects, experience, stack, archive };

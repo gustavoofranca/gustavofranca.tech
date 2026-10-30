@@ -1,0 +1,12 @@
+{
+  "areas": [
+    {
+      "id": "front",
+      "label": { "pt": "Front-end", "en": "Front-end" },
+      "items": [
+        { "id": "astro", "name": "Astro" },
+        { "id": "react", "name": "React" }
+      ]
+    }
+  ]
+}
