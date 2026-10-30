@@ -27,6 +27,22 @@ test("lista com 6 cartões e o arquivo acadêmico", async ({ page }) => {
   ).toHaveAttribute("href", "https://github.com/gustavoofranca/Desafio-museu");
 });
 
+test("os cartões da lista carregam data-kind e data-stack do projeto", async ({
+  page,
+}) => {
+  await page.goto("/projetos");
+  const prime = page
+    .getByTestId("project-card")
+    .filter({ hasText: "Prime Edu" });
+  await expect(prime).toHaveAttribute("data-kind", "mobile");
+  await expect(prime).toHaveAttribute("data-stack", "flutter dart");
+  const checkpoint = page
+    .getByTestId("project-card")
+    .filter({ hasText: "Checkpoint" });
+  await expect(checkpoint).toHaveAttribute("data-kind", "api");
+  await expect(checkpoint).toHaveAttribute("data-stack", /(^| )nestjs( |$)/);
+});
+
 test("lista em inglês tem os mesmos 6 cartões", async ({ page }) => {
   await page.goto("/en/projects");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Projects");
@@ -153,13 +169,19 @@ test.describe("em 360 px", () => {
     const diagram = page.locator('main img[src*="arquitetura"]');
     await diagram.scrollIntoViewIfNeeded();
     const box = await diagram.boundingBox();
-    expect(box?.width ?? 0).toBeGreaterThanOrEqual(640);
+    // Tamanho real (960 px): nunca encolhe abaixo disso, só rola.
+    expect(box?.width ?? 0).toBeGreaterThanOrEqual(959);
     const scroller = diagram.locator("xpath=..");
     const { scrollWidth, clientWidth } = await scroller.evaluate((el) => ({
       scrollWidth: el.scrollWidth,
       clientWidth: el.clientWidth,
     }));
     expect(scrollWidth).toBeGreaterThan(clientWidth);
+    // A rolagem fica no contêiner: o corpo da página não rola na horizontal.
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - window.innerWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
   });
 });
 

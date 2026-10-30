@@ -125,13 +125,13 @@
     }
 
     /* Diagramas de arquitetura têm rótulos pequenos (960 px de largura, ~12 px de
-       fonte): em tela estreita rolam na horizontal em vez de encolher até ficar
-       ilegíveis. O wrapper é criado por rehypeDiagramScroll (focável por teclado). */
+       fonte): ficam sempre no tamanho real e rolam na horizontal em tela estreita,
+       em vez de encolher até ficar ilegíveis. O wrapper focável vem de MdxImage.astro. */
     .diagram-scroll {
       @apply block overflow-x-auto rounded-(--radius-card);
 
       img {
-        @apply min-w-[640px] bg-surface;
+        @apply w-[960px] max-w-none bg-surface;
       }
     }
   }

@@ -7,7 +7,8 @@ import { t } from "@/lib/i18n";
 // Substitui o <img> do MDX (prop `components`). As imagens do corpo continuam
 // otimizadas pelo astro:assets; o diagrama de arquitetura ganha um contêiner.
 interface Props {
-  src: ImageMetadata;
+  // Imagem remota chega como string; só as locais (ImageMetadata) podem ser diagrama.
+  src: ImageMetadata | string;
   alt: string;
   width?: number;
   height?: number;
@@ -18,15 +19,19 @@ const { src, alt, ...rest } = Astro.props;
 // Diagramas têm rótulos pequenos (960 px de largura, ~12 px de fonte): em tela estreita
 // rolam na horizontal em vez de encolher. O contêiner de rolagem precisa ser focável,
 // senão quem usa teclado não alcança a parte cortada (axe: scrollable-region-focusable).
-const isDiagram = src.src.includes("arquitetura");
+// Contrato de nome: os diagramas se chamam arquitetura*.svg (src/assets/projects/<slug>/).
+const isDiagram = typeof src !== "string" && src.src.includes("arquitetura");
 const label = t(getLocaleFromPath(Astro.url.pathname)).projects.diagramScroll;
 ---
 
 {/* eslint-disable astro/jsx-a11y/no-noninteractive-tabindex -- região rolável precisa de foco (WCAG 2.1.1) */}
-{isDiagram && (
+{isDiagram && typeof src !== "string" && (
   <span class="diagram-scroll" tabindex="0" role="group" aria-label={label}>
     <Image src={src} alt={alt} {...rest} />
   </span>
 )}
 {/* eslint-enable astro/jsx-a11y/no-noninteractive-tabindex */}
-{!isDiagram && <Image src={src} alt={alt} {...rest} />}
+{typeof src === "string" && <Image src={src} alt={alt} inferSize />}
+{!isDiagram && typeof src !== "string" && (
+  <Image src={src} alt={alt} {...rest} />
+)}
