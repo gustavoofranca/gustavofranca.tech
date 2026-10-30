@@ -7,17 +7,24 @@ import { routePath, type RouteKey } from "@/lib/routes";
 
 // Varredura de todas as rotas, nos dois idiomas e nos dois temas: axe sem violação
 // séria ou crítica, nada de rolagem horizontal em 360 px e exatamente um h1.
-// A lista sai do mapa de rotas (src/lib/routes.ts) e dos arquivos de projeto, então
-// página nova entra aqui sem editar o teste. .claude/rules/qualidade.md
+// A lista sai do mapa de rotas (src/lib/routes.ts) e dos arquivos de projeto: projeto
+// novo entra sem editar o teste, e chave de rota nova falha o typecheck até entrar
+// em STATIC_KEY_SET. .claude/rules/qualidade.md
 
 const LOCALES: readonly Locale[] = ["pt", "en"];
-const STATIC_KEYS: readonly Exclude<RouteKey, "project">[] = [
-  "home",
-  "projects",
-  "about",
-  "contact",
-  "privacy",
-];
+// Todas as chaves de rota sem parâmetro. O `satisfies` exige uma entrada por chave de
+// RouteKey (menos "project", que depende do slug): chave nova sem entrada aqui não
+// compila (npm run check), então nenhuma rota fica fora da varredura sem ninguém ver.
+const STATIC_KEY_SET = {
+  home: true,
+  projects: true,
+  about: true,
+  contact: true,
+  privacy: true,
+} satisfies Record<Exclude<RouteKey, "project">, true>;
+const STATIC_KEYS = Object.keys(STATIC_KEY_SET) as Array<
+  keyof typeof STATIC_KEY_SET
+>;
 
 // "lumina.pt.mdx" → slug "lumina" no idioma "pt".
 function projectSlugs(locale: Locale): string[] {

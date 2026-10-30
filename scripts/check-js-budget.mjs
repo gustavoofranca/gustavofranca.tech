@@ -3,7 +3,7 @@
 // renderers do Astro, e os imports estáticos de cada chunk, em cascata) e falha acima
 // de 80 KB. import() dinâmico fica de fora: é o que só baixa sob demanda (o corpo da
 // paleta ⌘K, por exemplo). Rode depois do npm run build.
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
 import { parse } from "parse5";
@@ -20,8 +20,11 @@ const URL_ATTRS = new Set([
 ]);
 // import/export estático: `import{a}from"./x.js"`, `import"./x.js"`, `export*from"./x.js"`.
 // `import("./x.js")` não casa: depois de `import` vem `(`, não aspas nem nomes.
+// O lookbehind aceita qualquer caractere que não seja de identificador antes da palavra
+// (`*/import"…"`, `)import…`, `;`, `}`, início); só recusa `foo_import`, `$import` e
+// `a.import`.
 const STATIC_IMPORT =
-  /(?:^|[;}\s])(?:import|export)\s*(?:[^'"();]*?from\s*)?["']([^"']+\.js)["']/g;
+  /(?<![\w$.])(?:import|export)\s*(?:[^'"();]*?from\s*)?["']([^"']+\.js)["']/g;
 
 function elementsOf(node) {
   const self = node.tagName ? [node] : [];
@@ -38,6 +41,10 @@ function gzipSize(text) {
   return gzipSync(Buffer.from(text, "utf8")).length;
 }
 
+if (!existsSync(`${root}index.html`)) {
+  console.error("dist/client/index.html não existe. Rode npm run build antes.");
+  process.exit(1);
+}
 const html = readFileSync(`${root}index.html`, "utf8");
 const elements = elementsOf(parse(html));
 const sizes = new Map();

@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 
-// A ilha usa client:idle: o atalho só responde depois que o atributo ssr some.
+// A ilha usa client:afterload: o atalho só responde depois que o atributo ssr some.
 async function openPage(page: Page, path = "/") {
   await page.goto(path);
   await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
@@ -58,6 +58,33 @@ test.describe("paleta de comandos", () => {
     await page.keyboard.press("Escape");
     await expect(dialog(page)).toBeHidden();
     await expect(trigger).toBeFocused();
+  });
+
+  test("clique no botão antes de a ilha hidratar abre a paleta quando ela chega", async ({
+    page,
+  }) => {
+    // Segura o chunk da ilha: a página carrega, o botão já responde ao clique e o
+    // React ainda não chegou (ninguém ouve o evento gf:open-palette).
+    let release: () => void = () => {};
+    const held = new Promise<void>((resolve) => (release = resolve));
+    await page.route(/\/_astro\/CommandPalette[^/]*\.js$/, async (route) => {
+      await held;
+      await route.continue();
+    });
+    await page.goto("/");
+    await expect(page.locator("astro-island[ssr]")).not.toHaveCount(0);
+    await page
+      .getByRole("button", { name: "Abrir paleta de comandos" })
+      .click();
+    await expect(page.locator("dialog[open]")).toHaveCount(0);
+    release();
+    await expect(page.locator("astro-island[ssr]")).toHaveCount(0);
+    await expect(dialog(page)).toBeVisible();
+    await expect(page.getByRole("combobox")).toBeFocused();
+    // A marca foi consumida: fechar e esperar não reabre a paleta.
+    await expect(page.locator("html")).not.toHaveAttribute(
+      "data-palette-requested",
+    );
   });
 
   test("o foco fica preso na paleta enquanto ela está aberta", async ({

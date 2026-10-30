@@ -35,8 +35,13 @@ const buttonClass =
       >
         {dict.meta.siteName}
       </h1>
-      {/* text-muted, não text-faint: sobre a aurora o faint caía para 3,9:1 em 18 px
-          (mínimo 4,5:1, WCAG 1.4.3). Medido por pixel nos dois temas (Task 14). */}
+      {/* NÃO trocar por text-faint. Contraste medido por pixel sobre a aurora (texto
+          transparente, página fotografada, pior caso WCAG por caixa de linha), PT e EN,
+          dois temas, 360 a 1280 px, aurora parada e no fim da deriva:
+          text-muted: mínimo 5,06:1 (claro, 412 px, deriva), acima dos 4,5:1 do AA;
+          text-faint: 3,9:1 em 18 px, abaixo do mínimo (WCAG 1.4.3, texto normal).
+          Em ≥ 768 px (24 px, texto grande) o limite é 3:1. Sem teste versionado: a
+          medição depende de renderizar a aurora animada. */}
       <p class="mt-3 text-lg text-balance text-muted md:text-2xl">
         {dict.hero.role}
       </p>

@@ -3,7 +3,7 @@
 // definido antes da pintura, e o ícone troca por CSS). Como ilha client:load ele
 // puxava o runtime do React (~65 KB gzip) na abertura de toda página, disputando
 // banda com CSS, fontes e a imagem do LCP. O React agora só chega com a paleta
-// (client:idle). Orçamento: .claude/rules/qualidade.md
+// (client:afterload, depois do load). Orçamento: .claude/rules/qualidade.md
 interface Props {
   label: string;
 }

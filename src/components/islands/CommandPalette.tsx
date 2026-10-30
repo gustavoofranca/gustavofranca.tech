@@ -40,6 +40,8 @@ export function CommandPalette({ locale, pathname, projects, labels }: Props) {
   // ⌘K / Ctrl+K e o evento do botão do cabeçalho: ambos vêm de fora do React.
   useEffect(() => {
     function show() {
+      // Pedido do botão do cabeçalho atendido (ou desnecessário): apaga a marca.
+      delete document.documentElement.dataset.paletteRequested;
       const dialog = dialogRef.current;
       if (!dialog || dialog.open) return;
       const active = document.activeElement;
@@ -84,6 +86,12 @@ export function CommandPalette({ locale, pathname, projects, labels }: Props) {
       : window.setTimeout(warmUp, 2000);
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("gf:open-palette", show);
+    // Clique no botão do cabeçalho antes de a ilha hidratar: o evento se perdeu, mas o
+    // pedido ficou marcado. Em microtask para o flushSync do show() não rodar dentro
+    // da fase de efeitos do React.
+    if (document.documentElement.dataset.paletteRequested !== undefined) {
+      queueMicrotask(show);
+    }
     return () => {
       for (const trigger of triggers) {
         trigger.removeEventListener("pointerenter", warmUp);

@@ -99,9 +99,13 @@ const needsJs = "[html:not([data-theme])_&]:hidden";
 </header>
 
 <script>
-  // A paleta ⌘K (Task 10) escuta este evento; o botão só pede para abrir.
+  // A paleta ⌘K escuta este evento; o botão só pede para abrir. A ilha hidrata
+  // depois do load (client:afterload): um clique antes disso não tem ouvinte. Por isso
+  // o pedido também fica marcado no <html>; a ilha confere a marca ao montar, abre e
+  // apaga (CommandPalette.tsx). Se já estiver montada, o evento abre e apaga a marca.
   document.querySelectorAll("[data-open-palette]").forEach((button) => {
     button.addEventListener("click", () => {
+      document.documentElement.dataset.paletteRequested = "";
       window.dispatchEvent(new CustomEvent("gf:open-palette"));
     });
   });

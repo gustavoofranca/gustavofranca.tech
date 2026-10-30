@@ -56,11 +56,64 @@ function advisoriesOf(report: unknown): Advisory[] {
   return [...found.values()];
 }
 
+const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+// AAAA-MM-DD e data que existe (2027-02-30 não passa).
+function isRealIsoDate(value: string): boolean {
+  const match = ISO_DATE.exec(value);
+  if (!match) return false;
+  const [year = 0, month = 0, day = 0] = match.slice(1).map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
+}
+
+// Valida o JSON da lista antes de usar. Sem isso a conferência de prazo falha aberta:
+// comparar texto sem formato ("30/01/2027") ou `undefined` nunca vence, e a exceção
+// valeria para sempre. Erro aqui derruba o CI com a entrada apontada.
+export function parseAllowlist(raw: unknown): AllowedAdvisory[] {
+  if (!Array.isArray(raw)) {
+    throw new Error("audit-allowlist.json deve ser uma lista de exceções.");
+  }
+  return raw.map((entry: unknown, index) => {
+    const label = `audit-allowlist.json, item ${index + 1}`;
+    if (!isRecord(entry)) throw new Error(`${label}: deveria ser um objeto.`);
+    const named =
+      typeof entry["id"] === "string" && entry["id"] !== ""
+        ? `${label} (${entry["id"]})`
+        : label;
+    for (const field of ["id", "package", "reason"] as const) {
+      const value = entry[field];
+      if (typeof value !== "string" || value.trim() === "") {
+        throw new Error(
+          `${named}: "${field}" é obrigatório e não pode ser vazio.`,
+        );
+      }
+    }
+    const reviewBy = entry["reviewBy"];
+    if (typeof reviewBy !== "string" || !isRealIsoDate(reviewBy)) {
+      throw new Error(
+        `${named}: "reviewBy" deve ser uma data real no formato AAAA-MM-DD (veio ${JSON.stringify(reviewBy)}).`,
+      );
+    }
+    return {
+      id: entry["id"] as string,
+      package: entry["package"] as string,
+      reason: entry["reason"] as string,
+      reviewBy,
+    };
+  });
+}
+
 export function checkAudit(
   report: unknown,
-  allowlist: readonly AllowedAdvisory[],
+  rawAllowlist: readonly AllowedAdvisory[],
   today: string,
 ): AuditVerdict {
+  const allowlist = parseAllowlist(rawAllowlist);
   const advisories = advisoriesOf(report);
   const allowed = new Map(allowlist.map((entry) => [entry.id, entry]));
   const verdict: AuditVerdict = { blocking: [], expired: [], stale: [] };
