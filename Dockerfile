@@ -8,16 +8,21 @@
 # Com CONTENT_STRICT=true (padrão) o build falha enquanto houver TODO(gustavo) no
 # conteúdo. Só para teste local: --build-arg CONTENT_STRICT=false.
 #
-# Execução (segredos só em tempo de execução, nunca na imagem):
-#   docker run --init -p 4321:4321 --env-file .env portfolio
+# Execução (segredos só em tempo de execução, nunca na imagem). Teste local, só no
+# loopback:
+#   docker run --init -p 127.0.0.1:4321:4321 --env-file .env portfolio
+# Em produção a porta 4321 não é publicada no host: só o Caddy de borda a alcança, pela
+# rede do Docker. Exposta, qualquer um mandaria um X-Forwarded-For forjado e escaparia
+# do limite por IP (src/lib/contact/request.ts confia no último valor, que é do proxy).
 # --init (ou `init: true` no compose): o Node como PID 1 não trata SIGTERM sozinho.
 
-# Node 24 em Alpine, fixado pelo digest (o Dependabot atualiza: .github/dependabot.yml).
-ARG NODE_IMAGE=node:24-alpine@sha256:8a32c8cf649a49915a66e81e7a609223c708d0adabf288ee3f4077d765542f85
+# Node 24 em Alpine, fixado pelo digest. A imagem vai literal no FROM (e não num ARG)
+# porque o Dependabot só reconhece imagem escrita no FROM (.github/dependabot.yml).
+FROM node:24-alpine@sha256:8a32c8cf649a49915a66e81e7a609223c708d0adabf288ee3f4077d765542f85 AS base
 
 # Dependências completas, para o build. --ignore-scripts: nenhum pacote de produção
 # precisa de script de instalação (só o lefthook, que instala hooks do Git).
-FROM ${NODE_IMAGE} AS deps
+FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts
@@ -38,12 +43,12 @@ RUN PUBLIC_TURNSTILE_SITEKEY="$PUBLIC_TURNSTILE_SITEKEY" \
 
 # Só as dependências de produção (o servidor importa astro, nodemailer etc. em tempo de
 # execução).
-FROM ${NODE_IMAGE} AS prod-deps
+FROM base AS prod-deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev --ignore-scripts && npm cache clean --force
 
-FROM ${NODE_IMAGE} AS runtime
+FROM base AS runtime
 WORKDIR /app
 # NODE_ENV=production é obrigatório: com ele, src/lib/env.ts recusa MAIL_TRANSPORT=json
 # (que descartaria as mensagens em silêncio). HOST: o padrão do adapter é localhost,

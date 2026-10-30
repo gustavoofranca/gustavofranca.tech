@@ -39,6 +39,12 @@ jobs:
 
   seguranca:
     runs-on: ubuntu-latest
+    # Em pull_request o gitleaks-action lista os commits do PR pela API, o que pede
+    # leitura de pull requests. Permissões no job substituem as do workflow, por isso o
+    # contents: read se repete. https://github.com/gitleaks/gitleaks-action
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -46,6 +52,9 @@ jobs:
       - uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Sem comentário no PR: com só leitura ele falharia, e o resultado já fica no
+          # log do job (variável documentada no README da action).
+          GITLEAKS_ENABLE_COMMENTS: "false"
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24

@@ -86,17 +86,21 @@ Regras em [`.claude/rules/qualidade.md`](.claude/rules/qualidade.md); decisões 
 - `/api/contato` recebe os próprios cabeçalhos em `src/middleware.ts`.
 - **Origem:** em produção o Caddy encaminha `X-Forwarded-Proto/Host`, e `security.allowedDomains` faz o Astro confiar neles só para `gustavofranca.tech`; a origem vira `https://gustavofranca.tech`. No `npm run preview` (e no e2e) o host é `localhost:4321`, os cabeçalhos encaminhados são ignorados e a origem é `http://localhost:4321`.
 - **Dependências (`npm run audit:deps`):** as de produção (o que vai para a imagem) não podem ter nenhum alerta alto ou crítico, sem exceção. Nas de desenvolvimento, alerta alto só passa se estiver em `audit-allowlist.json`, com motivo e data de revisão; vencida a data, o CI volta a falhar. Hoje as quatro exceções são da cadeia do `@lhci/cli` (`extract-zip`, `basic-ftp`, `zod` 3 do `chromium-bidi`), sem versão corrigida compatível. O `tmp` vulnerável da mesma cadeia foi corrigido com `overrides` (0.2.7).
+- **`overrides` do `eslint-plugin-jsx-a11y`:** a 6.10.2 declara `peerDependencies` de `eslint` só até `^9`, e o projeto usa o ESLint 10; sem o override (`"eslint": "$eslint"`) o `npm install` para com `ERESOLVE`. O plugin funciona com o ESLint 10 (o `npm run lint` passa). Remover quando sair uma versão do plugin que aceite o ESLint 10 no `peerDependencies`.
 
 ## Docker
 
-A imagem roda `node ./dist/server/entry.mjs` na porta 4321 e serve também os estáticos (o Caddy pode servir `dist/client` direto, se preferir).
+A imagem roda `node ./dist/server/entry.mjs` na porta 4321 e serve também os estáticos. Antes de pôr o Caddy servindo `dist/client` direto, veja a pendência do `try_files` em [Pendências conhecidas](#pendências-conhecidas).
 
 ```powershell
 docker build --build-arg PUBLIC_TURNSTILE_SITEKEY=<chave> -t portfolio .
-docker run --init -p 4321:4321 --env-file .env portfolio
+docker run --init -p 127.0.0.1:4321:4321 --env-file .env portfolio
 ```
 
+O `-p 127.0.0.1:...` é só para teste local. Em produção a porta não é publicada no host (ver [Pendências conhecidas](#pendências-conhecidas)).
+
 - Multi-stage, Node 24 Alpine fixado por digest, usuário `node` (não root), `HEALTHCHECK` em `/`.
+- O estágio final instala só `dependencies` (`npm ci --omit=dev`). Ali fica só o que o servidor (`dist/server`) importa em tempo de execução, mais o Astro e as integrações; o que só roda no build (Tailwind, fontes, `satori`, `@resvg/resvg-js`, `cmdk`, `clsx`, `tailwind-merge`) é `devDependencies`. Pacote novo: confira os imports de `dist/server` antes de decidir onde ele entra.
 - `NODE_ENV=production` vem da imagem e é obrigatório: com ele, `MAIL_TRANSPORT=json` é recusado (as mensagens seriam descartadas em silêncio).
 - Segredos só em tempo de execução (`--env-file` ou `env_file` no compose), nunca como `--build-arg`. O `.dockerignore` só deixa entrar o necessário para o build.
 - O build usa `CONTENT_STRICT=true` e **falha enquanto houver `TODO(gustavo)`** no conteúdo; isso é o esperado. Para testar localmente: `--build-arg CONTENT_STRICT=false`.
@@ -119,6 +123,9 @@ docker run --init -p 4321:4321 --env-file .env portfolio
 
 - **Compressão no Caddy de borda (fase 2):** o Caddy de borda precisa de `encode zstd gzip`. O LHCI mede com compressão (o servidor estático dele comprime) e a imagem Docker serve `dist/client` sem comprimir; sem o `encode`, o JS da home chega com ~209 KB em vez de ~65 KB e o orçamento deixa de valer em produção.
 - **Caddy de borda (fase 2):** cabeçalhos que não cabem na `<meta>`: `frame-ancestors 'none'`, `Strict-Transport-Security`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (câmera, microfone e geolocalização desligados). E redirecionar `www` para o domínio sem `www`: `allowedDomains` só confia em `gustavofranca.tech`, então um POST do formulário vindo de `www` recebe 403.
+- **Caddy servindo `dist/client` (fase 2):** as páginas são `sobre/index.html`, `projetos/lumina/index.html` etc. Com `file_server` puro, o Caddy responde `/sobre` com 308 para `/sobre/`, e o canonical e o sitemap (sem barra no fim) passam a apontar para um redirecionamento. Se o Caddy servir os estáticos, use `try_files {path} {path}/index.html` antes do `file_server` ([documentação do `try_files`](https://caddyserver.com/docs/caddyfile/directives/try_files); não testado ainda); ou encaminhe tudo para o servidor Node da imagem, que já responde `/sobre` sem redirecionar.
+- **Porta 4321 fora do host (fase 2):** no compose, o serviço `portfolio` não publica a porta (`ports:`); o Caddy alcança o contêiner pela rede do Docker. Publicada, qualquer um falaria direto com o Node mandando um `X-Forwarded-For` forjado e escaparia do limite por IP: `clientIp` (`src/lib/contact/request.ts`) confia no último valor do cabeçalho porque ele é escrito pelo Caddy.
+- **Log de acesso do Caddy (fase 2):** desligado para este site, ou sem o IP do cliente. A página de privacidade diz que o IP "não é gravado em disco" (`src/i18n/pt.ts`, `privacy`); com o log padrão do Caddy, que grava o IP de cada requisição, o texto fica falso.
 - **Deploy:** o contêiner precisa rodar com `NODE_ENV=production` (a imagem já define; não sobrescreva no compose) e com o `.env` de produção no VPS.
 - **Checkpoint:** a demo em `checkpoint.gustavofranca.tech` ainda não existe (plano próprio); o projeto aparece como `offline`.
 - **`TODO(gustavo)`:** pendências de conteúdo (a lista completa sai de `npm run build` com `CONTENT_STRICT=true`; empresa atual, papel no Conexão, textos em primeira pessoa, CV, LinkedIn, WhatsApp, foto). O build de produção e a imagem Docker falham até elas serem respondidas.
