@@ -1,0 +1,30 @@
+---
+import { currentMonthUtc, isFutureMonth } from "@/lib/dates";
+import { formatMonth, t, type Locale } from "@/lib/i18n";
+
+interface Props {
+  start: string;
+  end: string | null;
+  locale: Locale;
+}
+
+const { start, end, locale } = Astro.props;
+const dict = t(locale);
+// Mês do build, em UTC (a página é estática): término depois dele é previsão.
+const expected = isFutureMonth(end, currentMonthUtc());
+---
+
+<time datetime={start} data-role="start">
+  {formatMonth(start, locale)}
+</time>
+{" – "}
+{end ? (
+  <>
+    <time datetime={end} data-role="end">
+      {formatMonth(end, locale)}
+    </time>
+    {expected && ` (${dict.about.expected})`}
+  </>
+) : (
+  dict.home.present
+)}

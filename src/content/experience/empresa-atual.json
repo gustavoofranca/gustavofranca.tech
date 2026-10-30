@@ -1,6 +1,9 @@
 {
   "kind": "work",
-  "org": "TODO(gustavo): pode citar empresa atual?",
+  "org": {
+    "pt": "TODO(gustavo): pode citar empresa atual?",
+    "en": "TODO(gustavo): pode citar empresa atual? (mesmo nome em inglês)"
+  },
   "role": {
     "pt": "TODO(gustavo): cargo na empresa atual",
     "en": "TODO(gustavo): cargo na empresa atual (em inglês)"

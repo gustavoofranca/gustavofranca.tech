@@ -1,6 +1,9 @@
 {
   "kind": "venture",
-  "org": "TODO(gustavo): nome da loja de streetwear",
+  "org": {
+    "pt": "TODO(gustavo): nome da loja de streetwear",
+    "en": "TODO(gustavo): nome da loja de streetwear (mesmo nome em inglês)"
+  },
   "role": {
     "pt": "Desenvolvimento e gestão do negócio",
     "en": "Development and business management"

@@ -1,8 +1,8 @@
 ---
 import SectionTitle from "@/components/home/SectionTitle.astro";
+import Period from "@/components/Period.astro";
 import { getExperience } from "@/lib/content";
-import { currentMonthUtc, isFutureMonth } from "@/lib/dates";
-import { formatMonth, t, type Locale } from "@/lib/i18n";
+import { t, type Locale } from "@/lib/i18n";
 
 interface Props {
   locale: Locale;
@@ -12,8 +12,6 @@ const { locale } = Astro.props;
 const dict = t(locale);
 // getExperience já vem do início mais recente para o mais antigo.
 const entries = await getExperience();
-// Mês do build, em UTC (a página é estática): término depois dele é previsão.
-const now = currentMonthUtc();
 ---
 
 <section
@@ -29,23 +27,12 @@ const now = currentMonthUtc();
           class="absolute top-2 -left-[5px] size-2.5 rounded-full border border-faint bg-bg"
         />
         <p class="font-mono text-sm text-faint">
-          <time datetime={data.start} data-role="start">
-            {formatMonth(data.start, locale)}
-          </time>
-          {" – "}
-          {data.end ? (
-            <>
-              <time datetime={data.end}>{formatMonth(data.end, locale)}</time>
-              {isFutureMonth(data.end, now) && ` (${dict.about.expected})`}
-            </>
-          ) : (
-            dict.home.present
-          )}
+          <Period start={data.start} end={data.end} locale={locale} />
           {" · "}
           {dict.about.kinds[data.kind]}
         </p>
         <h3 class="mt-1 text-base font-medium">{data.role[locale]}</h3>
-        <p class="text-sm text-muted">{data.org}</p>
+        <p class="text-sm text-muted">{data.org[locale]}</p>
         <p class="mt-2 max-w-prose text-sm text-muted">
           {data.description[locale]}
         </p>

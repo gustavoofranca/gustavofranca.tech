@@ -41,7 +41,9 @@ const experience = defineCollection({
   loader: glob({ base: "./src/content/experience", pattern: "*.json" }),
   schema: z.object({
     kind: z.enum(["work", "education", "incubator", "venture"]),
-    org: z.string(),
+    // Bilíngue: nome próprio se repete, mas descrição junto do nome ("incubadora
+    // da Campo Real") precisa de tradução.
+    org: bilingual,
     role: bilingual,
     start: month,
     end: month.nullable(),

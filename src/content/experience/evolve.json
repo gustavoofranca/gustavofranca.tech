@@ -1,6 +1,9 @@
 {
   "kind": "incubator",
-  "org": "Evolve, incubadora da Campo Real",
+  "org": {
+    "pt": "Evolve, incubadora da Campo Real",
+    "en": "Evolve, Campo Real's incubator"
+  },
   "role": {
     "pt": "TODO(gustavo): seu papel na startup",
     "en": "TODO(gustavo): seu papel na startup (em inglês)"

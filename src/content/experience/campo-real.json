@@ -1,12 +1,16 @@
 {
   "kind": "education",
-  "org": "Centro Universitário Campo Real",
+  "org": {
+    "pt": "Centro Universitário Campo Real",
+    "en": "Centro Universitário Campo Real"
+  },
   "role": {
     "pt": "Graduação em Engenharia de Software",
     "en": "Software Engineering degree"
   },
   "start": "2023-02",
   "end": "2027-12",
+  "_pendente": "TODO(gustavo): mês provisório em start e end (a spec só traz os anos 2023 e 2027); confirmar o mês de início e o de conclusão prevista",
   "description": {
     "pt": "Graduação em Engenharia de Software em Guarapuava (PR), com conclusão prevista para 2027. O TCC é o Lumina Influence AI.",
     "en": "Software Engineering degree in Guarapuava, Brazil, expected to finish in 2027. My capstone project is Lumina Influence AI."

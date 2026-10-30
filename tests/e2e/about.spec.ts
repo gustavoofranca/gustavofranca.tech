@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { expectExpectedLabel } from "./helpers/period";
 
 test("/sobre mostra formação, previsão e idiomas", async ({ page }) => {
   await page.goto("/sobre");
@@ -20,6 +21,9 @@ test("/en/about mostra os mesmos fatos em inglês", async ({ page }) => {
   await expect(main).toContainText("2027");
   await expect(main).toContainText("English");
   await expect(main).toContainText("Spanish");
+  // A organização também é traduzida (antes saía "incubadora da Campo Real" aqui).
+  await expect(main).toContainText("Evolve, Campo Real's incubator");
+  await expect(main).not.toContainText("incubadora");
 });
 
 for (const path of ["/sobre", "/en/about"]) {
@@ -42,18 +46,22 @@ for (const path of ["/sobre", "/en/about"]) {
 }
 
 // Escopo na linha da graduação: "expected" e "prevista" já aparecem nos textos.
+// A expectativa sai do próprio término e do mês corrente (isFutureMonth), não de uma
+// data fixa: depois de 12/2027 o rótulo some e o teste continua valendo.
 for (const [path, label] of [
   ["/sobre", "(previsão)"],
   ["/en/about", "(expected)"],
 ] as const) {
-  test(`${path}: a graduação, que termina em 2027, é marcada como previsão`, async ({
+  test(`${path}: término futuro da graduação é marcado como previsão`, async ({
     page,
   }) => {
     await page.goto(path);
-    const degree = page
-      .getByTestId("timeline-item")
-      .filter({ hasText: "Centro Universitário Campo Real" });
-    await expect(degree).toContainText(label);
+    await expectExpectedLabel(
+      page
+        .getByTestId("timeline-item")
+        .filter({ hasText: "Centro Universitário Campo Real" }),
+      label,
+    );
     // Fim já passado (Evolve) não leva o rótulo.
     const incubator = page
       .getByTestId("timeline-item")

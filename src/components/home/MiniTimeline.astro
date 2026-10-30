@@ -1,7 +1,8 @@
 ---
 import SectionTitle from "@/components/home/SectionTitle.astro";
+import Period from "@/components/Period.astro";
 import { getExperience } from "@/lib/content";
-import { formatMonth, t, type Locale } from "@/lib/i18n";
+import { t, type Locale } from "@/lib/i18n";
 import { routePath } from "@/lib/routes";
 
 interface Props {
@@ -35,16 +36,10 @@ const entries = (await getExperience()).slice(0, 3);
           class="absolute top-2 -left-[5px] size-2.5 rounded-full border border-faint bg-bg"
         />
         <p class="font-mono text-sm text-faint">
-          <time datetime={data.start}>{formatMonth(data.start, locale)}</time>
-          {" – "}
-          {data.end ? (
-            <time datetime={data.end}>{formatMonth(data.end, locale)}</time>
-          ) : (
-            dict.home.present
-          )}
+          <Period start={data.start} end={data.end} locale={locale} />
         </p>
         <h3 class="mt-1 text-base font-medium">{data.role[locale]}</h3>
-        <p class="text-sm text-muted">{data.org}</p>
+        <p class="text-sm text-muted">{data.org[locale]}</p>
       </li>
     ))}
   </ol>

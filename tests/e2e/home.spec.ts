@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { expectExpectedLabel } from "./helpers/period";
 
 for (const [path, cta] of [
   ["/", "Ver projetos"],
@@ -12,6 +13,25 @@ for (const [path, cta] of [
     );
     await expect(page.getByRole("link", { name: cta })).toBeVisible();
     await expect(page.getByTestId("project-card")).toHaveCount(3);
+  });
+}
+
+// A mini linha do tempo da home usa o mesmo período do Sobre: formatura no futuro
+// não pode aparecer como data fechada.
+for (const [path, label] of [
+  ["/", "(previsão)"],
+  ["/en/", "(expected)"],
+] as const) {
+  test(`home ${path}: término futuro da graduação é marcado como previsão`, async ({
+    page,
+  }) => {
+    await page.goto(path);
+    await expectExpectedLabel(
+      page
+        .locator("main li")
+        .filter({ hasText: "Centro Universitário Campo Real" }),
+      label,
+    );
   });
 }
 
