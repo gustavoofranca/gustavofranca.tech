@@ -24,6 +24,9 @@ export const prerender = false;
 
 // 5 envios por hora por IP (seguranca.md). Vive enquanto o processo vive.
 const limiter = createRateLimiter({ limit: 5, windowMs: 60 * 60 * 1000 });
+// Varre as janelas vencidas a cada minuto mesmo sem tráfego novo, para o IP não ficar
+// guardado depois da janela (promessa da página de privacidade). unref: não segura o processo.
+setInterval(() => limiter.sweep(), 60 * 1000).unref();
 
 // Um transporte por processo, criado no primeiro envio (as variáveis só são lidas aí).
 let send: ReturnType<typeof createMailer> | undefined;

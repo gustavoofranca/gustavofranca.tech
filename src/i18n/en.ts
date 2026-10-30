@@ -13,7 +13,7 @@ const en = {
     contactDescription:
       "Get in touch with Gustavo França, software engineer: contact form, email and GitHub.",
     privacyDescription:
-      "How Gustavo França's site handles your data: the form sends and stores nothing, and there are no cookies.",
+      "How Gustavo França's site handles your data: the form sends and stores nothing, and this site sets no cookies.",
   },
   a11y: {
     skipToContent: "Skip to content",
@@ -169,7 +169,7 @@ const en = {
         heading: "Spam protection",
         paragraphs: [
           "To block bots, the form uses Cloudflare Turnstile. To run this check, Cloudflare receives technical data from your browser and your IP address, under the Turnstile privacy policy.",
-          "Your IP also stays in the server's memory for up to one hour, to limit each address to 5 messages per hour. It is never written to disk.",
+          "Your IP also stays in the server's memory during the one-hour window that limits each address to 5 messages; the window is deleted at most one minute after it ends. It is never written to disk.",
         ],
       },
       {
@@ -181,7 +181,7 @@ const en = {
       {
         heading: "Cookies",
         paragraphs: [
-          "This site sets no cookies. Your theme choice (light or dark) is kept only in your browser, and goes away when you clear the site's data.",
+          "This site sets no cookies. Your theme choice (light or dark) is kept only in your browser, and goes away when you clear the site's data. Cloudflare Turnstile is a third-party service that loads only on the contact page and follows its own privacy policy.",
         ],
       },
       {

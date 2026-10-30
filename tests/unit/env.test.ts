@@ -41,6 +41,20 @@ describe("parseEnv", () => {
     );
   });
 
+  it("MAIL_TRANSPORT=json em produção falha fechado (mensagem não some em silêncio)", () => {
+    expect(() =>
+      parseEnv({ ...complete, MAIL_TRANSPORT: "json", NODE_ENV: "production" }),
+    ).toThrow(/MAIL_TRANSPORT/);
+    expect(
+      parseEnv({ ...complete, MAIL_TRANSPORT: "smtp", NODE_ENV: "production" })
+        .MAIL_TRANSPORT,
+    ).toBe("smtp");
+    expect(
+      parseEnv({ ...complete, MAIL_TRANSPORT: "json", NODE_ENV: "test" })
+        .MAIL_TRANSPORT,
+    ).toBe("json");
+  });
+
   it("ignora variáveis que não conhece", () => {
     expect(parseEnv({ ...complete, PATH: "/usr/bin" })).not.toHaveProperty(
       "PATH",

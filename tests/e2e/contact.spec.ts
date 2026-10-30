@@ -225,7 +225,7 @@ test("/privacidade diz que o formulário não guarda nada e que não há cookies
   await page.goto("/privacidade");
   const main = page.locator("main");
   await expect(main).toContainText("não guarda nada");
-  await expect(main).toContainText("não cria cookies");
+  await expect(main).toContainText("não grava cookies");
   await expect(main).toContainText("contato@gustavofranca.tech");
 });
 

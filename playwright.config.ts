@@ -13,7 +13,9 @@ export default defineConfig({
   // enviar, e as chaves do Turnstile são as de teste do Cloudflare (sempre passam).
   // https://developers.cloudflare.com/turnstile/troubleshooting/testing/
   webServer: {
-    command: "npm run build && npm run preview",
+    // NODE_ENV=test só no preview: o build continua de produção, e o env aceita
+    // MAIL_TRANSPORT=json (com NODE_ENV=production ele falha fechado).
+    command: "npm run build && npx cross-env NODE_ENV=test npm run preview",
     url: "http://localhost:4321",
     reuseExistingServer: !process.env["CI"],
     timeout: 180_000,

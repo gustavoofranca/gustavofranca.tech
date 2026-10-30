@@ -50,7 +50,15 @@ function parseWith<T>(schema: z.ZodType<T>, source: Source): T {
 }
 
 export function parseEnv(source: Source): Env {
-  return parseWith(serverSchema, source);
+  const env = parseWith(serverSchema, source);
+  // Em produção o transporte json descartaria as mensagens em silêncio: falha fechado
+  // (a rota responde send_failed). O e2e roda o preview com NODE_ENV=test.
+  if (source["NODE_ENV"] === "production" && env.MAIL_TRANSPORT === "json") {
+    throw new Error(
+      "Variáveis de ambiente faltando ou inválidas: MAIL_TRANSPORT (json não é aceito com NODE_ENV=production). Veja o .env.example.",
+    );
+  }
+  return env;
 }
 
 export function parsePublicEnv(source: Source): PublicEnv {

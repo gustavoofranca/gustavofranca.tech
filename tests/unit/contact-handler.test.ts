@@ -117,6 +117,18 @@ describe("handleContact", () => {
     expect(send).toHaveBeenCalledTimes(5);
   });
 
+  it("IPv6 da mesma /64 dividem o limite", async () => {
+    const { deps } = makeDeps();
+    for (let i = 1; i <= 5; i++) {
+      await expect(
+        handleContact(valid, { ip: `2001:db8::${i}`, now: NOW, deps }),
+      ).resolves.toEqual({ ok: true });
+    }
+    await expect(
+      handleContact(valid, { ip: "2001:db8::ffff", now: NOW, deps }),
+    ).resolves.toEqual({ ok: false, reason: "rate_limited" });
+  });
+
   it("captcha recusado não envia", async () => {
     const { deps, send } = makeDeps({ verifyCaptcha: async () => false });
     await expect(handleContact(valid, ctx(deps))).resolves.toEqual({

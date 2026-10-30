@@ -1,6 +1,6 @@
 import type { ContactEmail } from "@/lib/contact/mailer";
 import { buildEmail } from "@/lib/contact/mailer";
-import type { RateLimiter } from "@/lib/contact/rateLimit";
+import { rateLimitKey, type RateLimiter } from "@/lib/contact/rateLimit";
 import { contactSchema, type ContactField } from "@/lib/contact/schema";
 
 export type ContactReason =
@@ -68,7 +68,9 @@ export async function handleContact(
     };
   }
 
-  if (!deps.limiter.hit(ip)) return { ok: false, reason: "rate_limited" };
+  if (!deps.limiter.hit(rateLimitKey(ip))) {
+    return { ok: false, reason: "rate_limited" };
+  }
 
   let human: boolean;
   try {

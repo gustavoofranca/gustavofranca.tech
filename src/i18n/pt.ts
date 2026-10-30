@@ -14,7 +14,7 @@ const pt = {
     contactDescription:
       "Fale com Gustavo França, engenheiro de software: formulário de contato, e-mail e GitHub.",
     privacyDescription:
-      "Como o site de Gustavo França trata os seus dados: o formulário envia e não guarda nada, e não há cookies.",
+      "Como o site de Gustavo França trata os seus dados: o formulário envia e não guarda nada, e o site não grava cookies.",
   },
   a11y: {
     skipToContent: "Pular para o conteúdo",
@@ -180,7 +180,7 @@ const pt = {
         heading: "Proteção contra spam",
         paragraphs: [
           "Para barrar robôs, o formulário usa o Cloudflare Turnstile. Para fazer essa verificação, o Cloudflare recebe dados técnicos do seu navegador e o seu endereço IP, conforme a política de privacidade do Turnstile.",
-          "O seu IP também fica na memória do servidor por até uma hora, para limitar cada endereço a 5 envios por hora. Ele não é gravado em disco.",
+          "O seu IP também fica na memória do servidor durante a janela de uma hora que limita cada endereço a 5 envios; ela é apagada no máximo um minuto depois de vencer. Ele não é gravado em disco.",
         ],
       },
       {
@@ -192,7 +192,7 @@ const pt = {
       {
         heading: "Cookies",
         paragraphs: [
-          "Este site não cria cookies. A sua escolha de tema (claro ou escuro) fica guardada só no seu navegador, e some quando você limpa os dados do site.",
+          "Este site não grava cookies. A sua escolha de tema (claro ou escuro) fica guardada só no seu navegador, e some quando você limpa os dados do site. O Turnstile, do Cloudflare, é um serviço de terceiro que carrega só na página de contato e segue a política de privacidade dele.",
         ],
       },
       {
