@@ -14,6 +14,7 @@ const en = {
       "Get in touch with Gustavo França, software engineer: contact form, email and GitHub.",
     privacyDescription:
       "How Gustavo França's site handles your data: the form sends and stores nothing, and this site sets no cookies.",
+    ogImageAlt: "Share card: {title}",
   },
   a11y: {
     skipToContent: "Skip to content",

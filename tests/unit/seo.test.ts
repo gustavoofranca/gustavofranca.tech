@@ -127,8 +127,23 @@ describe("buildSeo", () => {
       "og:locale": "pt_BR",
       "og:site_name": "Gustavo França",
       "og:image": "https://gustavofranca.tech/og/sobre.png",
+      "og:image:width": "1200",
+      "og:image:height": "630",
+      "og:image:alt": "Cartão de compartilhamento: Sobre — Gustavo França",
       "twitter:card": "summary_large_image",
     });
+  });
+
+  it("descreve a imagem no idioma da página", () => {
+    const s = buildSeo({
+      locale: "en",
+      title: "",
+      description: "d",
+      path: "/en/",
+    });
+    expect(s.og["og:image:alt"]).toBe(
+      "Share card: Gustavo França — Software Engineer",
+    );
   });
 
   it("rota conhecida usa a imagem gerada para a própria página", () => {
@@ -152,6 +167,7 @@ describe("buildSeo", () => {
       path: "/en/nao-existe",
     });
     expect(s.og).not.toHaveProperty("og:image");
+    expect(s.og).not.toHaveProperty("og:image:alt");
     expect(s.og["twitter:card"]).toBe("summary");
     expect(s.og["og:locale"]).toBe("en_US");
   });

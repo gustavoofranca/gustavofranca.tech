@@ -15,6 +15,8 @@ const pt = {
       "Fale com Gustavo França, engenheiro de software: formulário de contato, e-mail e GitHub.",
     privacyDescription:
       "Como o site de Gustavo França trata os seus dados: o formulário envia e não guarda nada, e o site não grava cookies.",
+    // Texto alternativo da imagem Open Graph. {title} é o título completo da página.
+    ogImageAlt: "Cartão de compartilhamento: {title}",
   },
   a11y: {
     skipToContent: "Pular para o conteúdo",

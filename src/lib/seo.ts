@@ -1,6 +1,6 @@
 import { LOCALES, type Locale } from "@/i18n/locales";
 import { t } from "@/lib/i18n";
-import { ogPathFor } from "@/lib/og";
+import { OG_HEIGHT, OG_WIDTH, ogPathFor } from "@/lib/og";
 import { matchRoute, routePath } from "@/lib/routes";
 import { GITHUB_URL, SITE_URL } from "@/lib/site";
 
@@ -86,7 +86,14 @@ export function buildSeo({
     "og:site_name": t(locale).meta.siteName,
     "twitter:card": ogImage ? "summary_large_image" : "summary",
   };
-  if (ogImage) og["og:image"] = new URL(ogImage, SITE_URL).href;
+  if (ogImage) {
+    og["og:image"] = new URL(ogImage, SITE_URL).href;
+    // Toda imagem vem de src/lib/og.ts, sempre no mesmo tamanho; com largura e altura
+    // declaradas, quem lê a prévia não precisa baixar a imagem para montar o cartão.
+    og["og:image:width"] = String(OG_WIDTH);
+    og["og:image:height"] = String(OG_HEIGHT);
+    og["og:image:alt"] = t(locale).meta.ogImageAlt.replace("{title}", seoTitle);
+  }
   return {
     title: seoTitle,
     canonical,
