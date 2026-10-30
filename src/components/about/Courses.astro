@@ -1,0 +1,22 @@
+---
+import SectionTitle from "@/components/home/SectionTitle.astro";
+import { getAbout } from "@/lib/content";
+import { t, type Locale } from "@/lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+const { courses } = await getAbout();
+---
+
+<section aria-labelledby="courses-title" class="pb-16 md:pb-24">
+  <SectionTitle id="courses-title" label={dict.sections.courses} />
+  <ul class="mt-4 flex flex-col gap-2">
+    {courses.map((course) => (
+      <li class="border-b border-line pb-2 text-base">{course[locale]}</li>
+    ))}
+  </ul>
+</section>

@@ -1,0 +1,29 @@
+---
+import Courses from "@/components/about/Courses.astro";
+import Intro from "@/components/about/Intro.astro";
+import Languages from "@/components/about/Languages.astro";
+import StackFull from "@/components/about/StackFull.astro";
+import Timeline from "@/components/about/Timeline.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { t } from "@/lib/i18n";
+import { personJsonLd } from "@/lib/seo";
+
+const locale = "pt";
+const dict = t(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  title={dict.about.title}
+  description={dict.meta.aboutDescription}
+  path="/sobre"
+  jsonLd={[personJsonLd(locale)]}
+>
+  <Intro locale={locale} />
+  <Timeline locale={locale} />
+  <div class="mx-auto grid w-full max-w-5xl gap-x-8 px-4 sm:grid-cols-2 sm:px-6">
+    <Languages locale={locale} />
+    <Courses locale={locale} />
+  </div>
+  <StackFull locale={locale} />
+</BaseLayout>

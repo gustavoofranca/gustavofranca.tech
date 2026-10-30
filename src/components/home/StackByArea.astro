@@ -1,6 +1,6 @@
 ---
 import SectionTitle from "@/components/home/SectionTitle.astro";
-import { getStack, usedIn } from "@/lib/content";
+import { getStackAreas } from "@/lib/content";
 import { formatList, t, type Locale } from "@/lib/i18n";
 import { routePath } from "@/lib/routes";
 
@@ -10,26 +10,14 @@ interface Props {
 
 const { locale } = Astro.props;
 const dict = t(locale);
-const stack = await getStack();
-
 // Na home só entra o que tem prova: tecnologia usada em algum projeto publicado.
 // A stack completa fica no Sobre.
-const areas = (
-  await Promise.all(
-    stack.areas.map(async (area) => ({
-      id: area.id,
-      label: area.label[locale],
-      items: (
-        await Promise.all(
-          area.items.map(async (item) => ({
-            name: item.name,
-            projects: (await usedIn(item.id, locale)).map((p) => p.title),
-          })),
-        )
-      ).filter((item) => item.projects.length > 0),
-    })),
-  )
-).filter((area) => area.items.length > 0);
+const areas = (await getStackAreas(locale))
+  .map((area) => ({
+    ...area,
+    items: area.items.filter((item) => item.projects.length > 0),
+  }))
+  .filter((area) => area.items.length > 0);
 ---
 
 <section

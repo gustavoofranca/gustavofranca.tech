@@ -8,6 +8,8 @@ const en = {
       "Portfolio of Gustavo França, software engineer: projects, case studies and contact.",
     projectsDescription:
       "Projects by Gustavo França with case studies: context, architecture, challenges and results.",
+    aboutDescription:
+      "Who Gustavo França is: education, background, languages and the stack he uses, with the projects that back up each technology.",
   },
   a11y: {
     skipToContent: "Skip to content",
@@ -61,6 +63,7 @@ const en = {
     education: "// education",
     languages: "// languages",
     links: "// direct links",
+    courses: "// courses",
   },
   stack: {
     title: "Stack by area",
@@ -71,6 +74,16 @@ const en = {
       cms: "CMS and web",
       mobile: "Mobile",
       dataInfra: "Data and infra",
+    },
+  },
+  about: {
+    title: "About me",
+    expected: "expected",
+    kinds: {
+      work: "Work",
+      education: "Education",
+      incubator: "Incubator",
+      venture: "Own business",
     },
   },
   projects: {

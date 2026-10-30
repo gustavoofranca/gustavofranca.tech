@@ -75,6 +75,12 @@ export async function getStackNames() {
   );
 }
 
+export async function getAbout() {
+  const [entry] = await getCollection("about");
+  if (!entry) throw new Error("src/content/about.json está vazio ou ausente.");
+  return entry.data;
+}
+
 export async function getExperience() {
   const [entries, stack] = await Promise.all([
     getCollection("experience"),
@@ -99,4 +105,23 @@ export async function usedIn(stackId: string, locale: Locale) {
   return (await getProjects(locale))
     .filter((p) => p.data.stack.includes(stackId))
     .map((p) => ({ slug: projectSlug(p.id), title: p.data.title }));
+}
+
+// Stack por área, cada item com os projetos do idioma que o usam. A home filtra os
+// que têm prova; o Sobre mostra todos.
+export async function getStackAreas(locale: Locale) {
+  const stack = await getStack();
+  return Promise.all(
+    stack.areas.map(async (area) => ({
+      id: area.id,
+      label: area.label[locale],
+      items: await Promise.all(
+        area.items.map(async (item) => ({
+          id: item.id,
+          name: item.name,
+          projects: (await usedIn(item.id, locale)).map((p) => p.title),
+        })),
+      ),
+    })),
+  );
 }

@@ -1,0 +1,36 @@
+{
+  "story": [
+    {
+      "pt": "Estudo Engenharia de Software no Centro Universitário Campo Real, com conclusão prevista para 2027. Hoje meu foco é back-end, mas também gosto de trabalhar com front-end.",
+      "en": "I'm studying Software Engineering at Centro Universitário Campo Real, expected to graduate in 2027. My current focus is back-end, but I also enjoy working on the front-end."
+    },
+    {
+      "pt": "Ainda no primeiro período, o protótipo de uma startup de educação financeira foi selecionado pela incubadora Evolve, da faculdade. Também tive uma loja virtual própria de streetwear, na qual cuidei do desenvolvimento e do negócio. Hoje ela está fora do ar.",
+      "en": "In my first semester, a prototype for a financial education startup was selected by Evolve, the university's incubator. I also ran my own streetwear online store, handling both development and the business. It is offline now."
+    },
+    {
+      "pt": "TODO(gustavo): revisar este texto e acrescentar o que quiser contar (o que busca agora, o que te move como desenvolvedor)",
+      "en": "TODO(gustavo): revisar este texto em inglês e acrescentar o que quiser contar (o que busca agora, o que te move como desenvolvedor)"
+    }
+  ],
+  "languages": [
+    {
+      "name": { "pt": "Inglês", "en": "English" },
+      "level": { "pt": "fluente", "en": "fluent" }
+    },
+    {
+      "name": { "pt": "Espanhol", "en": "Spanish" },
+      "level": { "pt": "intermediário", "en": "intermediate" }
+    }
+  ],
+  "courses": [
+    {
+      "pt": "Python do básico ao avançado",
+      "en": "Python from basic to advanced"
+    },
+    {
+      "pt": "Programação, Instituto 3C",
+      "en": "Programming, Instituto 3C"
+    }
+  ]
+}

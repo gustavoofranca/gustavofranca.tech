@@ -74,6 +74,19 @@ const stack = defineCollection({
   }),
 });
 
+// Texto do Sobre que não é linha do tempo: história, idiomas e cursos. Os nomes de
+// idioma e curso moram aqui (e não no dicionário) por serem fatos sobre ele.
+const about = defineCollection({
+  loader: file("src/content/about.json", {
+    parser: (text) => [{ id: "about", ...JSON.parse(text) }],
+  }),
+  schema: z.object({
+    story: z.array(bilingual),
+    languages: z.array(z.object({ name: bilingual, level: bilingual })),
+    courses: z.array(bilingual),
+  }),
+});
+
 const archive = defineCollection({
   loader: file("src/content/archive.json", {
     parser: (text) =>
@@ -90,4 +103,4 @@ const archive = defineCollection({
   }),
 });
 
-export const collections = { projects, experience, stack, archive };
+export const collections = { projects, experience, stack, about, archive };

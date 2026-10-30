@@ -1,0 +1,25 @@
+---
+import SectionTitle from "@/components/home/SectionTitle.astro";
+import { getAbout } from "@/lib/content";
+import { t, type Locale } from "@/lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+const { languages } = await getAbout();
+---
+
+<section aria-labelledby="languages-title" class="pb-16 md:pb-24">
+  <SectionTitle id="languages-title" label={dict.sections.languages} />
+  <ul class="mt-4 flex flex-col gap-2">
+    {languages.map((language) => (
+      <li class="flex items-baseline justify-between gap-4 border-b border-line pb-2">
+        <span class="text-base font-medium">{language.name[locale]}</span>
+        <span class="text-sm text-muted">{language.level[locale]}</span>
+      </li>
+    ))}
+  </ul>
+</section>

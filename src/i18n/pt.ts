@@ -9,6 +9,8 @@ const pt = {
       "Portfólio de Gustavo França, engenheiro de software: projetos, estudos de caso e contato.",
     projectsDescription:
       "Projetos de Gustavo França com estudo de caso: contexto, arquitetura, desafios e resultado.",
+    aboutDescription:
+      "Quem é Gustavo França: formação, trajetória, idiomas e a stack que usa, com os projetos que provam cada tecnologia.",
   },
   a11y: {
     skipToContent: "Pular para o conteúdo",
@@ -64,6 +66,7 @@ const pt = {
     education: "// formação",
     languages: "// idiomas",
     links: "// links diretos",
+    courses: "// cursos",
   },
   stack: {
     title: "Stack por área",
@@ -74,6 +77,17 @@ const pt = {
       cms: "CMS e web",
       mobile: "Mobile",
       dataInfra: "Dados e infra",
+    },
+  },
+  about: {
+    title: "Sobre mim",
+    // Uma data de término no futuro vira "previsão" (formatura, por exemplo).
+    expected: "previsão",
+    kinds: {
+      work: "Trabalho",
+      education: "Formação",
+      incubator: "Incubadora",
+      venture: "Negócio próprio",
     },
   },
   projects: {
