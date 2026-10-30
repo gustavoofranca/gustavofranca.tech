@@ -26,8 +26,6 @@ const en = {
     projects: "Projects",
     about: "About",
     contact: "Contact",
-    menuOpen: "Open menu",
-    menuClose: "Close menu",
   },
   theme: {
     toggle: "Toggle theme",
@@ -63,23 +61,12 @@ const en = {
     contact: "// contact",
     allProjects: "// projects",
     academicArchive: "// academic archive",
-    about: "// about",
-    experience: "// experience",
-    education: "// education",
     languages: "// languages",
     links: "// direct links",
     courses: "// courses",
   },
   stack: {
-    title: "Stack by area",
     usedIn: "used in",
-    areas: {
-      front: "Front-end",
-      back: "Back-end",
-      cms: "CMS and web",
-      mobile: "Mobile",
-      dataInfra: "Data and infra",
-    },
   },
   about: {
     title: "About me",

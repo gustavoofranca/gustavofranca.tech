@@ -28,8 +28,6 @@ const pt = {
     projects: "Projetos",
     about: "Sobre",
     contact: "Contato",
-    menuOpen: "Abrir menu",
-    menuClose: "Fechar menu",
   },
   theme: {
     toggle: "Alternar tema",
@@ -67,23 +65,12 @@ const pt = {
     contact: "// contato",
     allProjects: "// projetos",
     academicArchive: "// arquivo acadêmico",
-    about: "// sobre",
-    experience: "// experiência",
-    education: "// formação",
     languages: "// idiomas",
     links: "// links diretos",
     courses: "// cursos",
   },
   stack: {
-    title: "Stack por área",
     usedIn: "usado em",
-    areas: {
-      front: "Front-end",
-      back: "Back-end",
-      cms: "CMS e web",
-      mobile: "Mobile",
-      dataInfra: "Dados e infra",
-    },
   },
   about: {
     title: "Sobre mim",
