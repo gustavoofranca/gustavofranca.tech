@@ -1,0 +1,25 @@
+---
+title: "Restaurant Management"
+summary: "Angular front-end for a burger restaurant: menu, cart, orders, inventory and finances, with customer and admin areas."
+locale: en
+kind: web
+role: solo
+period:
+  start: "2025-03"
+  end: "2025-05"
+stack: [angular, typescript]
+status: archived
+featured: false
+order: 5
+links:
+  repo:
+    - "https://github.com/gustavoofranca/restaurant-management-system"
+cover: ../../assets/projects/restaurant-management/cover.png
+coverAlt: "Restaurant Management cover with the project name and its stack: Angular and TypeScript."
+---
+
+Gusta's Burguer is an ordering and management platform for burger restaurants, built with Angular 17, TypeScript and RxJS. Customers build their order from the menu; admins track orders, products, inventory and finances in their own dashboard.
+
+The whole project runs in the browser. Data lives in `localStorage`, isolated behind services, with an HTTP interceptor and route guards already in place, so swapping in a real back-end touches only a few files. Login is a simulation, and the README says so plainly: any visitor can become an admin through devtools, because the point here is the front-end.
+
+In 2026 I went back to the repo to remove leftover Firebase code, fix the errors that kept it from compiling, and document these limitations. The next step is moving persistence and authentication to Supabase, with server-side checks.

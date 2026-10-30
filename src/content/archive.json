@@ -1,8 +1,68 @@
 [
   {
-    "name": "repositorio-exemplo",
-    "repo": "https://github.com/gustavoofranca/repositorio-exemplo",
-    "stack": ["astro"],
+    "name": "Desafio-museu",
+    "repo": "https://github.com/gustavoofranca/Desafio-museu",
+    "stack": ["html-css"],
     "year": 2024
+  },
+  {
+    "name": "Spotify",
+    "repo": "https://github.com/gustavoofranca/Spotify",
+    "stack": ["html-css"],
+    "year": 2024
+  },
+  {
+    "name": "Noticias-Cidade",
+    "repo": "https://github.com/gustavoofranca/Noticias-Cidade",
+    "stack": ["html-css"],
+    "year": 2024
+  },
+  {
+    "name": "React-Nutri",
+    "repo": "https://github.com/gustavoofranca/React-Nutri",
+    "stack": ["react", "javascript"],
+    "year": 2024
+  },
+  {
+    "name": "React-News",
+    "repo": "https://github.com/gustavoofranca/React-News",
+    "stack": ["react", "javascript"],
+    "year": 2024
+  },
+  {
+    "name": "firebase-avaliativo",
+    "repo": "https://github.com/gustavoofranca/firebase-avaliativo",
+    "stack": ["react", "javascript"],
+    "year": 2024
+  },
+  {
+    "name": "Unity-Jogo",
+    "repo": "https://github.com/gustavoofranca/Unity-Jogo",
+    "stack": ["unity"],
+    "year": 2024
+  },
+  {
+    "name": "Atividade-05-PHP-21-03",
+    "repo": "https://github.com/gustavoofranca/Atividade-05-PHP-21-03",
+    "stack": ["php"],
+    "year": 2025
+  },
+  {
+    "name": "PHP-CRUD-02-04",
+    "repo": "https://github.com/gustavoofranca/PHP-CRUD-02-04",
+    "stack": ["php"],
+    "year": 2025
+  },
+  {
+    "name": "Atividade-Reserva-Salas-Laravel",
+    "repo": "https://github.com/gustavoofranca/Atividade-Reserva-Salas-Laravel",
+    "stack": ["laravel", "php"],
+    "year": 2025
+  },
+  {
+    "name": "Atividade-Laravel",
+    "repo": "https://github.com/gustavoofranca/Atividade-Laravel",
+    "stack": ["laravel", "php"],
+    "year": 2025
   }
 ]

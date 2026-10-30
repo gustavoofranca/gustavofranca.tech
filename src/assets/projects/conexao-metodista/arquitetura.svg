@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="960" height="420" role="img" aria-labelledby="titulo descricao">
+  <title id="titulo">Arquitetura do Conexão Metodista</title>
+  <desc id="descricao">O navegador carrega o front-end em React, instalável como PWA, que conversa com o Supabase. Há também uma API em Express e TypeScript.</desc>
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#a1a1aa"/>
+    </marker>
+  </defs>
+  <rect width="960" height="420" rx="16" fill="#09090b"/>
+  <rect x="30" y="165" width="170" height="80" rx="10" fill="#131316" stroke="#a1a1aa" stroke-width="1.5"/>
+  <text x="115" y="201" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="600" fill="#fafafa" text-anchor="middle">Browser</text>
+  <text x="115" y="223" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">PWA</text>
+  <rect x="280" y="155" width="220" height="100" rx="10" fill="#131316" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="390" y="191" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="600" fill="#fafafa" text-anchor="middle">Front-end</text>
+  <text x="390" y="213" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">React · Vite</text>
+  <text x="390" y="235" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">Tailwind · Leaflet</text>
+  <rect x="620" y="40" width="220" height="90" rx="10" fill="#131316" stroke="#67e8f9" stroke-width="1.5"/>
+  <text x="730" y="81" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="600" fill="#fafafa" text-anchor="middle">Supabase</text>
+  <text x="730" y="103" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">PostgreSQL</text>
+  <rect x="620" y="280" width="220" height="90" rx="10" fill="#131316" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="730" y="321" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="600" fill="#fafafa" text-anchor="middle">API</text>
+  <text x="730" y="343" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">Express · TypeScript</text>
+  <path d="M200 205 L278 205" stroke="#a1a1aa" stroke-width="1.5" fill="none" marker-end="url(#seta)"/>
+  <path d="M500 185 L618 100" stroke="#a1a1aa" stroke-width="1.5" fill="none" marker-end="url(#seta)"/>
+  <path d="M500 225 L618 310" stroke="#a1a1aa" stroke-width="1.5" fill="none" marker-end="url(#seta)"/>
+  <path d="M730 280 L730 132" stroke="#a1a1aa" stroke-width="1.5" fill="none" marker-end="url(#seta)"/>
+</svg>

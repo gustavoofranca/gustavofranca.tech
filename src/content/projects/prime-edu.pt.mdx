@@ -1,0 +1,25 @@
+---
+title: "Prime Edu"
+summary: "App escolar em Flutter para alunos e professores: avisos, turmas, calendário, materiais pela Google Books API e entrada com biometria."
+locale: pt
+kind: mobile
+role: solo
+period:
+  start: "2025-08"
+  end: "2025-11"
+stack: [flutter, dart]
+status: archived
+featured: false
+order: 6
+links:
+  repo:
+    - "https://github.com/gustavoofranca/projeto-flutter-escola"
+cover: ../../assets/projects/prime-edu/cover.png
+coverAlt: "Capa do Prime Edu com o nome do projeto e a stack: Flutter e Dart."
+---
+
+O Prime Edu é um app escolar em Flutter, com perfis de aluno, professor e administrador. Tem quadro de avisos, turmas, calendário de eventos, perfil e uma área de materiais que busca livros pela Google Books API, com prévia e download.
+
+O código segue arquitetura limpa por funcionalidade (dados, domínio e apresentação), com Provider e get_it, modelos imutáveis com freezed, Hive e shared_preferences para os dados locais e go_router na navegação. Os componentes visuais seguem Atomic Design, de átomos como botões e campos até as páginas.
+
+Para os requisitos de entrega, implementei três recursos avançados: notificações locais agendadas (avisos, lembretes de aula e prazos), autenticação biométrica com impressão digital ou rosto pelo `local_auth`, e deep links (`primeedu://`) que abrem direto um aviso, uma aula ou um livro.

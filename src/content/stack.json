@@ -4,9 +4,70 @@
       "id": "front",
       "label": { "pt": "Front-end", "en": "Front-end" },
       "items": [
-        { "id": "astro", "name": "Astro" },
-        { "id": "react", "name": "React" }
+        { "id": "react", "name": "React", "icon": "react" },
+        { "id": "angular", "name": "Angular", "icon": "angular" },
+        { "id": "vue", "name": "Vue", "icon": "vuedotjs" },
+        { "id": "nuxt", "name": "Nuxt", "icon": "nuxt" },
+        { "id": "astro", "name": "Astro", "icon": "astro" },
+        { "id": "typescript", "name": "TypeScript", "icon": "typescript" },
+        { "id": "javascript", "name": "JavaScript", "icon": "javascript" },
+        { "id": "html-css", "name": "HTML & CSS", "icon": "html5" },
+        { "id": "tailwind", "name": "Tailwind CSS", "icon": "tailwindcss" },
+        { "id": "vite", "name": "Vite", "icon": "vite" }
       ]
+    },
+    {
+      "id": "back",
+      "label": { "pt": "Back-end", "en": "Back-end" },
+      "items": [
+        { "id": "nodejs", "name": "Node.js", "icon": "nodedotjs" },
+        { "id": "express", "name": "Express", "icon": "express" },
+        { "id": "nestjs", "name": "NestJS", "icon": "nestjs" },
+        { "id": "python", "name": "Python", "icon": "python" },
+        { "id": "flask", "name": "Flask", "icon": "flask" },
+        { "id": "php", "name": "PHP", "icon": "php" },
+        { "id": "laravel", "name": "Laravel", "icon": "laravel" },
+        { "id": "java", "name": "Java" }
+      ]
+    },
+    {
+      "id": "cms",
+      "label": { "pt": "CMS e web", "en": "CMS and web" },
+      "items": [
+        { "id": "wordpress", "name": "WordPress", "icon": "wordpress" },
+        { "id": "strapi", "name": "Strapi", "icon": "strapi" }
+      ]
+    },
+    {
+      "id": "mobile",
+      "label": { "pt": "Mobile", "en": "Mobile" },
+      "items": [
+        { "id": "flutter", "name": "Flutter", "icon": "flutter" },
+        { "id": "dart", "name": "Dart", "icon": "dart" }
+      ]
+    },
+    {
+      "id": "data",
+      "label": {
+        "pt": "Dados e infraestrutura",
+        "en": "Data and infrastructure"
+      },
+      "items": [
+        { "id": "postgresql", "name": "PostgreSQL", "icon": "postgresql" },
+        { "id": "supabase", "name": "Supabase", "icon": "supabase" },
+        { "id": "prisma", "name": "Prisma", "icon": "prisma" },
+        { "id": "redis", "name": "Redis", "icon": "redis" },
+        { "id": "bullmq", "name": "BullMQ" },
+        { "id": "firebase", "name": "Firebase", "icon": "firebase" },
+        { "id": "docker", "name": "Docker", "icon": "docker" },
+        { "id": "caddy", "name": "Caddy", "icon": "caddy" },
+        { "id": "git", "name": "Git e GitHub", "icon": "git" }
+      ]
+    },
+    {
+      "id": "other",
+      "label": { "pt": "Outros", "en": "Other" },
+      "items": [{ "id": "unity", "name": "Unity (C#)", "icon": "unity" }]
     }
   ]
 }

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="960" height="480" role="img" aria-labelledby="titulo descricao">
+  <title id="titulo">Arquitetura do Lumina Influence AI</title>
+  <desc id="descricao">O navegador acessa o Caddy, no VPS, que serve o front-end React e repassa a API Flask. A API e o worker de jobs usam o PostgreSQL no Supabase e chamam o Gemini, as APIs sociais e os provedores de OAuth.</desc>
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#a1a1aa"/>
+    </marker>
+  </defs>
+  <rect width="960" height="480" rx="16" fill="#09090b"/>
+  <rect x="220" y="20" width="460" height="440" rx="14" fill="none" stroke="#27272a" stroke-width="1.5" stroke-dasharray="4 6"/>
+  <text x="236" y="44" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12" fill="#a78bfa">VPS · Docker Compose</text>
+  <rect x="30" y="205" width="150" height="70" rx="10" fill="#131316" stroke="#a1a1aa" stroke-width="1.5"/>
+  <text x="105" y="236" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="600" fill="#fafafa" text-anchor="middle">Browser</text>
+  <text x="105" y="258" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">SPA</text>
+  <rect x="245" y="205" width="160" height="70" rx="10" fill="#131316" stroke="#a1a1aa" stroke-width="1.5"/>
+  <text x="325" y="236" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="600" fill="#fafafa" text-anchor="middle">Caddy</text>
+  <text x="325" y="258" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">HTTPS · headers</text>
+  <rect x="480" y="60" width="180" height="80" rx="10" fill="#131316" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="570" y="86" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="600" fill="#fafafa" text-anchor="middle">Front-end</text>
+  <text x="570" y="108" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">React · Vite</text>
+  <text x="570" y="130" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">Tailwind</text>
+  <rect x="480" y="200" width="180" height="80" rx="10" fill="#131316" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="570" y="226" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="600" fill="#fafafa" text-anchor="middle">API</text>
+  <text x="570" y="248" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">Flask · gunicorn</text>
+  <text x="570" y="270" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">JWT · Pydantic</text>
+  <rect x="480" y="350" width="180" height="80" rx="10" fill="#131316" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="570" y="376" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="600" fill="#fafafa" text-anchor="middle">Worker</text>
+  <text x="570" y="398" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">APScheduler</text>
+  <text x="570" y="420" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">sync · analyses</text>
+  <rect x="740" y="95" width="190" height="110" rx="10" fill="#131316" stroke="#67e8f9" stroke-width="1.5"/>
+  <text x="835" y="126" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="600" fill="#fafafa" text-anchor="middle">External services</text>
+  <text x="835" y="148" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">Google Gemini</text>
+  <text x="835" y="170" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">YouTube · Instagram</text>
+  <text x="835" y="192" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">TikTok · OAuth</text>
+  <rect x="740" y="300" width="190" height="80" rx="10" fill="#131316" stroke="#67e8f9" stroke-width="1.5"/>
+  <text x="835" y="336" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="17" font-weight="600" fill="#fafafa" text-anchor="middle">PostgreSQL</text>
+  <text x="835" y="358" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="12.5" fill="#a1a1aa" text-anchor="middle">Supabase</text>
+  <path d="M180 240 L243 240" stroke="#a1a1aa" stroke-width="1.5" fill="none" marker-end="url(#seta)"/>
+  <path d="M405 230 L478 110" stroke="#a1a1aa" stroke-width="1.5" fill="none" marker-end="url(#seta)"/>
+  <text x="441.5" y="162" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="11.5" fill="#a1a1aa" text-anchor="middle">static</text>
+  <path d="M405 240 L478 240" stroke="#a1a1aa" stroke-width="1.5" fill="none" marker-end="url(#seta)"/>
+  <text x="441.5" y="232" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="11.5" fill="#a1a1aa" text-anchor="middle">api.lumina</text>
+  <path d="M660 225 L738 165" stroke="#a1a1aa" stroke-width="1.5" fill="none" marker-end="url(#seta)"/>
+  <path d="M660 255 L738 320" stroke="#a1a1aa" stroke-width="1.5" fill="none" marker-end="url(#seta)"/>
+  <path d="M660 380 L738 360" stroke="#a1a1aa" stroke-width="1.5" fill="none" marker-end="url(#seta)"/>
+  <path d="M660 365 L738 195" stroke="#a1a1aa" stroke-width="1.5" fill="none" marker-end="url(#seta)"/>
+</svg>

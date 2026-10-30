@@ -1,0 +1,15 @@
+{
+  "kind": "work",
+  "org": "TODO(gustavo): pode citar empresa atual?",
+  "role": {
+    "pt": "TODO(gustavo): cargo na empresa atual",
+    "en": "TODO(gustavo): cargo na empresa atual (em inglês)"
+  },
+  "start": "2026-01",
+  "end": null,
+  "description": {
+    "pt": "TODO(gustavo): período na empresa atual (o início do campo acima é provisório) e descrição das atividades, sem citar clientes que não foram autorizados",
+    "en": "TODO(gustavo): descrição das atividades na empresa atual (em inglês)"
+  },
+  "stack": []
+}
