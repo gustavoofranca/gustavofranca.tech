@@ -83,7 +83,8 @@
   --color-accent-2: var(--accent-2);
   --color-live: var(--live);
   --color-code-string: var(--code-string);
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:
+    "Inter Variable", "Inter Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-mono:
     "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --radius-card: 0.75rem;

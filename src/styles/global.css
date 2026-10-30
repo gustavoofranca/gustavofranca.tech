@@ -20,6 +20,20 @@
     format("woff2-variations");
 }
 
+/* Fallback com as métricas da Inter: enquanto a Inter baixa, o texto já ocupa o mesmo
+   espaço, e a troca (font-display: swap) não empurra o layout (CLS). Valores das métricas
+   da Inter (UPM 2048, ascender 1984, descender -494) sobre a Arial; a Liberation Sans tem
+   as mesmas métricas da Arial (Linux do CI).
+   https://developer.chrome.com/blog/font-fallbacks */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans");
+  size-adjust: 107.4%;
+  ascent-override: 90.2%;
+  descent-override: 22.46%;
+  line-gap-override: 0%;
+}
+
 @layer base {
   html {
     background-color: var(--color-bg);

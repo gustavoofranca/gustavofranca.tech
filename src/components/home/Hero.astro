@@ -35,7 +35,9 @@ const buttonClass =
       >
         {dict.meta.siteName}
       </h1>
-      <p class="mt-3 text-lg text-balance text-faint md:text-2xl">
+      {/* text-muted, não text-faint: sobre a aurora o faint caía para 3,9:1 em 18 px
+          (mínimo 4,5:1, WCAG 1.4.3). Medido por pixel nos dois temas (Task 14). */}
+      <p class="mt-3 text-lg text-balance text-muted md:text-2xl">
         {dict.hero.role}
       </p>
       <div class="mt-8 flex flex-wrap gap-3">

@@ -45,9 +45,10 @@ const paletteProjects = shell
         <Shell locale={locale} path={seo.path}>
           <slot />
         </Shell>
-        {/* client:idle: abre por atalho ou clique, não é preciso hidratar antes de a página ficar ociosa. */}
+        {/* client:afterload: abre por atalho ou clique; hidrata depois do load para o
+            React não disputar banda com a imagem do LCP e as fontes. */}
         <CommandPalette
-          client:idle
+          client:afterload
           locale={locale}
           labels={{
             label: t(locale).palette.label,

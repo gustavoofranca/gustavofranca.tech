@@ -21,6 +21,20 @@ async function inlineHashes(dir) {
   );
 }
 
+// client:afterload (src/directives/afterLoad.ts): hidrata depois do load. Integração
+// local só para registrar a diretiva; não há pacote para isso.
+const afterLoadDirective = {
+  name: "after-load-directive",
+  hooks: {
+    "astro:config:setup": ({ addClientDirective }) => {
+      addClientDirective({
+        name: "afterload",
+        entrypoint: "./src/directives/afterLoad.ts",
+      });
+    },
+  },
+};
+
 // Saída estática: toda página é pré-renderizada. A única rota de servidor
 // (/api/contato) opta por `prerender = false`, e o adapter Node a atende.
 export default defineConfig({
@@ -72,6 +86,7 @@ export default defineConfig({
     routing: { prefixDefaultLocale: false },
   },
   integrations: [
+    afterLoadDirective,
     react(),
     mdx(),
     sitemap({
