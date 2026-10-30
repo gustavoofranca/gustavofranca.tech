@@ -27,21 +27,23 @@ O pre-commit (lefthook) exige o [gitleaks](https://github.com/gitleaks/gitleaks)
 
 ## Comandos
 
-| Comando              | O que faz                                                                                       |
-| -------------------- | ----------------------------------------------------------------------------------------------- |
-| `npm run dev`        | Servidor de desenvolvimento em `http://localhost:4321`                                          |
-| `npm run build`      | Gera `dist/` (antes, lista os `TODO(gustavo)`; com `CONTENT_STRICT=true` falha se sobrar algum) |
-| `npm run preview`    | Serve o build (servidor Node do adapter)                                                        |
-| `npm run check`      | `astro check` + `tsc`                                                                           |
-| `npm run lint`       | ESLint + `prettier --check`                                                                     |
-| `npm run test`       | Vitest                                                                                          |
-| `npm run test:e2e`   | Playwright contra o build de produção (inclui a varredura de acessibilidade)                    |
-| `npm run audit:dist` | Confere a CSP de cada HTML de `dist/client` (depois do build)                                   |
-| `npm run budget`     | JS da home, gzip, limite de 80 KB (depois do build)                                             |
-| `npm run lhci`       | Lighthouse CI em quatro páginas, com o orçamento (depois do build)                              |
-| `npm run audit:deps` | `npm audit` em duas camadas (ver Segurança)                                                     |
+| Comando                | O que faz                                                                                       |
+| ---------------------- | ----------------------------------------------------------------------------------------------- |
+| `npm run dev`          | Servidor de desenvolvimento em `http://localhost:4321`                                          |
+| `npm run build`        | Gera `dist/` (antes, lista os `TODO(gustavo)`; com `CONTENT_STRICT=true` falha se sobrar algum) |
+| `npm run preview`      | Serve o build (servidor Node do adapter)                                                        |
+| `npm run check`        | `astro check` + `tsc`                                                                           |
+| `npm run lint`         | ESLint + `prettier --check`                                                                     |
+| `npm run test`         | Vitest                                                                                          |
+| `npm run test:e2e`     | Playwright contra o build de produção (inclui a varredura de acessibilidade)                    |
+| `npm run audit:dist`   | Confere a CSP de cada HTML de `dist/client` (depois do build)                                   |
+| `npm run audit:fonts`  | Confere se as fontes publicadas têm glifo para todo caractere do build (depois do build)        |
+| `npm run fonts:subset` | Gera de novo os subconjuntos das fontes em `src/assets/fonts/` (só ao mudar caractere ou peso)  |
+| `npm run budget`       | JS da home, gzip, limite de 80 KB (depois do build)                                             |
+| `npm run lhci`         | Lighthouse CI em quatro páginas, com o orçamento (depois do build)                              |
+| `npm run audit:deps`   | `npm audit` em duas camadas (ver Segurança)                                                     |
 
-Verificação completa antes de commitar: `check`, `lint`, `test`, `build`, `audit:dist`, `budget`, `test:e2e`, `lhci`. O CI (`.github/workflows/ci.yml`) roda a mesma sequência e o `audit:deps`.
+Verificação completa antes de commitar: `check`, `lint`, `test`, `build`, `audit:dist`, `audit:fonts`, `budget`, `test:e2e`, `lhci`. O CI (`.github/workflows/ci.yml`) roda a mesma sequência e o `audit:deps`.
 
 ## Como adicionar um projeto
 
@@ -67,6 +69,7 @@ Regras em [`.claude/rules/qualidade.md`](.claude/rules/qualidade.md); decisões 
 
 - **Acessibilidade:** `tests/e2e/a11y-and-layout.spec.ts` percorre todas as rotas PT e EN (e as duas 404) nos temas escuro e claro: axe sem violação séria ou crítica, exatamente um `h1` e nada de rolagem horizontal em 360 px.
 - **JS da home:** `npm run budget` soma o que a home carrega sem interação (scripts inline, módulos, ilhas e seus imports estáticos); `import()` dinâmico, como o corpo da paleta, fica de fora.
+- **Fontes:** Inter e JetBrains Mono saem de subconjuntos próprios em `src/assets/fonts/` (latim, pesos 400–600, só os recursos OpenType de forma), gerados por `npm run fonts:subset` a partir do `@fontsource-variable` e versionados com a licença OFL ao lado. Peso fora de 400–600 ou caractere novo fora do Latim-1 e da Pontuação Geral: ampliar `scripts/subset-fonts.mjs`, gerar de novo e ajustar o `font-weight` do `@font-face` em `global.css`. O `npm run audit:fonts` falha listando o caractere sem glifo. [ADR 0003](docs/adr/0003-orcamento-de-performance.md)
 - **Lighthouse:** `lighthouserc.json` mede `/`, `/projetos/lumina`, `/sobre` e `/contato` no perfil mobile padrão (4G simulado), mediana de 3 execuções, sobre `dist/client` servido com compressão (como o Caddy faz em produção).
 - **Lighthouse no Windows com antivírus:** o Kaspersky injeta um script em toda página aberta pelo `chrome.exe` e estraga a medição. Use o `chrome-headless-shell` do Playwright:
 
@@ -119,4 +122,4 @@ docker run --init -p 4321:4321 --env-file .env portfolio
 - **Deploy:** o contêiner precisa rodar com `NODE_ENV=production` (a imagem já define; não sobrescreva no compose) e com o `.env` de produção no VPS.
 - **Checkpoint:** a demo em `checkpoint.gustavofranca.tech` ainda não existe (plano próprio); o projeto aparece como `offline`.
 - **`TODO(gustavo)`:** pendências de conteúdo (a lista completa sai de `npm run build` com `CONTENT_STRICT=true`; empresa atual, papel no Conexão, textos em primeira pessoa, CV, LinkedIn, WhatsApp, foto). O build de produção e a imagem Docker falham até elas serem respondidas.
-- **LCP no 4G simulado:** a home fica em 1,66 s, `/sobre` e `/contato` em 1,51 s (limite: 1,5 s); `/projetos/lumina` passa (1,21 s) e o resto do orçamento passa em todas. Opções e números no [ADR 0003](docs/adr/0003-orcamento-de-performance.md); a escolha é do Gustavo.
+- **LCP no 4G simulado com pouca folga na home:** com os subconjuntos de fonte as quatro páginas passam (medianas: home 1,44 s, `/sobre` 1,36 s, `/contato` e `/projetos/lumina` 1,06–1,36 s; limite 1,5 s), mas o Lantern oscila entre execuções e a home pode falhar de vez em quando no CI. Números e próxima alavanca no [ADR 0003](docs/adr/0003-orcamento-de-performance.md).

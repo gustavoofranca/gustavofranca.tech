@@ -21,7 +21,7 @@ A direção visual está decidida: **Variante 1 — minimal escuro + terminal + 
 
 ## Tipografia
 - Inter para texto, JetBrains Mono para detalhes de "dev" (rótulos `// ...`, terminal, atalhos, tags de stack). Mono nunca em parágrafo.
-- Fontes auto-hospedadas (`@fontsource-variable/*`), com subset latino e `font-display: swap`.
+- Fontes auto-hospedadas, com `font-display: swap`: subconjuntos em `src/assets/fonts/` gerados do `@fontsource-variable/*` (`npm run fonts:subset`), só pesos 400–600. Peso ou caractere novo: ampliar `scripts/subset-fonts.mjs` e gerar de novo; `npm run audit:fonts` confere os glifos.
 - Escala tipográfica fixa no `DESIGN.md`; títulos com `text-wrap: balance`; texto corrido com no máximo ~70 caracteres por linha.
 
 ## Movimento

@@ -32,7 +32,7 @@ No tema claro, ciano e verde são mais escuros que os da paleta original (`#06b6
 ## Tipografia
 
 - Texto: Inter Variable. Detalhes de dev (rótulos `// ...`, terminal, atalhos, tags): JetBrains Mono Variable. Mono nunca em parágrafo.
-- Auto-hospedadas, subset latino, `font-display: swap`.
+- Auto-hospedadas, `font-display: swap`. Subconjuntos próprios em `src/assets/fonts/` (latim, pesos 400–600), gerados do `@fontsource-variable` por `npm run fonts:subset`: peso fora de 400–600 exige gerar de novo (ADR 0003).
 - Fallback com métricas ajustadas (`Inter Fallback`: Arial/Liberation Sans com `size-adjust` e `ascent/descent-override` da Inter, em `global.css`): a troca de fonte não empurra o texto (CLS).
 - Escala fixa (Tailwind): `text-sm` 14, `text-base` 16, `text-lg` 18, `text-2xl` 24, `text-4xl` 36, `text-6xl` 60. Títulos com `text-wrap: balance`; texto corrido até ~70 caracteres por linha.
 
