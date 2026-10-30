@@ -1,0 +1,27 @@
+# dependências e build
+node_modules/
+dist/
+.astro/
+
+# segredos
+.env
+.env.*
+!.env.example
+
+# testes
+test-results/
+playwright-report/
+.lighthouseci/
+coverage/
+
+# ferramentas do agente (pessoais)
+.superpowers/
+docs/superpowers/
+.claude/settings.local.json
+# skills de terceiros: restauradas pelo skills-lock.json
+.claude/skills/
+
+# sistema
+.DS_Store
+Thumbs.db
+desktop.ini

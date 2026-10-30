@@ -1,0 +1,44 @@
+{
+  "enabledPlugins": {
+    "context7@claude-plugins-official": true
+  },
+  "permissions": {
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.local)",
+      "Read(./.env.development)",
+      "Read(./.env.production)",
+      "Read(**/.env)",
+      "Edit(./.env)",
+      "Edit(**/.env)",
+      "Read(~/.ssh/**)",
+      "Edit(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.npmrc)"
+    ],
+    "ask": [
+      "Bash(ssh:*)",
+      "Bash(scp:*)",
+      "Bash(rsync:*)",
+      "Bash(git push:*)",
+      "Bash(npm publish:*)",
+      "Bash(docker push:*)",
+      "PowerShell(ssh:*)",
+      "PowerShell(scp:*)",
+      "PowerShell(git push:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|PowerShell",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/guarda-git.mjs\""
+          }
+        ]
+      }
+    ]
+  }
+}
