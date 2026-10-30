@@ -39,6 +39,11 @@ const afterLoadDirective = {
 // (/api/contato) opta por `prerender = false`, e o adapter Node a atende.
 export default defineConfig({
   site: "https://gustavofranca.tech",
+  // dev e preview atendem em todas as interfaces: abre no celular e nos outros aparelhos
+  // da rede de casa (http://<ip-do-pc>:4321). O firewall do Windows só aceita a rede local.
+  // Não afeta produção: lá o processo roda no container e o Caddy fica na frente.
+  // https://docs.astro.build/en/reference/configuration-reference/#serverhost
+  server: { host: true },
   output: "static",
   // bodySizeLimit: o padrão é 1 GB. O maior envio legítimo (4000 caracteres de 4 bytes,
   // percent-encoded, mais o token do Turnstile) fica abaixo de 64 KB.
