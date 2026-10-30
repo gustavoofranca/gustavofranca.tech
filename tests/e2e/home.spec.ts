@@ -18,12 +18,17 @@ for (const [path, cta] of [
 test("movimento reduzido mostra o terminal completo", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  await expect(page.getByTestId("hero-terminal")).toContainText(
-    "open lumina --live",
-  );
+  const terminal = page.getByTestId("hero-terminal");
+  await expect(terminal).toContainText("open lumina --live");
+  // As máscaras da digitação ficam transparentes: nada do texto fica coberto.
+  const masks = terminal.locator(".typing-mask");
+  await expect(masks).toHaveCount(2);
+  for (const mask of await masks.all()) {
+    await expect(mask).toHaveCSS("opacity", "0");
+  }
 });
 
-test("o terminal é decorativo e não entra na árvore de acessibilidade", async ({
+test("o terminal tem aria-hidden e fica fora da árvore de acessibilidade", async ({
   page,
 }) => {
   await page.goto("/");
@@ -31,6 +36,33 @@ test("o terminal é decorativo e não entra na árvore de acessibilidade", async
     "aria-hidden",
     "true",
   );
+  const tree = await page.locator("main").ariaSnapshot();
+  expect(tree).not.toContain("cat stack.json");
+  expect(tree).not.toContain("open lumina");
+});
+
+// WCAG 2.2.2: nada no hero se move sozinho para sempre; a aurora roda uma vez.
+test("a aurora roda uma vez e nenhuma animação do hero é infinita", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const blobs = page.locator(".aurora-blob");
+  await expect(blobs).toHaveCount(2);
+  for (const blob of await blobs.all()) {
+    await expect(blob).toHaveCSS("animation-iteration-count", "1");
+  }
+  const infinite = await page
+    .locator("#hero-title")
+    .evaluate(
+      (title) =>
+        (
+          title.closest("section")?.getAnimations({ subtree: true }) ?? []
+        ).filter(
+          (animation) => animation.effect?.getTiming().iterations === Infinity,
+        ).length,
+    );
+  expect(infinite).toBe(0);
 });
 
 // Sem public/cv-gustavo-franca.pdf no repositório, o botão não pode aparecer
@@ -40,12 +72,18 @@ test("sem o PDF do CV, não há botão de baixar", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Baixar CV" })).toHaveCount(0);
 });
 
-test("a home não tem rolagem horizontal", async ({ page }) => {
-  await page.goto("/");
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - window.innerWidth,
-  );
-  expect(overflow).toBeLessThanOrEqual(0);
+test.describe("em 360 px", () => {
+  test.use({ viewport: { width: 360, height: 800 } });
+
+  for (const path of ["/", "/en/"]) {
+    test(`${path} não tem rolagem horizontal`, async ({ page }) => {
+      await page.goto(path);
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - window.innerWidth,
+      );
+      expect(overflow).toBeLessThanOrEqual(0);
+    });
+  }
 });
 
 // Movimento reduzido: o axe mede o contraste do estado final, sem a máscara da digitação.

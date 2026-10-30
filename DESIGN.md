@@ -42,9 +42,9 @@ No tema claro, ciano e verde são mais escuros que os da paleta original (`#06b6
 
 ## Movimento
 
-- Durações: `--duration-fast` 150 ms (hover, cor), `--duration-base` 250 ms (entradas), `--duration-type` 65 ms (por caractere digitado no terminal), `--duration-aurora` 16 s (ciclo de um brilho da aurora).
+- Durações: `--duration-fast` 150 ms (hover, cor), `--duration-base` 250 ms (entradas), `--duration-type` 65 ms (por caractere digitado no terminal), `--duration-aurora` 4,5 s (deriva única dos brilhos da aurora).
 - Terminal do hero: o estado padrão já é o texto completo; a digitação é uma máscara que anda com `steps()` (só `transform`/`opacity`) e só existe com `prefers-reduced-motion: no-preference`. O cursor pisca 4 vezes e para (WCAG 2.2.2).
-- Só `transform` e `opacity`. Um momento orquestrado por página (hero); a aurora se move devagar; o terminal digita uma vez.
+- Só `transform` e `opacity`. Um momento orquestrado por página (hero); a aurora deriva uma vez em 4,5 s e para (WCAG 2.2.2: nada se move sozinho por mais de 5 s sem pausa); o terminal digita uma vez.
 - `prefers-reduced-motion: reduce`: animações e transições reduzidas a quase zero em `global.css`; conteúdo completo visível, nunca começa com `opacity: 0`.
 
 ## Botões e cartões

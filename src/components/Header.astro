@@ -84,15 +84,15 @@ const needsJs = "[html:not([data-theme])_&]:hidden";
           needsJs,
         ]}
       >
-        <!-- Nome pelo texto oculto, não por aria-label: o "⌘K" visível é símbolo e
-             não casaria com o nome (WCAG 2.5.3); o atalho vai em aria-keyshortcuts. -->
+        {/* Nome pelo texto oculto, não por aria-label: o "⌘K" visível é símbolo e
+            não casaria com o nome (WCAG 2.5.3); o atalho vai em aria-keyshortcuts. */}
         <span class="sr-only">{dict.palette.open}</span>
         <kbd aria-hidden="true" class="font-mono">
           ⌘K
         </kbd>
       </button>
       <span class={needsJs}>
-        <!-- client:load: o botão precisa responder já no primeiro toque. -->
+        {/* client:load: o botão precisa responder já no primeiro toque. */}
         <ThemeToggle client:load label={dict.theme.toggle} />
       </span>
     </div>

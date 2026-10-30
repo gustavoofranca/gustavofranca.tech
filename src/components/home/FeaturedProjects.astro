@@ -28,9 +28,9 @@ const projects = await getFeaturedProjects(locale);
     </a>
   </div>
   <ul class="mt-2 grid gap-4 md:grid-cols-3">
-    {projects.map((project) => (
+    {projects.map((project, index) => (
       <li>
-        <ProjectCard project={project} locale={locale} priority />
+        <ProjectCard project={project} locale={locale} priority={index === 0} />
       </li>
     ))}
   </ul>

@@ -21,9 +21,10 @@
   --shadow-terminal: 0 24px 64px -24px rgb(0 0 0 / 0.9);
   --duration-fast: 150ms;
   --duration-base: 250ms;
-  /* Tempo por caractere digitado no terminal do hero e ciclo de um blob da aurora. */
+  /* Tempo por caractere digitado no terminal do hero e deriva única da aurora
+     (abaixo de 5 s: WCAG 2.2.2). */
   --duration-type: 65ms;
-  --duration-aurora: 16s;
+  --duration-aurora: 4.5s;
 }
 
 /* Claro: mesmos tokens, redefinidos. Ciano e verde escurecidos para manter contraste de texto (WCAG AA). */
