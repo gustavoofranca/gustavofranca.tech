@@ -17,7 +17,21 @@ export default defineConfig({
     locales: ["pt", "en"],
     routing: { prefixDefaultLocale: false },
   },
-  integrations: [react(), mdx(), sitemap()],
+  integrations: [
+    react(),
+    mdx(),
+    sitemap({
+      // Mesma regra de barra final do canonical (src/lib/seo.ts, canonicalPath): só as
+      // duas homes terminam em "/". O @astrojs/sitemap emitiria "/sobre/" (formato diretório).
+      serialize(item) {
+        const url = new URL(item.url);
+        if (url.pathname !== "/" && url.pathname !== "/en/") {
+          url.pathname = url.pathname.replace(/\/+$/, "");
+        }
+        return { ...item, url: url.href };
+      },
+    }),
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

@@ -37,7 +37,7 @@ const dict = t(locale);
           href={hrefs[code]}
           hreflang={code === "pt" ? "pt-BR" : code}
           lang={code}
-          aria-label={dict.language[code]}
+          aria-label={`${code.toUpperCase()} — ${dict.language[code]}`}
           class="inline-flex min-h-10 min-w-8 items-center justify-center rounded-(--radius-control) text-muted transition-colors duration-(--duration-fast) hover:text-fg"
         >
           {code.toUpperCase()}

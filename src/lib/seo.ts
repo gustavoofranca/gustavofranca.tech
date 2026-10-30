@@ -1,4 +1,4 @@
-import type { Locale } from "@/i18n/locales";
+import { LOCALES, type Locale } from "@/i18n/locales";
 import { t } from "@/lib/i18n";
 import { matchRoute, routePath } from "@/lib/routes";
 import { GITHUB_URL, SITE_URL } from "@/lib/site";
@@ -25,9 +25,17 @@ const HREFLANG: Record<Locale, Exclude<Hreflang, "x-default">> = {
   en: "en",
 };
 const OG_LOCALE: Record<Locale, string> = { pt: "pt_BR", en: "en_US" };
-const LOCALES: Locale[] = ["pt", "en"];
 
-const absolute = (path: string) => new URL(path, SITE_URL).href;
+// Único ponto que decide a barra final: rota conhecida usa a forma de `routePath`
+// (só as duas homes terminam em "/"); o resto perde a barra. O sitemap segue a mesma
+// regra em astro.config.mjs, e um e2e confere que os dois batem.
+function canonicalPath(path: string): string {
+  const match = matchRoute(path);
+  if (match) return routePath(match.key, match.locale, match.slug);
+  return path.replace(/\/+$/, "") || "/";
+}
+
+const absolute = (path: string) => new URL(canonicalPath(path), SITE_URL).href;
 
 // Título vazio é a home: "Gustavo França — Engenheiro de Software".
 function fullTitle(title: string, locale: Locale): string {
@@ -69,7 +77,7 @@ export function buildSeo({
     "og:site_name": t(locale).meta.siteName,
     "twitter:card": ogImage ? "summary_large_image" : "summary",
   };
-  if (ogImage) og["og:image"] = absolute(ogImage);
+  if (ogImage) og["og:image"] = new URL(ogImage, SITE_URL).href;
   return {
     title: seoTitle,
     canonical,
@@ -86,7 +94,7 @@ export function personJsonLd(locale: Locale) {
     "@type": "Person",
     name: PERSON_NAME,
     jobTitle: t(locale).meta.jobTitle,
-    url: locale === "pt" ? SITE_URL : absolute(routePath("home", locale)),
+    url: absolute(routePath("home", locale)),
     sameAs: [GITHUB_URL],
   };
 }

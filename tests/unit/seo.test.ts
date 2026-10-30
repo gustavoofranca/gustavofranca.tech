@@ -44,6 +44,40 @@ describe("buildSeo", () => {
     });
   });
 
+  it("normaliza a barra final: /sobre/ e /sobre dão o mesmo canonical", () => {
+    const canonical = (path: string, locale: "pt" | "en" = "pt") =>
+      buildSeo({ locale, title: "x", description: "d", path }).canonical;
+    expect(canonical("/sobre/")).toBe("https://gustavofranca.tech/sobre");
+    expect(canonical("/sobre")).toBe("https://gustavofranca.tech/sobre");
+    expect(canonical("/en/about/", "en")).toBe(
+      "https://gustavofranca.tech/en/about",
+    );
+    expect(canonical("/projetos/lumina/")).toBe(
+      "https://gustavofranca.tech/projetos/lumina",
+    );
+  });
+
+  it("mantém a barra nas duas homes", () => {
+    const canonical = (path: string, locale: "pt" | "en") =>
+      buildSeo({ locale, title: "", description: "d", path }).canonical;
+    expect(canonical("/", "pt")).toBe("https://gustavofranca.tech/");
+    expect(canonical("/en/", "en")).toBe("https://gustavofranca.tech/en/");
+    expect(canonical("/en", "en")).toBe("https://gustavofranca.tech/en/");
+  });
+
+  it("normaliza também os hreflang", () => {
+    const s = buildSeo({
+      locale: "pt",
+      title: "Sobre",
+      description: "d",
+      path: "/sobre/",
+    });
+    expect(s.alternates).toContainEqual({
+      hreflang: "en",
+      href: "https://gustavofranca.tech/en/about",
+    });
+  });
+
   it("usa o título da home quando o título vem vazio", () => {
     expect(
       buildSeo({ locale: "pt", title: "", description: "d", path: "/" }).title,
@@ -117,7 +151,7 @@ describe("personJsonLd", () => {
       "@context": "https://schema.org",
       "@type": "Person",
       name: "Gustavo Henrique França",
-      url: SITE_URL,
+      url: `${SITE_URL}/`,
       sameAs: [GITHUB_URL],
     });
     expect(personJsonLd("en")).toMatchObject({ url: `${SITE_URL}/en/` });
