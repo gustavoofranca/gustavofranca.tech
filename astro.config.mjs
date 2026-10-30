@@ -10,7 +10,9 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   site: "https://gustavofranca.tech",
   output: "static",
-  adapter: node({ mode: "standalone" }),
+  // bodySizeLimit: o padrão é 1 GB. O maior envio legítimo (4000 caracteres de 4 bytes,
+  // percent-encoded, mais o token do Turnstile) fica abaixo de 64 KB.
+  adapter: node({ mode: "standalone", bodySizeLimit: 64 * 1024 }),
   // PT na raiz, EN em /en. As rotas têm nomes próprios por idioma (src/lib/routes.ts).
   i18n: {
     defaultLocale: "pt",

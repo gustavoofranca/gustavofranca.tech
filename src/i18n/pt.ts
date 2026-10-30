@@ -11,6 +11,10 @@ const pt = {
       "Projetos de Gustavo França com estudo de caso: contexto, arquitetura, desafios e resultado.",
     aboutDescription:
       "Quem é Gustavo França: formação, trajetória, idiomas e a stack que usa, com os projetos que provam cada tecnologia.",
+    contactDescription:
+      "Fale com Gustavo França, engenheiro de software: formulário de contato, e-mail e GitHub.",
+    privacyDescription:
+      "Como o site de Gustavo França trata os seus dados: o formulário envia e não guarda nada, e não há cookies.",
   },
   a11y: {
     skipToContent: "Pular para o conteúdo",
@@ -124,24 +128,81 @@ const pt = {
     title: "Vamos conversar",
     intro: "Escreva e eu respondo por e-mail.",
     form: {
+      label: "Formulário de contato",
       name: "Nome",
       email: "E-mail",
       message: "Mensagem",
+      messageHint: "De 10 a 4000 caracteres.",
+      // Campo-isca escondido: só robô preenche.
+      honeypot: "Deixe este campo vazio",
       send: "Enviar mensagem",
       sending: "Enviando...",
       success: "Mensagem enviada. Respondo em breve.",
+      // {email} é trocado pelo e-mail de contato (src/lib/site.ts).
       errors: {
         nameRequired: "Informe seu nome.",
-        emailInvalid: "Informe um e-mail válido.",
-        messageTooShort: "Escreva uma mensagem um pouco maior.",
-        messageTooLong: "A mensagem passou do limite de caracteres.",
+        nameTooLong: "Use no máximo 80 caracteres no nome.",
+        nameInvalid: "Tire a quebra de linha ou o caractere especial do nome.",
+        emailInvalid: "Informe um e-mail válido, como nome@exemplo.com.",
+        messageTooShort: "Escreva pelo menos 10 caracteres.",
+        messageTooLong: "Use no máximo 4000 caracteres.",
+        invalid:
+          "Confira os campos: nome, e-mail válido e mensagem de 10 a 4000 caracteres.",
+        captchaPending:
+          "Espere a verificação anti-spam terminar e envie de novo.",
+        captcha:
+          "Não deu para confirmar que você é uma pessoa. A verificação precisa de JavaScript: recarregue a página e tente de novo, ou escreva para {email}.",
         tooManyRequests: "Muitas tentativas. Tente de novo em alguns minutos.",
         generic:
-          "Não foi possível enviar agora. Tente de novo ou escreva para o e-mail abaixo.",
+          "Não foi possível enviar agora. Tente de novo ou escreva para {email}.",
       },
     },
     copyEmail: "Copiar e-mail",
     emailCopied: "E-mail copiado",
+    copyFailed: "Não consegui copiar. O e-mail está aqui ao lado.",
+    github: "GitHub",
+    whatsapp: "Conversar no WhatsApp",
+  },
+  // Página de privacidade. {email} é trocado pelo e-mail de contato.
+  privacy: {
+    title: "Privacidade",
+    intro:
+      "O que acontece com os seus dados neste site. A página é curta porque o site coleta pouco.",
+    sections: [
+      {
+        heading: "Formulário de contato",
+        paragraphs: [
+          "Quando você envia o formulário, o nome, o e-mail e a mensagem vão direto por e-mail para {email}. O site não guarda nada em banco de dados: envia e esquece.",
+          "A mensagem fica na minha caixa de entrada, como qualquer e-mail que você me mandasse, e uso o seu endereço só para responder.",
+        ],
+      },
+      {
+        heading: "Proteção contra spam",
+        paragraphs: [
+          "Para barrar robôs, o formulário usa o Cloudflare Turnstile. Para fazer essa verificação, o Cloudflare recebe dados técnicos do seu navegador e o seu endereço IP, conforme a política de privacidade do Turnstile.",
+          "O seu IP também fica na memória do servidor por até uma hora, para limitar cada endereço a 5 envios por hora. Ele não é gravado em disco.",
+        ],
+      },
+      {
+        heading: "Registros",
+        paragraphs: [
+          "O servidor registra só um identificador aleatório de cada envio e o resultado (enviado ou bloqueado). Nome, e-mail, mensagem e IP não entram nesses registros.",
+        ],
+      },
+      {
+        heading: "Cookies",
+        paragraphs: [
+          "Este site não cria cookies. A sua escolha de tema (claro ou escuro) fica guardada só no seu navegador, e some quando você limpa os dados do site.",
+        ],
+      },
+      {
+        heading: "Seus direitos",
+        paragraphs: [
+          "Pela LGPD, você pode pedir uma cópia ou a exclusão de uma mensagem que me enviou. Escreva para {email}.",
+        ],
+      },
+    ],
+    turnstilePolicy: "Política de privacidade do Cloudflare Turnstile",
   },
   notFound: {
     title: "404",

@@ -10,6 +10,10 @@ const en = {
       "Projects by Gustavo França with case studies: context, architecture, challenges and results.",
     aboutDescription:
       "Who Gustavo França is: education, background, languages and the stack he uses, with the projects that back up each technology.",
+    contactDescription:
+      "Get in touch with Gustavo França, software engineer: contact form, email and GitHub.",
+    privacyDescription:
+      "How Gustavo França's site handles your data: the form sends and stores nothing, and there are no cookies.",
   },
   a11y: {
     skipToContent: "Skip to content",
@@ -115,25 +119,79 @@ const en = {
     title: "Let's talk",
     intro: "Write to me and I'll reply by email.",
     form: {
+      label: "Contact form",
       name: "Name",
       email: "Email",
       message: "Message",
+      messageHint: "10 to 4,000 characters.",
+      honeypot: "Leave this field empty",
       send: "Send message",
       sending: "Sending...",
       success: "Message sent. I'll reply soon.",
       errors: {
         nameRequired: "Please enter your name.",
-        emailInvalid: "Please enter a valid email.",
-        messageTooShort: "Please write a slightly longer message.",
-        messageTooLong: "The message is over the character limit.",
+        nameTooLong: "Use at most 80 characters for your name.",
+        nameInvalid:
+          "Remove the line break or special character from your name.",
+        emailInvalid: "Enter a valid email, like name@example.com.",
+        messageTooShort: "Write at least 10 characters.",
+        messageTooLong: "Use at most 4,000 characters.",
+        invalid:
+          "Check the fields: name, a valid email and a message of 10 to 4,000 characters.",
+        captchaPending:
+          "Wait for the anti-spam check to finish, then send again.",
+        captcha:
+          "Couldn't confirm you're a person. The check needs JavaScript: reload the page and try again, or write to {email}.",
         tooManyRequests:
           "Too many attempts. Please try again in a few minutes.",
-        generic:
-          "Couldn't send right now. Try again or write to the email below.",
+        generic: "Couldn't send right now. Try again or write to {email}.",
       },
     },
     copyEmail: "Copy email",
     emailCopied: "Email copied",
+    copyFailed: "Couldn't copy. The email is right next to this button.",
+    github: "GitHub",
+    whatsapp: "Chat on WhatsApp",
+  },
+  privacy: {
+    title: "Privacy",
+    intro:
+      "What happens to your data on this site. The page is short because the site collects little.",
+    sections: [
+      {
+        heading: "Contact form",
+        paragraphs: [
+          "When you send the form, your name, email and message go straight to {email} by email. The site stores nothing in a database: it sends and forgets.",
+          "The message stays in my inbox, like any email you'd send me, and I use your address only to reply.",
+        ],
+      },
+      {
+        heading: "Spam protection",
+        paragraphs: [
+          "To block bots, the form uses Cloudflare Turnstile. To run this check, Cloudflare receives technical data from your browser and your IP address, under the Turnstile privacy policy.",
+          "Your IP also stays in the server's memory for up to one hour, to limit each address to 5 messages per hour. It is never written to disk.",
+        ],
+      },
+      {
+        heading: "Logs",
+        paragraphs: [
+          "The server logs only a random identifier for each submission and its result (sent or blocked). Name, email, message and IP are not in these logs.",
+        ],
+      },
+      {
+        heading: "Cookies",
+        paragraphs: [
+          "This site sets no cookies. Your theme choice (light or dark) is kept only in your browser, and goes away when you clear the site's data.",
+        ],
+      },
+      {
+        heading: "Your rights",
+        paragraphs: [
+          "Under Brazil's LGPD, you can ask for a copy or the deletion of a message you sent me. Write to {email}.",
+        ],
+      },
+    ],
+    turnstilePolicy: "Cloudflare Turnstile privacy policy",
   },
   notFound: {
     title: "404",

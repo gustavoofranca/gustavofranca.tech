@@ -1,0 +1,59 @@
+---
+import DirectLinks from "@/components/contact/DirectLinks.astro";
+import StatusMessages from "@/components/contact/StatusMessages.astro";
+import { ContactForm } from "@/components/islands/ContactForm";
+import type { Locale } from "@/i18n/locales";
+import { getPublicEnv } from "@/lib/env";
+import { t } from "@/lib/i18n";
+import { CONTACT_EMAIL } from "@/lib/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+const { form } = dict.contact;
+const withEmail = (text: string) => text.replace("{email}", CONTACT_EMAIL);
+const labels = {
+  ...form,
+  errors: {
+    ...form.errors,
+    captcha: withEmail(form.errors.captcha),
+    generic: withEmail(form.errors.generic),
+  },
+};
+// Falha o build se a chave pública do Turnstile não estiver definida.
+const siteKey = getPublicEnv().PUBLIC_TURNSTILE_SITEKEY;
+---
+
+<div class="mx-auto w-full max-w-5xl px-4 pt-12 pb-20 sm:px-6 md:pt-16 md:pb-28">
+  <h1 class="text-4xl font-semibold tracking-tight">{dict.contact.title}</h1>
+  <p class="mt-3 max-w-prose text-lg text-muted">{dict.contact.intro}</p>
+
+  <div class="mt-10 grid gap-12 md:grid-cols-[minmax(0,1fr)_16rem]">
+    <div class="max-w-xl">
+      <StatusMessages locale={locale} />
+      <ContactForm
+        client:visible
+        locale={locale}
+        siteKey={siteKey}
+        action="/api/contato"
+        labels={labels}
+      />
+      {/* Fora da ilha (ligado ao form pelo atributo form) para o React não disputar o valor. */}
+      <input
+        type="hidden"
+        id="contact-started-at"
+        name="startedAt"
+        form="contact-form"
+        value=""
+      />
+      {/* startedAt não pode vir do build (página estática): o carregamento preenche. Sem JS fica vazio e o servidor trata como "tempo desconhecido". Uma linha estável, para o hash da CSP (Task 13). */}
+      <script is:inline>
+        document.getElementById("contact-started-at").value = Date.now();
+      </script>
+    </div>
+    <DirectLinks locale={locale} />
+  </div>
+</div>

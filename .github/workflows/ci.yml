@@ -11,6 +11,10 @@ permissions:
 jobs:
   qualidade:
     runs-on: ubuntu-latest
+    # Chave pública de teste do Turnstile (sempre passa): o build exige uma chave, e o
+    # e2e roda com as variáveis do webServer do playwright.config.ts.
+    env:
+      PUBLIC_TURNSTILE_SITEKEY: 1x00000000000000000000AA
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0

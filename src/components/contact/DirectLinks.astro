@@ -1,0 +1,94 @@
+---
+import type { Locale } from "@/i18n/locales";
+import { encodePhone } from "@/lib/contact/whatsapp";
+import { getPublicEnv } from "@/lib/env";
+import { t } from "@/lib/i18n";
+import { CONTACT_EMAIL, GITHUB_URL } from "@/lib/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+const whatsapp = getPublicEnv().PUBLIC_WHATSAPP;
+// Botões que só funcionam com JS somem sem ele (mesma regra do Header).
+const needsJs = "[html:not([data-theme])_&]:hidden";
+const buttonClass =
+  "inline-flex min-h-10 items-center rounded-(--radius-control) border border-line px-3 text-sm text-muted transition-colors duration-(--duration-fast) hover:border-faint hover:text-fg";
+const linkClass =
+  "inline-flex min-h-10 items-center rounded-(--radius-control) text-muted underline-offset-4 transition-colors duration-(--duration-fast) hover:text-fg hover:underline";
+---
+
+<aside aria-labelledby="direct-links-title">
+  <h2 id="direct-links-title" class="font-mono text-sm text-faint">
+    {dict.sections.links}
+  </h2>
+  <ul class="mt-4 flex flex-col gap-3">
+    <li class="flex flex-wrap items-center gap-x-3 gap-y-1">
+      <a
+        href={`mailto:${CONTACT_EMAIL}`}
+        translate="no"
+        class:list={[linkClass, "font-mono text-sm break-all"]}
+      >
+        {CONTACT_EMAIL}
+      </a>
+      <button
+        type="button"
+        data-copy-email={CONTACT_EMAIL}
+        class:list={[buttonClass, needsJs]}
+      >
+        {dict.contact.copyEmail}
+      </button>
+    </li>
+    <li>
+      <a href={GITHUB_URL} rel="noopener noreferrer" class={linkClass}>
+        {dict.contact.github}
+      </a>
+    </li>
+    {whatsapp && (
+      <li>
+        <button
+          type="button"
+          data-whatsapp={encodePhone(whatsapp)}
+          class:list={[buttonClass, needsJs]}
+        >
+          {dict.contact.whatsapp}
+        </button>
+      </li>
+    )}
+  </ul>
+  <p
+    data-copy-feedback
+    data-copied={dict.contact.emailCopied}
+    data-failed={dict.contact.copyFailed}
+    role="status"
+    class="mt-2 min-h-5 text-sm text-faint"
+  ></p>
+</aside>
+
+<script>
+  import { decodePhone, whatsappUrl } from "@/lib/contact/whatsapp";
+
+  const feedback = document.querySelector<HTMLElement>("[data-copy-feedback]");
+
+  document
+    .querySelector<HTMLButtonElement>("[data-copy-email]")
+    ?.addEventListener("click", (event) => {
+      const email = (event.currentTarget as HTMLElement).dataset["copyEmail"];
+      if (!email || !feedback) return;
+      navigator.clipboard.writeText(email).then(
+        () => (feedback.textContent = feedback.dataset["copied"] ?? ""),
+        () => (feedback.textContent = feedback.dataset["failed"] ?? ""),
+      );
+    });
+
+  // O número só vira link no clique; no HTML ele está codificado (seguranca.md).
+  document
+    .querySelector<HTMLButtonElement>("[data-whatsapp]")
+    ?.addEventListener("click", (event) => {
+      const encoded = (event.currentTarget as HTMLElement).dataset["whatsapp"];
+      const digits = encoded ? decodePhone(encoded) : null;
+      if (digits) window.open(whatsappUrl(digits), "_blank", "noopener");
+    });
+</script>

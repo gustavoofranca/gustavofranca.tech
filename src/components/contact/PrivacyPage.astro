@@ -1,0 +1,41 @@
+---
+import type { Locale } from "@/i18n/locales";
+import { t } from "@/lib/i18n";
+import { CONTACT_EMAIL } from "@/lib/site";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const { privacy } = t(locale);
+const withEmail = (text: string) => text.replace("{email}", CONTACT_EMAIL);
+const turnstilePolicy =
+  locale === "pt"
+    ? "https://www.cloudflare.com/pt-br/turnstile-privacy-policy/"
+    : "https://www.cloudflare.com/turnstile-privacy-policy/";
+---
+
+<article class="mx-auto w-full max-w-5xl px-4 pt-12 pb-20 sm:px-6 md:pt-16 md:pb-28">
+  <h1 class="text-4xl font-semibold tracking-tight">{privacy.title}</h1>
+  <p class="mt-3 max-w-[70ch] text-lg text-muted">{privacy.intro}</p>
+  {privacy.sections.map((section) => (
+    <section class="mt-10 max-w-[70ch]">
+      <h2 class="text-2xl font-semibold tracking-tight">{section.heading}</h2>
+      {section.paragraphs.map((paragraph) => (
+        <p class="mt-3 text-base leading-7 text-muted">
+          {withEmail(paragraph)}
+        </p>
+      ))}
+    </section>
+  ))}
+  <p class="mt-10">
+    <a
+      href={turnstilePolicy}
+      rel="noopener noreferrer"
+      class="inline-flex min-h-10 items-center rounded-(--radius-control) text-accent underline underline-offset-4 hover:text-fg"
+    >
+      {privacy.turnstilePolicy}
+    </a>
+  </p>
+</article>
