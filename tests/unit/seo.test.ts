@@ -81,11 +81,11 @@ describe("buildSeo", () => {
   it("usa o título da home quando o título vem vazio", () => {
     expect(
       buildSeo({ locale: "pt", title: "", description: "d", path: "/" }).title,
-    ).toBe("Gustavo França — Engenheiro de Software");
+    ).toBe("Gustavo França — Desenvolvedor full-stack");
     expect(
       buildSeo({ locale: "en", title: "", description: "d", path: "/en/" })
         .title,
-    ).toBe("Gustavo França — Software Engineer");
+    ).toBe("Gustavo França — Full-stack Developer");
   });
 
   it("traduz o caminho de projeto entre os idiomas", () => {
@@ -142,7 +142,7 @@ describe("buildSeo", () => {
       path: "/en/",
     });
     expect(s.og["og:image:alt"]).toBe(
-      "Share card: Gustavo França — Software Engineer",
+      "Share card: Gustavo França — Full-stack Developer",
     );
   });
 
@@ -188,9 +188,11 @@ describe("personJsonLd", () => {
 
   it("traduz o cargo", () => {
     expect(personJsonLd("pt")).toMatchObject({
-      jobTitle: "Engenheiro de Software",
+      jobTitle: "Desenvolvedor full-stack",
     });
-    expect(personJsonLd("en")).toMatchObject({ jobTitle: "Software Engineer" });
+    expect(personJsonLd("en")).toMatchObject({
+      jobTitle: "Full-stack Developer",
+    });
   });
 });
 

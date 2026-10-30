@@ -3,15 +3,15 @@ import type { Dictionary } from "./pt";
 const en = {
   meta: {
     siteName: "Gustavo França",
-    jobTitle: "Software Engineer",
+    jobTitle: "Full-stack Developer",
     homeDescription:
-      "Portfolio of Gustavo França, software engineer: projects, case studies and contact.",
+      "Portfolio of Gustavo França, full-stack developer: projects, case studies and contact.",
     projectsDescription:
       "Projects by Gustavo França with case studies: context, architecture, challenges and results.",
     aboutDescription:
       "Who Gustavo França is: education, background, languages and the stack he uses, with the projects that back up each technology.",
     contactDescription:
-      "Get in touch with Gustavo França, software engineer: contact form, email and GitHub.",
+      "Get in touch with Gustavo França, full-stack developer: contact form, email and GitHub.",
     privacyDescription:
       "How Gustavo França's site handles your data: the form sends and stores nothing, and this site sets no cookies.",
     ogImageAlt: "Share card: {title}",
@@ -37,7 +37,7 @@ const en = {
   },
   hero: {
     available: "open to opportunities",
-    role: "Full\u2011stack software engineer: web, APIs and mobile.",
+    role: "Full\u2011stack developer: web, APIs and mobile.",
     seeProjects: "View projects",
     downloadCv: "Download CV",
     talkToMe: "Get in touch",

@@ -46,7 +46,7 @@ function defaultOgImage(path: string): string | undefined {
 
 const absolute = (path: string) => new URL(canonicalPath(path), SITE_URL).href;
 
-// Título vazio é a home: "Gustavo França — Engenheiro de Software".
+// Título vazio é a home: "Gustavo França — Desenvolvedor full-stack".
 function fullTitle(title: string, locale: Locale): string {
   const { siteName, jobTitle } = t(locale).meta;
   return title ? `${title} — ${siteName}` : `${siteName} — ${jobTitle}`;

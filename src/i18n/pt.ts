@@ -4,15 +4,15 @@
 const pt = {
   meta: {
     siteName: "Gustavo França",
-    jobTitle: "Engenheiro de Software",
+    jobTitle: "Desenvolvedor full-stack",
     homeDescription:
-      "Portfólio de Gustavo França, engenheiro de software: projetos, estudos de caso e contato.",
+      "Portfólio de Gustavo França, desenvolvedor full-stack: projetos, estudos de caso e contato.",
     projectsDescription:
       "Projetos de Gustavo França com estudo de caso: contexto, arquitetura, desafios e resultado.",
     aboutDescription:
       "Quem é Gustavo França: formação, trajetória, idiomas e a stack que usa, com os projetos que provam cada tecnologia.",
     contactDescription:
-      "Fale com Gustavo França, engenheiro de software: formulário de contato, e-mail e GitHub.",
+      "Fale com Gustavo França, desenvolvedor full-stack: formulário de contato, e-mail e GitHub.",
     privacyDescription:
       "Como o site de Gustavo França trata os seus dados: o formulário envia e não guarda nada, e o site não grava cookies.",
     // Texto alternativo da imagem Open Graph. {title} é o título completo da página.
@@ -40,7 +40,7 @@ const pt = {
   hero: {
     available: "disponível para oportunidades",
     // \u2011 é hífen inseparável: a linha não quebra em "full-/stack".
-    role: "Engenheiro de Software full\u2011stack: web, APIs e mobile.",
+    role: "Desenvolvedor full\u2011stack: web, APIs e mobile.",
     seeProjects: "Ver projetos",
     downloadCv: "Baixar CV",
     talkToMe: "Falar comigo",

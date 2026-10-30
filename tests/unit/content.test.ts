@@ -118,7 +118,9 @@ describe("assertKnownStack", () => {
 
 describe("findPendingTodos", () => {
   it("devolve arquivo, linha (base 1) e anotação", () => {
-    const files = [{ path: "x.mdx", text: "ok\nTODO(gustavo): cargo na empresa atual" }];
+    const files = [
+      { path: "x.mdx", text: "ok\nTODO(gustavo): cargo na empresa atual" },
+    ];
     expect(findPendingTodos(files)).toEqual([
       { path: "x.mdx", line: 2, note: "cargo na empresa atual" },
     ]);
