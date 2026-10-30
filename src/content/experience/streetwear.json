@@ -7,9 +7,10 @@
   },
   "start": "2024-01",
   "end": "2024-12",
+  "_pendente": "TODO(gustavo): data provisória em start e end (período real da loja)",
   "description": {
-    "pt": "Loja virtual própria de streetwear: fiz o site e cuidei da operação do negócio. Hoje está fora do ar. TODO(gustavo): período real (as datas do campo acima são provisórias) e a stack usada no site",
-    "en": "My own streetwear online store: I built the site and ran the business. It is offline now. TODO(gustavo): real period (the dates above are placeholders) and the stack used on the site"
+    "pt": "Loja virtual própria de streetwear: fiz o site e cuidei da operação do negócio. Hoje está fora do ar. TODO(gustavo): stack usada no site",
+    "en": "My own streetwear online store: I built the site and ran the business. It is offline now. TODO(gustavo): stack usada no site (em inglês)"
   },
   "stack": []
 }

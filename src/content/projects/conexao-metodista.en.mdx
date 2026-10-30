@@ -6,8 +6,8 @@ kind: web
 role: team
 roleNote: "University outreach project, built as a pair"
 period:
-  start: "2026-01" # TODO(gustavo): mês de início e de fim do Conexão Metodista (o início é provisório)
-stack: [react, vite, tailwind, typescript, nodejs, express, supabase]
+  start: "2026-01" # TODO(gustavo): data provisória; mês de início e de fim do Conexão Metodista
+stack: [react, vite, tailwind, typescript, supabase]
 status: live
 featured: true
 order: 2
@@ -31,11 +31,11 @@ TODO(gustavo): o que exatamente foi feito por você (em inglês)
 
 ## Architecture
 
-![Diagram: the browser loads the React front-end, installable as a PWA, which talks to Supabase. There is also an Express and TypeScript API.](../../assets/projects/conexao-metodista/arquitetura.svg)
+![Diagram: the browser loads the React front-end, installable as a PWA, which talks to Supabase. An Express and TypeScript API is drawn dashed, still to be confirmed.](../../assets/projects/conexao-metodista/arquitetura.svg)
 
 - **React front-end with Vite and Tailwind**, shipped as a PWA: it has a manifest and a service worker, so it opens like an app on the phone.
 - **Supabase** as the database and data service, accessed by the front-end itself.
-- **Express and TypeScript API** on the back-end.
+- **Express and TypeScript API (to be confirmed).** The published front-end only calls Supabase, so this API's role still needs confirming.
 - **Map built with Leaflet**, using OpenStreetMap and CARTO tiles, to show the churches and small groups in the city.
 
 TODO(gustavo): confirmar o diagrama e o porquê de cada decisão (em inglês)

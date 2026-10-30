@@ -27,6 +27,8 @@ O objetivo é mostrar, num código pequeno o bastante para ser lido em menos de 
 
 Projeto individual: especificação, arquitetura, implementação, testes e documentação.
 
+{/* TODO(gustavo): confirmar «projeto individual» e como apresentar o uso de agente de IA (a maioria dos commits vem de outra conta do GitHub e o repositório tem CLAUDE.md e PROGRESS.md do agente) */}
+
 ## Arquitetura
 
 ![Diagrama: o cliente chama a API NestJS, que lê o PostgreSQL pelo Prisma e usa o Redis para cache, limite de requisições e fila. Um worker separado consome a fila BullMQ, busca os dados na loja da Steam e grava no PostgreSQL.](../../assets/projects/checkpoint/arquitetura.svg)
@@ -63,5 +65,7 @@ O cache usa chaves versionadas (`games:v{n}:...`): invalidar é incrementar a ve
 A API está pronta; a interface web e o demo público em `checkpoint.gustavofranca.tech` são os próximos passos.
 
 ## O que eu faria diferente
+
+{/* TODO(gustavo): confirmar esta seção (rascunho escrito a partir das limitações documentadas no repositório) */}
 
 Reveria o bloqueio de login por conta: cinco tentativas erradas bloqueiam o e-mail por 15 minutos, e outra pessoa pode provocar esse bloqueio de propósito. Também separaria melhor as permissões do banco, porque o papel que a aplicação usa ainda consegue escrever na tabela de controle das migrations.

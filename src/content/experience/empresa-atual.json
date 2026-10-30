@@ -7,8 +7,9 @@
   },
   "start": "2026-01",
   "end": null,
+  "_pendente": "TODO(gustavo): data provisória em start; end null quer dizer que você ainda trabalha lá, confirmar",
   "description": {
-    "pt": "TODO(gustavo): período na empresa atual (o início do campo acima é provisório) e descrição das atividades, sem citar clientes que não foram autorizados",
+    "pt": "TODO(gustavo): descrição das atividades na empresa atual, sem citar clientes que não foram autorizados",
     "en": "TODO(gustavo): descrição das atividades na empresa atual (em inglês)"
   },
   "stack": []

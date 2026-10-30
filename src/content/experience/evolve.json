@@ -2,14 +2,15 @@
   "kind": "incubator",
   "org": "Evolve, incubadora da Campo Real",
   "role": {
-    "pt": "Startup de educação financeira",
-    "en": "Financial education startup"
+    "pt": "TODO(gustavo): seu papel na startup",
+    "en": "TODO(gustavo): seu papel na startup (em inglês)"
   },
   "start": "2023-02",
   "end": "2023-06",
+  "_pendente": "TODO(gustavo): data provisória em start e end (mês de início e de fim na Evolve)",
   "description": {
-    "pt": "Protótipo de um app de educação financeira, selecionado pela incubadora da faculdade ainda no primeiro período do curso. TODO(gustavo): mês de início e de fim (os do campo acima são provisórios) e qual foi o seu papel na startup",
-    "en": "Prototype of a financial education app, selected by the university incubator during my first semester. TODO(gustavo): start and end month (the ones above are placeholders) and your role in the startup"
+    "pt": "Startup de educação financeira: protótipo de um app, selecionado pela incubadora da faculdade ainda no primeiro período do curso.",
+    "en": "Financial education startup: an app prototype, selected by the university incubator during my first semester."
   },
   "stack": []
 }

@@ -27,6 +27,8 @@ The goal is to show, in a codebase small enough to read in under an hour, the ha
 
 Solo project: specification, architecture, implementation, tests and documentation.
 
+{/* TODO(gustavo): confirmar «solo project» e o uso de agente de IA (em inglês) */}
+
 ## Architecture
 
 ![Diagram: the client calls the NestJS API, which reads PostgreSQL through Prisma and uses Redis for caching, rate limiting and the queue. A separate worker consumes the BullMQ queue, fetches data from the Steam store and writes it to PostgreSQL.](../../assets/projects/checkpoint/arquitetura.svg)
@@ -63,5 +65,7 @@ The cache uses versioned keys (`games:v{n}:...`): invalidating means bumping the
 The API is done; the web UI and the public demo at `checkpoint.gustavofranca.tech` are next.
 
 ## What I'd do differently
+
+{/* TODO(gustavo): confirmar esta seção (rascunho, em inglês) */}
 
 I'd rethink the per-account login lockout: five failed attempts lock the email for 15 minutes, and someone else can trigger that on purpose. I'd also tighten database permissions, since the role the app uses can still write to the migrations bookkeeping table.
