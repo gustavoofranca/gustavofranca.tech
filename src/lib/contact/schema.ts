@@ -11,8 +11,10 @@ export const CONTACT_LIMITS = {
 } as const;
 
 // Caractere de controle (\r, \n, \t, \0...) ou separador de linha Unicode no nome
-// abriria caminho para injeção de cabeçalho no assunto do e-mail.
-const SINGLE_LINE = /^[^\p{Cc}\p{Zl}\p{Zp}]*$/u;
+// abriria caminho para injeção de cabeçalho no assunto do e-mail. Caractere de
+// formatação (\p{Cf}: U+202E e outros controles bidi, espaço de largura zero)
+// reordena ou esconde texto e falsificaria o assunto que o Gustavo lê.
+const SINGLE_LINE = /^[^\p{Cc}\p{Cf}\p{Zl}\p{Zp}]*$/u;
 
 // Mesmo schema no servidor (fronteira) e na ilha (só para UX).
 export const contactSchema = z

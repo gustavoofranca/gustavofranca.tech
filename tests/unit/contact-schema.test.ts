@@ -46,6 +46,20 @@ describe("contactSchema", () => {
     });
   });
 
+  // U+202E (RLO) inverte a ordem do texto e falsifica o assunto do e-mail ("Ana
+  // <U+202E>moc.knab" aparece como "Ana bank.com"); U+200B some na tela.
+  it("rejeita caractere de formatação Unicode no nome (categoria Cf)", () => {
+    for (const name of [
+      "Ana\u202Emoc.knab",
+      "Ana\u2066Souza\u2069",
+      "Ana\u200FSouza",
+      "Ana\u200BSouza",
+      "Ana\uFEFFSouza",
+    ]) {
+      expect(errorsFor({ ...valid, name })).toEqual({ name: "nameInvalid" });
+    }
+  });
+
   it("aplica os limites de tamanho", () => {
     expect(errorsFor({ ...valid, name: "   " })).toEqual({
       name: "nameRequired",
