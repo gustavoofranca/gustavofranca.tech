@@ -1,0 +1,11 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: prettier
+      glob: "*.{js,mjs,ts,tsx,astro,json,css,md,mdx,yml,yaml}"
+      run: npx prettier --check {staged_files}
+    - name: eslint
+      glob: "*.{js,mjs,ts,tsx,astro}"
+      run: npx eslint {staged_files}
+    - name: gitleaks
+      run: gitleaks git --staged --redact

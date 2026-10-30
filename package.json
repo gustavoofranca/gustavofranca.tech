@@ -1,0 +1,61 @@
+{
+  "name": "portfolio",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "prebuild": "node scripts/prebuild.mjs",
+    "build": "astro build",
+    "preview": "astro preview --port 4321",
+    "check": "astro check && tsc --noEmit",
+    "lint": "eslint . && prettier --check .",
+    "format": "prettier --write .",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "lhci": "lhci autorun",
+    "budget": "node scripts/check-js-budget.mjs"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "8.1.2",
+    "@astrojs/node": "11.1.9",
+    "@astrojs/react": "7.1.2",
+    "@astrojs/sitemap": "3.7.4",
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "7.4.4",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwindcss": "4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@axe-core/playwright": "4.14.0",
+    "@eslint/js": "10.0.1",
+    "@lhci/cli": "0.15.1",
+    "@playwright/test": "1.64.1",
+    "@types/node": "24.0.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "cross-env": "10.1.0",
+    "eslint": "10.13.0",
+    "eslint-plugin-astro": "3.2.1",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "globals": "17.13.0",
+    "lefthook": "2.2.2",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.2",
+    "prettier-plugin-tailwindcss": "0.8.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
+    "vitest": "5.0.5"
+  },
+  "overrides": {
+    "eslint-plugin-jsx-a11y": {
+      "eslint": "$eslint"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+dist/
+.astro/
+node_modules/
+coverage/
+playwright-report/
+test-results/
+.lighthouseci/
+package-lock.json
+docs/superpowers/
+.superpowers/
+.claude/skills/
+skills-lock.json
+CLAUDE.md
+.claude/
+docs/adr/0000-modelo.md
+docs/referencias.md

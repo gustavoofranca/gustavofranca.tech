@@ -56,17 +56,17 @@ Skills de terceiros do projeto ficam em `.claude/skills/` (fora do Git) e são r
 
 ## Comandos
 
-> Preencher quando o projeto for criado (fase 0). Previstos:
-
 ```powershell
 npm run dev          # http://localhost:4321
 npm run build        # gera dist/ (falha com TODO(gustavo) em produção)
 npm run preview      # serve o build
-npm run check        # astro check + tsc
+npm run check        # astro check + tsc --noEmit
 npm run lint         # eslint + prettier --check
+npm run format       # prettier --write
 npm run test         # vitest
-npm run test:e2e     # playwright (inclui axe)
+npm run test:e2e     # playwright (builda, sobe o preview e testa; inclui axe)
 npm run lhci         # lighthouse ci
+npm run budget       # orçamento de JS da home
 ```
 
 - Windows, PowerShell é o shell principal. No Windows, parar um servidor em segundo plano pode deixar `node.exe` órfão na porta (`Get-NetTCPConnection -LocalPort 4321` + `Stop-Process`).
