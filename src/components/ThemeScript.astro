@@ -1,25 +1,14 @@
 ---
-// Roda no <head> antes da primeira pintura para não piscar o tema errado.
-// Mesma lógica de `resolveTheme` em src/lib/theme.ts, repetida aqui porque o script é inline (sem imports)
-// e fica pequeno e estável, para o hash da CSP não mudar à toa.
+import themeScript from "@/scripts/inline/theme.js?raw";
+
+// Define data-theme antes da primeira pintura. src/scripts/inline/theme.js repete a lógica
+// de `resolveTheme` (src/lib/theme.ts) porque o script é inline, sem imports, e quase não
+// tem comentário porque cada byte vai para toda página.
+//
+// Primeira coisa do <body> (BaseLayout), não do <head>: o Astro põe a <meta> da CSP no
+// fim do <head>, e uma CSP em <meta> só vale para o que vem depois dela. Ainda roda
+// antes de qualquer conteúdo ser pintado, então o tema não pisca.
 ---
 
-<script is:inline>
-  (function () {
-    let stored = null;
-    try {
-      stored = localStorage.getItem("gf-theme");
-    } catch {
-      // Storage bloqueado: segue o sistema.
-    }
-    const dark =
-      stored === "dark" ||
-      (stored !== "light" &&
-        (!window.matchMedia ||
-          matchMedia("(prefers-color-scheme: dark)").matches));
-    document.documentElement.setAttribute(
-      "data-theme",
-      dark ? "dark" : "light",
-    );
-  })();
-</script>
+{/* set:html devolve o texto sem mudar um byte: o hash da CSP (astro.config.mjs) bate. */}
+<script is:inline set:html={themeScript} />

@@ -37,9 +37,9 @@ const paletteProjects = shell
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <Seo locale={locale} {...seo} />
-    <ThemeScript />
   </head>
   <body class="flex min-h-dvh flex-col bg-bg font-sans text-fg antialiased">
+    <ThemeScript />
     {shell ? (
       <>
         <Shell locale={locale} path={seo.path}>

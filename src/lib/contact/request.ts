@@ -1,4 +1,4 @@
-import { z } from "astro/zod";
+import { z } from "@/lib/zod";
 import type { ContactResult } from "@/lib/contact/handler";
 import type { Locale } from "@/i18n/locales";
 import { routePath } from "@/lib/routes";

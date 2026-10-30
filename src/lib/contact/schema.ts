@@ -1,4 +1,4 @@
-import { z } from "astro/zod";
+import { z } from "@/lib/zod";
 
 // Limites de seguranca.md (OWASP ASVS V5). O token do Turnstile tem até 2048 caracteres
 // (documentação do Cloudflare); maior que isso não é token.

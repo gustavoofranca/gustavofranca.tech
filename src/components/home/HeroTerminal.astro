@@ -1,6 +1,7 @@
 ---
 import { getStack } from "@/lib/content";
 import { t, type Locale } from "@/lib/i18n";
+import timing from "@/styles/inline/heroTerminal.css?raw";
 
 interface Props {
   locale: Locale;
@@ -43,19 +44,18 @@ const lines: Token[][] = SAMPLE.map(([area, ids], index) => {
 });
 const TONE = { key: "text-accent-2", string: "text-code-string" } as const;
 
-// O número de passos do steps() precisa ser o número de caracteres digitados.
-const timing = {
-  "--n1": terminal.firstCommand.length,
-  "--n2": terminal.secondCommand.length,
-};
+// --n1/--n2 (heroTerminal.css): o número de passos do steps() é o número de caracteres
+// de cada comando. Vão num <style> com hash, não em style="", porque a CSP não libera
+// atributo de estilo; tests/unit/heroTerminal.test.ts confere os números com o i18n.
 ---
+
+<style is:inline set:html={timing} />
 
 {/* Vitrine decorativa: o conteúdo real (stack e projetos) está na página. */}
 <div
   data-testid="hero-terminal"
   aria-hidden="true"
   translate="no"
-  style={timing}
   class="terminal min-w-0 overflow-hidden rounded-(--radius-card) border border-line bg-surface font-mono shadow-(--shadow-terminal)"
 >
   <div class="flex items-center gap-1.5 border-b border-line px-3 py-2.5 text-sm text-faint">

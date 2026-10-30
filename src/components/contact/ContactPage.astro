@@ -6,6 +6,7 @@ import type { Locale } from "@/i18n/locales";
 import { getPublicEnv } from "@/lib/env";
 import { t } from "@/lib/i18n";
 import { CONTACT_EMAIL } from "@/lib/site";
+import startedAt from "@/scripts/inline/startedAt.js?raw";
 
 interface Props {
   locale: Locale;
@@ -49,10 +50,10 @@ const siteKey = getPublicEnv().PUBLIC_TURNSTILE_SITEKEY;
         form="contact-form"
         value=""
       />
-      {/* startedAt não pode vir do build (página estática): o carregamento preenche. Sem JS fica vazio e o servidor trata como "tempo desconhecido". Uma linha estável, para o hash da CSP (Task 13). */}
-      <script is:inline>
-        document.getElementById("contact-started-at").value = Date.now();
-      </script>
+      {/* startedAt não pode vir do build (página estática): o carregamento preenche. Sem
+          JS fica vazio e o servidor trata como "tempo desconhecido". Vem logo depois do
+          campo, que já existe quando o script roda. */}
+      <script is:inline set:html={startedAt} />
     </div>
     <DirectLinks locale={locale} />
   </div>

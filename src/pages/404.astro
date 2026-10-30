@@ -4,6 +4,7 @@ import { LOCALES } from "@/i18n/locales";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { t } from "@/lib/i18n";
 import { routePath } from "@/lib/routes";
+import notFoundLocale from "@/scripts/inline/notFoundLocale.js?raw";
 
 // A página é estática: o servidor não sabe qual URL errada o visitante pediu.
 // Os dois idiomas vão no HTML (inglês oculto) e o script do fim do <body> deixa só o certo.
@@ -61,23 +62,8 @@ const linkClass =
     );
   })}
 
-  <!-- Sem imports de propósito: precisa rodar antes da pintura e ter conteúdo fixo (hash da CSP).
-       A regra do idioma repete getLocaleFromPath (src/lib/routes.ts); tests/e2e/shell.spec.ts cobre os dois. -->
-  <script is:inline>
-    (function () {
-      const path = location.pathname;
-      const locale = /^\/en(\/|$)/.test(path) ? "en" : "pt";
-      document.documentElement.lang = locale === "en" ? "en" : "pt-BR";
-      document.querySelectorAll("[data-locale]").forEach(function (block) {
-        if (block.getAttribute("data-locale") === locale) {
-          block.hidden = false;
-        } else {
-          block.remove();
-        }
-      });
-      document.querySelectorAll("[data-path]").forEach(function (el) {
-        el.textContent = path;
-      });
-    })();
-  </script>
+  {/* Fim do <body>: roda depois que os dois blocos existem. A regra do idioma em
+      src/scripts/inline/notFoundLocale.js repete getLocaleFromPath (src/lib/routes.ts);
+      tests/e2e/shell.spec.ts cobre os dois. */}
+  <script is:inline set:html={notFoundLocale} />
 </BaseLayout>
