@@ -11,6 +11,12 @@ export default defineConfig({
   site: "https://gustavofranca.tech",
   output: "static",
   adapter: node({ mode: "standalone" }),
+  // PT na raiz, EN em /en. As rotas têm nomes próprios por idioma (src/lib/routes.ts).
+  i18n: {
+    defaultLocale: "pt",
+    locales: ["pt", "en"],
+    routing: { prefixDefaultLocale: false },
+  },
   integrations: [react(), mdx(), sitemap()],
   vite: {
     plugins: [tailwindcss()],
