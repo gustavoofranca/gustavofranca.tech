@@ -1,8 +1,11 @@
 ---
+import { CommandPalette } from "@/components/islands/CommandPalette";
 import Seo from "@/components/Seo.astro";
 import Shell from "@/components/Shell.astro";
 import ThemeScript from "@/components/ThemeScript.astro";
 import type { Locale } from "@/i18n/locales";
+import { getProjects, projectSlug } from "@/lib/content";
+import { t } from "@/lib/i18n";
 import "@/styles/global.css";
 
 interface Props {
@@ -19,6 +22,12 @@ interface Props {
 
 const { locale, shell = true, ...seo } = Astro.props;
 const htmlLang = locale === "pt" ? "pt-BR" : "en";
+const paletteProjects = shell
+  ? (await getProjects(locale)).map((project) => ({
+      slug: projectSlug(project.id),
+      title: project.data.title,
+    }))
+  : [];
 ---
 
 <!doctype html>
@@ -32,9 +41,19 @@ const htmlLang = locale === "pt" ? "pt-BR" : "en";
   </head>
   <body class="flex min-h-dvh flex-col bg-bg font-sans text-fg antialiased">
     {shell ? (
-      <Shell locale={locale} path={seo.path}>
-        <slot />
-      </Shell>
+      <>
+        <Shell locale={locale} path={seo.path}>
+          <slot />
+        </Shell>
+        {/* client:idle: abre por atalho ou clique, não é preciso hidratar antes de a página ficar ociosa. */}
+        <CommandPalette
+          client:idle
+          locale={locale}
+          label={t(locale).palette.label}
+          pathname={seo.path}
+          projects={paletteProjects}
+        />
+      </>
     ) : (
       <slot />
     )}

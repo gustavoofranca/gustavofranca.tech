@@ -8,3 +8,18 @@ export function resolveTheme(stored: unknown, prefersDark: boolean): Theme {
   if (stored === "dark" || stored === "light") return stored;
   return prefersDark ? "dark" : "light";
 }
+
+// Troca o tema no <html> e guarda a escolha. Compartilhada entre o botão do
+// cabeçalho e a paleta de comandos, para os dois produzirem o mesmo resultado.
+export function toggleTheme(): Theme {
+  const next: Theme =
+    document.documentElement.dataset["theme"] === "light" ? "dark" : "light";
+  document.documentElement.dataset["theme"] = next;
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, next);
+  } catch (error) {
+    // Armazenamento bloqueado: o tema vale só nesta visita.
+    console.warn("Não foi possível salvar o tema.", error);
+  }
+  return next;
+}

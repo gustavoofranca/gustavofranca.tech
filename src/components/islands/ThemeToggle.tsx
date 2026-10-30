@@ -1,12 +1,6 @@
-import { THEME_STORAGE_KEY, type Theme } from "@/lib/theme";
+import { toggleTheme } from "@/lib/theme";
 
 type Props = { label: string };
-
-function currentTheme(): Theme {
-  return document.documentElement.dataset["theme"] === "light"
-    ? "light"
-    : "dark";
-}
 
 const iconProps = {
   width: 18,
@@ -23,21 +17,10 @@ const iconProps = {
 export function ThemeToggle({ label }: Props) {
   // Sem estado no React: o tema vive no atributo do <html> (definido antes da pintura)
   // e o ícone troca por CSS. Assim não há divergência entre servidor e navegador.
-  function toggle() {
-    const next: Theme = currentTheme() === "dark" ? "light" : "dark";
-    document.documentElement.dataset["theme"] = next;
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, next);
-    } catch (error) {
-      // Armazenamento bloqueado: o tema vale só nesta visita.
-      console.warn("Não foi possível salvar o tema.", error);
-    }
-  }
-
   return (
     <button
       type="button"
-      onClick={toggle}
+      onClick={toggleTheme}
       aria-label={label}
       className="inline-flex size-10 items-center justify-center rounded-(--radius-control) border border-line text-muted transition-colors duration-(--duration-fast) hover:text-fg"
     >

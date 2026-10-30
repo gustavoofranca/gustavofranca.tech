@@ -152,6 +152,9 @@ const pt = {
   palette: {
     open: "Abrir paleta de comandos",
     placeholder: "Digite um comando ou busque...",
+    label: "Paleta de comandos",
+    copied: "E-mail copiado",
+    copyFailed: "Não foi possível copiar. O e-mail é",
     empty: "Nada encontrado.",
     groups: {
       navigate: "Navegar",
@@ -162,6 +165,7 @@ const pt = {
       toggleTheme: "Alternar tema",
       switchLanguage: "Mudar para English",
       copyEmail: "Copiar e-mail",
+      hireMe: "Contratar o Gustavo",
     },
   },
   footer: {

@@ -144,6 +144,9 @@ const en = {
   palette: {
     open: "Open command palette",
     placeholder: "Type a command or search...",
+    label: "Command palette",
+    copied: "Email copied",
+    copyFailed: "Couldn't copy. The email is",
     empty: "Nothing found.",
     groups: {
       navigate: "Navigate",
@@ -154,6 +157,7 @@ const en = {
       toggleTheme: "Toggle theme",
       switchLanguage: "Switch to Português",
       copyEmail: "Copy email",
+      hireMe: "Hire Gustavo",
     },
   },
   footer: {
