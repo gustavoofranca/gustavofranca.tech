@@ -1,5 +1,6 @@
 import { LOCALES, type Locale } from "@/i18n/locales";
 import { t } from "@/lib/i18n";
+import { ogPathFor } from "@/lib/og";
 import { matchRoute, routePath } from "@/lib/routes";
 import { GITHUB_URL, SITE_URL } from "@/lib/site";
 
@@ -35,6 +36,14 @@ function canonicalPath(path: string): string {
   return path.replace(/\/+$/, "") || "/";
 }
 
+// Imagem padrão: a gerada no build para a própria página. Rota desconhecida (a 404)
+// não tem imagem.
+function defaultOgImage(path: string): string | undefined {
+  const match = matchRoute(path);
+  if (!match) return undefined;
+  return ogPathFor(match.locale, match.key, match.slug);
+}
+
 const absolute = (path: string) => new URL(canonicalPath(path), SITE_URL).href;
 
 // Título vazio é a home: "Gustavo França — Engenheiro de Software".
@@ -64,7 +73,7 @@ export function buildSeo({
   title,
   description,
   path,
-  ogImage,
+  ogImage = defaultOgImage(path),
 }: SeoInput): Seo {
   const seoTitle = fullTitle(title, locale);
   const canonical = absolute(path);

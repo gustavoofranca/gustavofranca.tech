@@ -131,12 +131,25 @@ describe("buildSeo", () => {
     });
   });
 
-  it("sem imagem, omite og:image e usa o cartão simples", () => {
+  it("rota conhecida usa a imagem gerada para a própria página", () => {
     const s = buildSeo({
       locale: "en",
-      title: "About",
+      title: "Lumina",
       description: "d",
-      path: "/en/about",
+      path: "/en/projects/lumina",
+    });
+    expect(s.og["og:image"]).toBe(
+      "https://gustavofranca.tech/og/en/projects/lumina.png",
+    );
+    expect(s.og["twitter:card"]).toBe("summary_large_image");
+  });
+
+  it("sem imagem (rota desconhecida), omite og:image e usa o cartão simples", () => {
+    const s = buildSeo({
+      locale: "en",
+      title: "404",
+      description: "d",
+      path: "/en/nao-existe",
     });
     expect(s.og).not.toHaveProperty("og:image");
     expect(s.og["twitter:card"]).toBe("summary");
