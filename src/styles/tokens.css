@@ -1,0 +1,69 @@
+/* Única fonte de cores, fontes, raios e durações. Nenhum literal de cor fora deste arquivo. */
+
+/* Escuro é o padrão (cartão de visita). */
+:root {
+  color-scheme: dark;
+  --bg: #09090b;
+  --surface: #131316;
+  --fg: #fafafa;
+  --muted: #a1a1aa;
+  --faint: #8a8a96;
+  --line: #27272a;
+  --accent: #a78bfa;
+  --accent-strong: #7c3aed;
+  --accent-2: #67e8f9;
+  --live: #4ade80;
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+}
+
+/* Claro: mesmos tokens, redefinidos. Ciano e verde escurecidos para manter contraste de texto (WCAG AA). */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --fg: #18181b;
+  --muted: #52525b;
+  --faint: #62626c;
+  --line: #e4e4e7;
+  --accent: #7c3aed;
+  --accent-strong: #6d28d9;
+  --accent-2: #0e7490;
+  --live: #15803d;
+}
+
+/* Sem escolha salva e sem JS, o sistema decide. Com JS, o ThemeScript sempre define data-theme. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --bg: #fafafa;
+    --surface: #ffffff;
+    --fg: #18181b;
+    --muted: #52525b;
+    --faint: #62626c;
+    --line: #e4e4e7;
+    --accent: #7c3aed;
+    --accent-strong: #6d28d9;
+    --accent-2: #0e7490;
+    --live: #15803d;
+  }
+}
+
+/* `inline` faz as utilitárias apontarem para as variáveis acima, que mudam com o tema. */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-2: var(--accent-2);
+  --color-live: var(--live);
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius-card: 0.75rem;
+  --radius-control: 0.5rem;
+}

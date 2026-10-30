@@ -1,16 +1,17 @@
 ---
-// Página temporária: as tarefas seguintes substituem pela home real.
+import { ThemeToggle } from "@/components/islands/ThemeToggle";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 ---
 
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Gustavo França</title>
-  </head>
-  <body>
-    <main>
-      <h1>Gustavo França</h1>
-    </main>
-  </body>
-</html>
+<BaseLayout
+  locale="pt"
+  title="Gustavo França"
+  description="Portfólio de Gustavo França, desenvolvedor."
+  path="/"
+>
+  <main class="p-6">
+    <h1 class="text-3xl font-semibold">Gustavo França</h1>
+    <!-- client:load: o botão precisa responder já no primeiro toque; o cabeçalho real vem na Task 6. -->
+    <ThemeToggle client:load label="Alternar tema" />
+  </main>
+</BaseLayout>

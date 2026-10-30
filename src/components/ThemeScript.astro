@@ -1,0 +1,23 @@
+---
+// Roda no <head> antes da primeira pintura para não piscar o tema errado.
+// Mesma lógica de `resolveTheme` em src/lib/theme.ts, repetida aqui porque o script é inline (sem imports)
+// e fica pequeno e estável, para o hash da CSP não mudar à toa.
+---
+
+<script is:inline>
+  (function () {
+    let theme;
+    try {
+      const stored = localStorage.getItem("gf-theme");
+      theme =
+        stored === "dark" || stored === "light"
+          ? stored
+          : matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+    } catch {
+      theme = "dark";
+    }
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
