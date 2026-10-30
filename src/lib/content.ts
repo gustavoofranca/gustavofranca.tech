@@ -87,8 +87,12 @@ export async function getExperience() {
     getStack(),
   ]);
   assertKnownStack(entries, stackIdsOf(stack));
-  // Mais recente primeiro; "YYYY-MM" ordena como texto.
-  return entries.sort((a, b) => b.data.start.localeCompare(a.data.start));
+  // Mais recente primeiro; "YYYY-MM" ordena como texto. Início igual desempata
+  // pelo id (nome do arquivo), para a ordem não depender do loader.
+  return entries.sort(
+    (a, b) =>
+      b.data.start.localeCompare(a.data.start) || a.id.localeCompare(b.id),
+  );
 }
 
 export async function getArchive() {

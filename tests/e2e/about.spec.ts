@@ -41,15 +41,48 @@ for (const path of ["/sobre", "/en/about"]) {
   });
 }
 
-test("a stack completa lista tecnologias sem prova e com 'usado em'", async ({
+// Escopo na linha da graduação: "expected" e "prevista" já aparecem nos textos.
+for (const [path, label] of [
+  ["/sobre", "(previsão)"],
+  ["/en/about", "(expected)"],
+] as const) {
+  test(`${path}: a graduação, que termina em 2027, é marcada como previsão`, async ({
+    page,
+  }) => {
+    await page.goto(path);
+    const degree = page
+      .getByTestId("timeline-item")
+      .filter({ hasText: "Centro Universitário Campo Real" });
+    await expect(degree).toContainText(label);
+    // Fim já passado (Evolve) não leva o rótulo.
+    const incubator = page
+      .getByTestId("timeline-item")
+      .filter({ hasText: "Evolve" });
+    await expect(incubator).not.toContainText(label);
+  });
+}
+
+test("a stack completa inclui tecnologias sem projeto, só com o nome", async ({
   page,
 }) => {
   await page.goto("/sobre");
   const stack = page.getByRole("region", { name: /stack/i });
-  // Tem projeto publicado: mostra onde foi usada.
-  await expect(stack).toContainText("usado em");
-  // Tecnologia sem projeto ainda aparece (na home só entra o que tem prova).
-  await expect(stack).toContainText("Angular");
+  const item = (name: string) =>
+    stack.getByRole("listitem").filter({ hasText: name });
+  // Com projeto publicado: mostra onde foi usada.
+  await expect(item("Angular")).toContainText("usado em");
+  // Sem projeto publicado (conferido em src/content/projects): aparece, sem "usado em".
+  await expect(item("Laravel")).toHaveCount(1);
+  await expect(item("Laravel")).not.toContainText("usado em");
+
+  // Na home só entra o que tem prova; o Sobre lista mais tecnologias.
+  const aboutCount = await stack.getByRole("listitem").count();
+  await page.goto("/");
+  const homeCount = await page
+    .getByRole("region", { name: /stack/i })
+    .getByRole("listitem")
+    .count();
+  expect(aboutCount).toBeGreaterThan(homeCount);
 });
 
 test("sem o PDF do CV, não há botão de baixar", async ({ page }) => {

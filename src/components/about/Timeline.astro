@@ -1,6 +1,7 @@
 ---
 import SectionTitle from "@/components/home/SectionTitle.astro";
 import { getExperience } from "@/lib/content";
+import { currentMonthUtc, isFutureMonth } from "@/lib/dates";
 import { formatMonth, t, type Locale } from "@/lib/i18n";
 
 interface Props {
@@ -11,8 +12,8 @@ const { locale } = Astro.props;
 const dict = t(locale);
 // getExperience já vem do início mais recente para o mais antigo.
 const entries = await getExperience();
-// Término no futuro (formatura) é previsão, não fato consumado.
-const currentMonth = new Date().toISOString().slice(0, 7);
+// Mês do build, em UTC (a página é estática): término depois dele é previsão.
+const now = currentMonthUtc();
 ---
 
 <section
@@ -35,7 +36,7 @@ const currentMonth = new Date().toISOString().slice(0, 7);
           {data.end ? (
             <>
               <time datetime={data.end}>{formatMonth(data.end, locale)}</time>
-              {data.end > currentMonth && ` (${dict.about.expected})`}
+              {isFutureMonth(data.end, now) && ` (${dict.about.expected})`}
             </>
           ) : (
             dict.home.present
