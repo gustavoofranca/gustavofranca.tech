@@ -32,6 +32,7 @@
   --live: #15803d;
 }
 
+/* Manter em sincronia com o bloco :root[data-theme="light"] acima (CSS não deixa compartilhar). */
 /* Sem escolha salva e sem JS, o sistema decide. Com JS, o ThemeScript sempre define data-theme. */
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {

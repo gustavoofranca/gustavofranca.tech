@@ -6,18 +6,20 @@
 
 <script is:inline>
   (function () {
-    let theme;
+    let stored = null;
     try {
-      const stored = localStorage.getItem("gf-theme");
-      theme =
-        stored === "dark" || stored === "light"
-          ? stored
-          : matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light";
+      stored = localStorage.getItem("gf-theme");
     } catch {
-      theme = "dark";
+      // Storage bloqueado: segue o sistema.
     }
-    document.documentElement.setAttribute("data-theme", theme);
+    const dark =
+      stored === "dark" ||
+      (stored !== "light" &&
+        (!window.matchMedia ||
+          matchMedia("(prefers-color-scheme: dark)").matches));
+    document.documentElement.setAttribute(
+      "data-theme",
+      dark ? "dark" : "light",
+    );
   })();
 </script>
