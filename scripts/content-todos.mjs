@@ -4,9 +4,11 @@
 // de src/lib/contentTodos.ts continua sendo a única.
 import { readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 import { findPendingTodos } from "../src/lib/contentTodos.ts";
 
-const root = new URL("../src/content", import.meta.url);
+// fileURLToPath decodifica %20 e trata a letra do drive no Windows.
+const rootPath = fileURLToPath(new URL("../src/content", import.meta.url));
 
 function walk(dir) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -15,7 +17,6 @@ function walk(dir) {
   });
 }
 
-const rootPath = root.pathname.replace(/^\/([A-Za-z]:)/, "$1");
 const files = walk(rootPath).map((file) => ({
   path: relative(process.cwd(), file).replaceAll("\\", "/"),
   text: readFileSync(file, "utf8"),

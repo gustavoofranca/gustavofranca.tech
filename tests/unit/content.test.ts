@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   assertFeaturedLimit,
   assertKnownStack,
+  assertLocaleMatchesId,
   assertTranslationPairs,
   projectSlug,
   sortProjects,
@@ -60,9 +61,14 @@ describe("assertTranslationPairs", () => {
   });
 
   it("não cita slugs que têm par", () => {
-    expect(() => assertTranslationPairs(["a.pt", "a.en", "b.pt"])).not.toThrow(
-      /\ba\b/,
-    );
+    let message = "";
+    try {
+      assertTranslationPairs(["a.pt", "a.en", "b.pt"]);
+    } catch (error) {
+      message = (error as Error).message;
+    }
+    expect(message).toContain("b (falta en)");
+    expect(message).not.toContain("a (falta");
   });
 
   it("aceita todos os pares completos", () => {
@@ -72,12 +78,36 @@ describe("assertTranslationPairs", () => {
   });
 });
 
+describe("assertLocaleMatchesId", () => {
+  it("aceita quando o locale do frontmatter bate com o sufixo do id", () => {
+    const entries = [
+      { id: "a.pt", data: { locale: "pt" as const } },
+      { id: "a.en", data: { locale: "en" as const } },
+    ];
+    expect(() => assertLocaleMatchesId(entries)).not.toThrow();
+  });
+
+  it("lança citando o id cujo locale não bate com o sufixo", () => {
+    const entries = [
+      { id: "a.pt", data: { locale: "pt" as const } },
+      { id: "b.en", data: { locale: "pt" as const } },
+    ];
+    expect(() => assertLocaleMatchesId(entries)).toThrow(/b\.en/);
+    expect(() => assertLocaleMatchesId(entries)).not.toThrow(/a\.pt/);
+  });
+});
+
 describe("assertKnownStack", () => {
   const ids = new Set(["astro", "react"]);
 
   it("lança com a stack desconhecida e o projeto", () => {
     const projects = [{ id: "x.pt", data: { stack: ["astro", "cobol"] } }];
     expect(() => assertKnownStack(projects, ids)).toThrow(/x\.pt.*cobol/s);
+  });
+
+  it("vale para qualquer entrada com stack (experiência, arquivo)", () => {
+    const entries = [{ id: "empresa-atual", data: { stack: ["php"] } }];
+    expect(() => assertKnownStack(entries, ids)).toThrow(/empresa-atual.*php/s);
   });
 
   it("aceita só ids conhecidos", () => {

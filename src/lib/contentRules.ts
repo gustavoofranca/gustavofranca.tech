@@ -65,7 +65,23 @@ export function assertKnownStack(
   });
   if (problems.length > 0) {
     throw new Error(
-      `Stack que não existe em stack.json (projeto: ids): ${problems.join("; ")}.`,
+      `Stack que não existe em stack.json (entrada: ids): ${problems.join("; ")}.`,
+    );
+  }
+}
+
+// O idioma vale em dois lugares: o sufixo do arquivo (que forma o par) e o
+// `locale` do frontmatter (que filtra a listagem). Se divergem, um `x.en.mdx`
+// copiado e esquecido como `locale: pt` some do EN e duplica no PT.
+export function assertLocaleMatchesId(
+  entries: { id: string; data: { locale: Locale } }[],
+): void {
+  const mismatched = entries
+    .filter(({ id, data }) => !id.endsWith(`.${data.locale}`))
+    .map(({ id, data }) => `${id} (locale: ${data.locale})`);
+  if (mismatched.length > 0) {
+    throw new Error(
+      `Sufixo do arquivo diferente do locale do frontmatter: ${mismatched.join(", ")}.`,
     );
   }
 }

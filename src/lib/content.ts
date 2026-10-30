@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n";
 import {
   assertFeaturedLimit,
   assertKnownStack,
+  assertLocaleMatchesId,
   assertTranslationPairs,
   projectSlug,
   sortProjects,
@@ -11,6 +12,7 @@ import {
 export {
   assertFeaturedLimit,
   assertKnownStack,
+  assertLocaleMatchesId,
   assertTranslationPairs,
   projectSlug,
   sortProjects,
@@ -22,14 +24,17 @@ export { findPendingTodos } from "@/lib/contentTodos";
 // violação lança e derruba o build. A promessa é reaproveitada entre páginas.
 let validated: Promise<Awaited<ReturnType<typeof loadAllProjects>>> | undefined;
 
+function stackIdsOf(stack: Awaited<ReturnType<typeof getStack>>) {
+  return new Set(stack.areas.flatMap((area) => area.items.map((i) => i.id)));
+}
+
 async function loadAllProjects() {
   const [projects, stack] = await Promise.all([
     getCollection("projects"),
     getStack(),
   ]);
-  const stackIds = new Set(
-    stack.areas.flatMap((area) => area.items.map((i) => i.id)),
-  );
+  const stackIds = stackIdsOf(stack);
+  assertLocaleMatchesId(projects);
   assertTranslationPairs(projects.map((p) => p.id));
   assertFeaturedLimit(projects);
   assertKnownStack(projects, stackIds);
@@ -61,13 +66,21 @@ export async function getStack() {
 }
 
 export async function getExperience() {
-  const entries = await getCollection("experience");
+  const [entries, stack] = await Promise.all([
+    getCollection("experience"),
+    getStack(),
+  ]);
+  assertKnownStack(entries, stackIdsOf(stack));
   // Mais recente primeiro; "YYYY-MM" ordena como texto.
   return entries.sort((a, b) => b.data.start.localeCompare(a.data.start));
 }
 
 export async function getArchive() {
-  const entries = await getCollection("archive");
+  const [entries, stack] = await Promise.all([
+    getCollection("archive"),
+    getStack(),
+  ]);
+  assertKnownStack(entries, stackIdsOf(stack));
   return entries.map((e) => e.data).sort((a, b) => b.year - a.year);
 }
 
