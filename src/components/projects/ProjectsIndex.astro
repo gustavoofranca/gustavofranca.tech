@@ -1,0 +1,72 @@
+---
+import ProjectCard from "@/components/home/ProjectCard.astro";
+import SectionTitle from "@/components/home/SectionTitle.astro";
+import { ProjectFilter } from "@/components/islands/ProjectFilter";
+import ArchiveList from "@/components/projects/ArchiveList.astro";
+import { getProjects, getStack, projectSlug } from "@/lib/content";
+import { t, type Locale } from "@/lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+const [projects, stack] = await Promise.all([getProjects(locale), getStack()]);
+
+// A ilha recebe só o necessário para filtrar; os cartões continuam HTML estático.
+const items = projects.map((p) => ({
+  slug: projectSlug(p.id),
+  data: { kind: p.data.kind, stack: p.data.stack },
+}));
+const kinds = (["web", "api", "mobile"] as const)
+  .filter((id) => projects.some((p) => p.data.kind === id))
+  .map((id) => ({ id, label: dict.projects.kinds[id] }));
+const used = new Set(projects.flatMap((p) => p.data.stack));
+const stacks = stack.areas
+  .flatMap((area) => area.items)
+  .filter((item) => used.has(item.id))
+  .map(({ id, name }) => ({ id, name }))
+  .sort((a, b) => a.name.localeCompare(b.name));
+---
+
+<div class="mx-auto w-full max-w-5xl px-4 py-12 sm:px-6 md:py-16">
+  <header class="max-w-[70ch]">
+    <h1 class="text-4xl font-semibold tracking-tight">{dict.projects.title}</h1>
+    <p class="mt-3 text-lg text-muted">{dict.projects.intro}</p>
+  </header>
+
+  <section aria-labelledby="projects-title" class="mt-12">
+    <SectionTitle id="projects-title" label={dict.sections.allProjects} />
+    {/* Sem JS o filtro não funciona: some junto com os outros controles de JS. */}
+    <div class="mt-4 [html:not([data-theme])_&]:hidden">
+      <ProjectFilter
+        client:visible
+        items={items}
+        kinds={kinds}
+        stacks={stacks}
+        labels={{
+          group: dict.projects.filterLabel,
+          all: dict.projects.all,
+          kind: dict.projects.kindLabel,
+          stack: dict.projects.stackLabel,
+          shown: dict.projects.shown,
+          empty: dict.projects.empty,
+        }}
+      />
+    </div>
+    <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {projects.map((project, index) => (
+        <li data-project-slug={projectSlug(project.id)}>
+          <ProjectCard
+            project={project}
+            locale={locale}
+            priority={index === 0}
+          />
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <ArchiveList locale={locale} />
+</div>

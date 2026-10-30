@@ -7,6 +7,8 @@ const pt = {
     jobTitle: "Engenheiro de Software",
     homeDescription:
       "Portfólio de Gustavo França, engenheiro de software: projetos, estudos de caso e contato.",
+    projectsDescription:
+      "Projetos de Gustavo França com estudo de caso: contexto, arquitetura, desafios e resultado.",
   },
   a11y: {
     skipToContent: "Pular para o conteúdo",
@@ -55,6 +57,7 @@ const pt = {
     stack: "// stack",
     timeline: "// trajetória",
     contact: "// contato",
+    allProjects: "// projetos",
     academicArchive: "// arquivo acadêmico",
     about: "// sobre",
     experience: "// experiência",
@@ -74,8 +77,27 @@ const pt = {
     },
   },
   projects: {
+    title: "Projetos",
+    intro:
+      "Estudos de caso do que construí: contexto, decisões de arquitetura e resultado.",
     all: "Todos",
     filterLabel: "Filtrar projetos",
+    kindLabel: "Tipo",
+    stackLabel: "Tecnologia",
+    kinds: { web: "Web", api: "API", mobile: "Mobile" },
+    // {shown} e {total} são trocados no navegador.
+    shown: "Mostrando {shown} de {total}",
+    meta: {
+      kind: "Tipo",
+      role: "Papel",
+      period: "Período",
+      status: "Situação",
+    },
+    offline: "fora do ar",
+    archived: "arquivado",
+    links: "Links do projeto",
+    diagramScroll: "Diagrama de arquitetura, role para os lados",
+    stackList: "Tecnologias usadas",
     viewCaseStudy: "Ver estudo de caso",
     demo: "Demo",
     code: "Código",

@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { t, type Locale } from "@/lib/i18n";
+
+interface Props {
+  links: CollectionEntry<"projects">["data"]["links"];
+  locale: Locale;
+}
+
+const { links, locale } = Astro.props;
+const dict = t(locale);
+const repos = links.repo ?? [];
+// Com mais de um repositório (front e back), o nome diferencia os botões.
+const repoName = (url: string) => url.split("/").filter(Boolean).at(-1) ?? url;
+
+const base =
+  "inline-flex min-h-10 items-center gap-2 rounded-(--radius-control) px-4 text-sm font-medium transition-colors duration-(--duration-fast)";
+const primary = `${base} bg-fg text-bg hover:bg-accent`;
+const outline = `${base} border border-line text-fg hover:border-accent`;
+---
+
+{(links.demo || repos.length > 0) && (
+  <ul aria-label={dict.projects.links} class="flex flex-wrap gap-3">
+    {links.demo && (
+      <li>
+        <a href={links.demo} class={primary}>
+          {dict.projects.demo}
+        </a>
+      </li>
+    )}
+    {repos.map((url) => (
+      <li>
+        <a href={url} class={outline}>
+          {dict.projects.code}
+          {repos.length > 1 && (
+            <span translate="no" class="font-mono text-sm text-muted">
+              {repoName(url)}
+            </span>
+          )}
+        </a>
+      </li>
+    ))}
+  </ul>
+)}

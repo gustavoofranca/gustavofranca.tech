@@ -1,0 +1,21 @@
+---
+import { render } from "astro:content";
+import MdxImage from "@/components/projects/MdxImage.astro";
+import CaseStudyLayout from "@/layouts/CaseStudyLayout.astro";
+import { getProjects, projectSlug } from "@/lib/content";
+
+export async function getStaticPaths() {
+  const projects = await getProjects("en");
+  return projects.map((project) => ({
+    params: { slug: projectSlug(project.id) },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<CaseStudyLayout project={project} locale="en">
+  <Content components={{ img: MdxImage }} />
+</CaseStudyLayout>

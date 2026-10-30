@@ -50,3 +50,89 @@
     }
   }
 }
+
+/* Corpo dos estudos de caso (MDX). Só tokens: nada de cor literal aqui. */
+@layer components {
+  .prose {
+    @apply text-base leading-7 text-fg;
+
+    /* Texto corrido fica em ~70 caracteres; imagens e diagramas usam a largura toda. */
+    > :where(p, ul, ol, h2, h3, blockquote, pre) {
+      @apply max-w-[70ch];
+    }
+
+    h2 {
+      @apply mt-14 mb-4 text-2xl font-semibold tracking-tight;
+    }
+
+    h3 {
+      @apply mt-8 mb-2 text-lg font-semibold;
+    }
+
+    p {
+      @apply my-4;
+    }
+
+    ul {
+      @apply my-4 list-disc pl-6 marker:text-faint;
+    }
+
+    ol {
+      @apply my-4 list-decimal pl-6 marker:text-faint;
+    }
+
+    /* Em vez de space-y: dentro de @apply aninhado ele gera um seletor inválido. */
+    li + li {
+      @apply mt-3;
+    }
+
+    strong {
+      @apply font-semibold;
+    }
+
+    a {
+      @apply text-accent underline underline-offset-4 transition-colors duration-(--duration-fast) hover:text-fg;
+    }
+
+    code {
+      @apply rounded-sm border border-line bg-surface px-1.5 py-0.5 font-mono text-[0.875em];
+    }
+
+    pre {
+      @apply my-6 overflow-x-auto rounded-(--radius-card) border border-line bg-surface p-4 text-sm;
+
+      code {
+        @apply border-0 bg-transparent p-0;
+      }
+    }
+
+    blockquote {
+      @apply my-6 border-l-2 border-accent pl-4 text-muted;
+    }
+
+    img {
+      @apply h-auto max-w-full rounded-(--radius-card) border border-line;
+    }
+
+    /* Imagem sozinha no parágrafo usa a largura toda, não os 70 caracteres do texto. */
+    p:has(> img, > .diagram-scroll) {
+      @apply my-8 max-w-none;
+    }
+
+    /* Print de celular (780 x 1688) não pode ocupar a coluna inteira. */
+    img[src*="mobile"] {
+      @apply max-w-xs;
+    }
+
+    /* Diagramas de arquitetura têm rótulos pequenos (960 px de largura, ~12 px de
+       fonte): em tela estreita rolam na horizontal em vez de encolher até ficar
+       ilegíveis. O wrapper é criado por rehypeDiagramScroll (focável por teclado). */
+    .diagram-scroll {
+      @apply block overflow-x-auto rounded-(--radius-card);
+
+      img {
+        @apply min-w-[640px] bg-surface;
+      }
+    }
+  }
+}

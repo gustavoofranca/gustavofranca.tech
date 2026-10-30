@@ -1,0 +1,111 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ProjectLinks from "@/components/projects/ProjectLinks.astro";
+import StatusBadge from "@/components/projects/StatusBadge.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getStackNames, projectSlug } from "@/lib/content";
+import { formatMonth, t, type Locale } from "@/lib/i18n";
+import { routePath } from "@/lib/routes";
+import { projectJsonLd } from "@/lib/seo";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  locale: Locale;
+}
+
+const { project, locale } = Astro.props;
+const { data } = project;
+const dict = t(locale);
+const slug = projectSlug(project.id);
+const names = await getStackNames();
+
+// Sem data de fim, "atual" só vale para projeto no ar.
+const start = formatMonth(data.period.start, locale);
+const period = data.period.end
+  ? `${start} – ${formatMonth(data.period.end, locale)}`
+  : data.status === "live"
+    ? `${start} – ${dict.home.present}`
+    : start;
+const meta = [
+  { label: dict.projects.meta.kind, value: dict.projects.kinds[data.kind] },
+  {
+    label: dict.projects.meta.role,
+    value: data.role === "solo" ? dict.projects.solo : dict.projects.inTeam,
+  },
+  { label: dict.projects.meta.period, value: period },
+];
+---
+
+<BaseLayout
+  locale={locale}
+  title={data.title}
+  description={data.summary}
+  path={routePath("project", locale, slug)}
+  jsonLd={[
+    projectJsonLd(
+      {
+        slug,
+        title: data.title,
+        summary: data.summary,
+        period: data.period,
+      },
+      locale,
+    ),
+  ]}
+>
+  <article class="mx-auto w-full max-w-5xl px-4 py-12 sm:px-6 md:py-16">
+    <header class="max-w-[70ch]">
+      <h1 class="text-4xl font-semibold tracking-tight">{data.title}</h1>
+      <p class="mt-3 text-lg text-muted">{data.summary}</p>
+
+      <dl class="mt-8 grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-4">
+        {meta.map((item) => (
+          <div>
+            <dt class="font-mono text-sm text-faint">{item.label}</dt>
+            <dd class="mt-1 text-sm first-letter:uppercase">{item.value}</dd>
+          </div>
+        ))}
+        <div>
+          <dt class="font-mono text-sm text-faint">
+            {dict.projects.meta.status}
+          </dt>
+          <dd class="mt-1">
+            <StatusBadge status={data.status} locale={locale} />
+          </dd>
+        </div>
+      </dl>
+      {data.roleNote && <p class="mt-3 text-sm text-muted">{data.roleNote}</p>}
+
+      <ul
+        translate="no"
+        aria-label={dict.projects.stackList}
+        class="mt-6 flex flex-wrap gap-1.5"
+      >
+        {data.stack.map((id) => (
+          <li class="rounded-full border border-line px-2 font-mono text-sm text-muted">
+            {names.get(id) ?? id}
+          </li>
+        ))}
+      </ul>
+
+      <div class="mt-6">
+        <ProjectLinks links={data.links} locale={locale} />
+      </div>
+    </header>
+
+    {/* O corpo do MDX já traz o diagrama de arquitetura: não renderizar de novo. */}
+    <div class="prose mt-12">
+      <slot />
+    </div>
+
+    <p class="mt-16">
+      <a
+        href={routePath("projects", locale)}
+        class="inline-flex min-h-10 items-center gap-2 rounded-(--radius-control) text-sm text-muted transition-colors duration-(--duration-fast) hover:text-fg"
+      >
+        <span aria-hidden="true">←</span>
+        {dict.home.allProjects}
+      </a>
+    </p>
+  </article>
+</BaseLayout>

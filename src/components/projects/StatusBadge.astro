@@ -1,0 +1,24 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { t, type Locale } from "@/lib/i18n";
+
+interface Props {
+  status: CollectionEntry<"projects">["data"]["status"];
+  locale: Locale;
+}
+
+const { status, locale } = Astro.props;
+const label = t(locale).projects[status];
+const isLive = status === "live";
+---
+
+{/* Verde só para "no ar" (DESIGN.md); os outros estados ficam neutros, com o ponto vazado. */}
+<span
+  class={`inline-flex shrink-0 items-center gap-1.5 font-mono text-sm ${isLive ? "text-live" : "text-faint"}`}
+>
+  <span
+    aria-hidden="true"
+    class={`size-1.5 rounded-full ${isLive ? "bg-live" : "border border-faint"}`}
+  ></span>
+  {label}
+</span>

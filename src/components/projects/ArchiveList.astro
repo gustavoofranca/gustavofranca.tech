@@ -1,0 +1,34 @@
+---
+import SectionTitle from "@/components/home/SectionTitle.astro";
+import { getArchive, getStackNames } from "@/lib/content";
+import { t, type Locale } from "@/lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const dict = t(locale);
+const [archive, names] = await Promise.all([getArchive(), getStackNames()]);
+---
+
+<section aria-labelledby="archive-title" class="mt-16 md:mt-24">
+  <SectionTitle id="archive-title" label={dict.sections.academicArchive} />
+  <ul class="mt-4 divide-y divide-line border-y border-line">
+    {archive.map((repo) => (
+      <li class="flex flex-wrap items-baseline gap-x-4 gap-y-1 py-2">
+        <a
+          href={repo.repo}
+          translate="no"
+          class="inline-flex min-h-8 items-center break-all font-mono text-sm text-fg underline-offset-4 hover:text-accent hover:underline"
+        >
+          {repo.name}
+        </a>
+        <span translate="no" class="text-sm text-muted">
+          {repo.stack.map((id) => names.get(id) ?? id).join(", ")}
+        </span>
+        <span class="ml-auto font-mono text-sm text-faint">{repo.year}</span>
+      </li>
+    ))}
+  </ul>
+</section>

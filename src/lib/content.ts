@@ -65,6 +65,16 @@ export async function getStack() {
   return entry.data;
 }
 
+// id → nome de exibição ("nestjs" → "NestJS"), para tags e listas.
+export async function getStackNames() {
+  const stack = await getStack();
+  return new Map(
+    stack.areas.flatMap((area) =>
+      area.items.map((item) => [item.id, item.name] as const),
+    ),
+  );
+}
+
 export async function getExperience() {
   const [entries, stack] = await Promise.all([
     getCollection("experience"),

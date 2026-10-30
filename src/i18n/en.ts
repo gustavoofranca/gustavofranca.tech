@@ -6,6 +6,8 @@ const en = {
     jobTitle: "Software Engineer",
     homeDescription:
       "Portfolio of Gustavo França, software engineer: projects, case studies and contact.",
+    projectsDescription:
+      "Projects by Gustavo França with case studies: context, architecture, challenges and results.",
   },
   a11y: {
     skipToContent: "Skip to content",
@@ -52,6 +54,7 @@ const en = {
     stack: "// stack",
     timeline: "// timeline",
     contact: "// contact",
+    allProjects: "// projects",
     academicArchive: "// academic archive",
     about: "// about",
     experience: "// experience",
@@ -71,8 +74,22 @@ const en = {
     },
   },
   projects: {
+    title: "Projects",
+    intro:
+      "Case studies of what I built: context, architecture decisions and results.",
     all: "All",
     filterLabel: "Filter projects",
+    kindLabel: "Type",
+    stackLabel: "Technology",
+    kinds: { web: "Web", api: "API", mobile: "Mobile" },
+    // {shown} and {total} are replaced in the browser.
+    shown: "Showing {shown} of {total}",
+    meta: { kind: "Type", role: "Role", period: "Period", status: "Status" },
+    offline: "offline",
+    archived: "archived",
+    links: "Project links",
+    diagramScroll: "Architecture diagram, scroll sideways",
+    stackList: "Technologies used",
     viewCaseStudy: "Read the case study",
     demo: "Demo",
     code: "Code",
