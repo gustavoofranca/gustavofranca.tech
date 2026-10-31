@@ -1,0 +1,85 @@
+/* Luz que segue o cursor e borda acesa nos cartões de projeto (I1, ADR 0004). A posição
+   vem de src/scripts/cardLight.ts em --light-x/--light-y. Sem JS (teclado, toque,
+   movimento reduzido), a luz fica no topo, ao centro. Importado por ProjectCard.astro:
+   sai embutido no HTML de cada página com cartão (abaixo dos 4 KB do Astro). */
+.project-card {
+  --light-x: 50%;
+  --light-y: 0%;
+}
+
+/* Luz de fundo: um círculo do tamanho do cartão, deslocado com transform. Fica atrás do
+   texto (z-index -1 dentro do isolate) e a capa opaca a cobre. */
+.project-card-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.project-card-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle closest-side,
+    var(--glow-accent),
+    transparent
+  );
+  transform: translate(calc(var(--light-x) - 50%), calc(var(--light-y) - 50%));
+}
+
+/* Borda acesa: anel de 1 px em cima da borda, accent forte perto do cursor. Só existe
+   com máscara: sem ela o ::after seria um gradiente opaco por cima do texto. A máscara
+   só usa o alfa, então qualquer cor opaca serve. */
+@supports (mask-composite: exclude) or (-webkit-mask-composite: xor) {
+  .project-card::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    padding: 1px;
+    border-radius: inherit;
+    background: radial-gradient(
+      240px circle at var(--light-x) var(--light-y),
+      var(--accent),
+      transparent 70%
+    );
+    -webkit-mask:
+      linear-gradient(var(--fg) 0 0) content-box,
+      linear-gradient(var(--fg) 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(var(--fg) 0 0) content-box,
+      linear-gradient(var(--fg) 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+/* Acende rápido e apaga devagar. */
+.project-card-glow,
+.project-card::after {
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-out-expo);
+}
+
+.project-card:has(a:focus-visible) .project-card-glow,
+.project-card:has(a:focus-visible)::after {
+  opacity: 1;
+  transition-duration: var(--duration-fast);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .project-card:hover .project-card-glow,
+  .project-card:hover::after {
+    opacity: 1;
+    transition-duration: var(--duration-fast);
+  }
+
+  /* Camada própria só enquanto o mouse está em cima: o deslocamento da luz vira
+     composição, sem repintar. Fora do hover, nenhuma camada a mais na página. */
+  .project-card:hover .project-card-glow::before {
+    will-change: transform;
+  }
+}

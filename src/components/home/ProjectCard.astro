@@ -5,6 +5,7 @@ import StatusBadge from "@/components/projects/StatusBadge.astro";
 import { getStackNames, projectSlug } from "@/lib/content";
 import type { Locale } from "@/lib/i18n";
 import { routePath } from "@/lib/routes";
+import "@/styles/cardLight.css";
 
 interface Props {
   project: CollectionEntry<"projects">;
@@ -32,9 +33,9 @@ const href = routePath("project", locale, projectSlug(project.id));
   data-card-light
   data-kind={data.kind}
   data-stack={data.stack.join(" ")}
-  class="card group relative isolate flex h-full flex-col rounded-(--radius-card) border border-line bg-surface transition-colors duration-(--duration-fast) hover:border-accent/40 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-accent"
+  class="project-card group relative isolate flex h-full flex-col rounded-(--radius-card) border border-line bg-surface transition-colors duration-(--duration-fast) hover-fine:border-accent/40 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-accent"
 >
-  <span aria-hidden="true" class="card-glow"></span>
+  <span aria-hidden="true" class="project-card-glow"></span>
   <div class="overflow-hidden rounded-t-[calc(var(--radius-card)-1px)] border-b border-line">
     <Picture
       src={data.cover}
@@ -80,79 +81,3 @@ const href = routePath("project", locale, projectSlug(project.id));
   // Luz que segue o cursor (I1): um script por página, mesmo com vários cartões.
   import "@/scripts/cardLight";
 </script>
-
-<style>
-  /* Padrão sem JS (teclado, toque, movimento reduzido): luz no topo, ao centro. */
-  .card {
-    --light-x: 50%;
-    --light-y: 0%;
-  }
-
-  /* Luz de fundo: um círculo do tamanho do cartão, movido só com transform (sem
-     repintar). Fica atrás do texto (z-index -1 dentro do isolate) e a capa opaca a
-     cobre. */
-  .card-glow {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-    border-radius: inherit;
-    pointer-events: none;
-  }
-
-  .card-glow::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-      circle closest-side,
-      var(--glow-accent),
-      transparent
-    );
-    transform: translate(
-      calc(var(--light-x) - 50%),
-      calc(var(--light-y) - 50%)
-    );
-  }
-
-  /* Borda acesa: anel de 1 px em cima da borda, com o accent forte perto do cursor. */
-  .card::after {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    padding: 1px;
-    border-radius: inherit;
-    background: radial-gradient(
-      240px circle at var(--light-x) var(--light-y),
-      var(--accent),
-      transparent 70%
-    );
-    /* A máscara só usa o alfa: qualquer cor opaca serve. */
-    mask:
-      linear-gradient(var(--fg) 0 0) content-box,
-      linear-gradient(var(--fg) 0 0);
-    mask-composite: exclude;
-    pointer-events: none;
-  }
-
-  /* Acende rápido e apaga devagar. */
-  .card-glow,
-  .card::after {
-    opacity: 0;
-    transition: opacity var(--duration-base) var(--ease-out-expo);
-  }
-
-  .card:has(a:focus-visible) .card-glow,
-  .card:has(a:focus-visible)::after {
-    opacity: 1;
-    transition-duration: var(--duration-fast);
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .card:hover .card-glow,
-    .card:hover::after {
-      opacity: 1;
-      transition-duration: var(--duration-fast);
-    }
-  }
-</style>
