@@ -65,6 +65,9 @@ const stack = defineCollection({
       z.object({
         id: z.string(),
         label: bilingual,
+        // A home mostra só tecnologia usada em projeto publicado. Área de prática
+        // (infraestrutura e operações) não tem projeto que a prove e aparece inteira.
+        showAllOnHome: z.boolean().default(false),
         items: z.array(
           z.object({
             id: z.string(),

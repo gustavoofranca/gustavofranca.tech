@@ -95,8 +95,44 @@ test("/sobre mostra a área de infraestrutura em português", async ({
   }
 });
 
-test("os ícones são decorativos e não levam estilo inline", async ({
+for (const { path, practices } of [
+  {
+    path: "/",
+    practices: [
+      "Deploy de aplicações",
+      "Servidores Linux",
+      "Suporte e sustentação",
+    ],
+  },
+  {
+    path: "/en/",
+    practices: [
+      "Application deployment",
+      "Linux servers",
+      "Support and maintenance",
+    ],
+  },
+]) {
+  test(`${path}: a área de infraestrutura aparece inteira na home, sem "usado em" inventado`, async ({
+    page,
+  }) => {
+    await page.goto(path);
+    const stack = page.getByRole("region", { name: /stack/i });
+    for (const name of practices) {
+      const item = stack.getByTestId("stack-item").filter({ hasText: name });
+      await expect(item).toHaveCount(1);
+      await expect(item).not.toContainText(/usado em|used in/);
+    }
+    // As outras áreas continuam só com o que tem projeto: Laravel não tem.
+    await expect(
+      stack.getByTestId("stack-item").filter({ hasText: "Laravel" }),
+    ).toHaveCount(0);
+  });
+}
+
+test("os ícones são decorativos e vêm do sprite externo, que tem todos os <symbol>", async ({
   page,
+  request,
 }) => {
   await page.goto("/sobre");
   const icons = page

@@ -227,6 +227,7 @@
         "pt": "Infraestrutura e operações",
         "en": "Infrastructure and operations"
       },
+      "showAllOnHome": true,
       "items": [
         {
           "id": "docker",

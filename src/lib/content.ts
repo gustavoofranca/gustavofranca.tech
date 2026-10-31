@@ -140,6 +140,7 @@ export async function getStackAreas(locale: Locale) {
     stack.areas.map(async (area) => ({
       id: area.id,
       label: area.label[locale],
+      showAllOnHome: area.showAllOnHome,
       items: await Promise.all(
         area.items.map(async (item) => ({
           id: item.id,

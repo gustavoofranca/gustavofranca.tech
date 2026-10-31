@@ -13,11 +13,14 @@ interface Props {
 const { locale } = Astro.props;
 const dict = t(locale);
 // Na home só entra o que tem prova: tecnologia usada em algum projeto publicado.
-// A stack completa fica no Sobre.
+// Exceção explícita no conteúdo (showAllOnHome): área de prática, como infraestrutura
+// e operações, aparece inteira. A stack completa fica no Sobre.
 const areas = (await getStackAreas(locale))
   .map((area) => ({
     ...area,
-    items: area.items.filter((item) => item.projects.length > 0),
+    items: area.showAllOnHome
+      ? area.items
+      : area.items.filter((item) => item.projects.length > 0),
   }))
   .filter((area) => area.items.length > 0);
 ---
@@ -49,9 +52,11 @@ const areas = (await getStackAreas(locale))
                 level={item.level}
                 locale={locale}
               />
-              <p class="pl-6 text-sm text-faint">
-                {dict.stack.usedIn} {formatList(item.projects, locale)}
-              </p>
+              {item.projects.length > 0 && (
+                <p class="pl-6 text-sm text-faint">
+                  {dict.stack.usedIn} {formatList(item.projects, locale)}
+                </p>
+              )}
             </li>
           ))}
         </ul>
