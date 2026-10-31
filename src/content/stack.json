@@ -6,6 +6,10 @@
         "pt": "Front-end",
         "en": "Front-end"
       },
+      "description": {
+        "pt": "Interfaces em React e Angular, do painel do Lumina ao app do Conexão Metodista.",
+        "en": "Interfaces in React and Angular, from the Lumina dashboard to the Conexão Metodista app."
+      },
       "items": [
         {
           "id": "react",
@@ -29,13 +33,15 @@
           "id": "nuxt",
           "name": "Nuxt",
           "icon": "nuxt",
-          "level": "basic"
+          "level": "basic",
+          "showInStack": false
         },
         {
           "id": "astro",
           "name": "Astro",
           "icon": "astro",
-          "level": "basic"
+          "level": "basic",
+          "showInStack": false
         },
         {
           "id": "typescript",
@@ -65,7 +71,8 @@
           "id": "vite",
           "name": "Vite",
           "icon": "vite",
-          "level": "basic"
+          "level": "basic",
+          "showInStack": false
         }
       ]
     },
@@ -74,6 +81,10 @@
       "label": {
         "pt": "Back-end",
         "en": "Back-end"
+      },
+      "description": {
+        "pt": "APIs em Node.js e Python: o Checkpoint em NestJS, a coleta de dados do Lumina em Flask.",
+        "en": "APIs in Node.js and Python: Checkpoint in NestJS, Lumina's data collection in Flask."
       },
       "items": [
         {
@@ -86,7 +97,8 @@
           "id": "express",
           "name": "Express",
           "icon": "express",
-          "level": "basic"
+          "level": "basic",
+          "showInStack": false
         },
         {
           "id": "nestjs",
@@ -132,6 +144,10 @@
         "pt": "CMS e web",
         "en": "CMS and web"
       },
+      "description": {
+        "pt": "Sites em WordPress e conteúdo gerenciado com Strapi.",
+        "en": "WordPress sites and content managed with Strapi."
+      },
       "items": [
         {
           "id": "wordpress",
@@ -158,13 +174,15 @@
           "id": "flutter",
           "name": "Flutter",
           "icon": "flutter",
-          "level": "basic"
+          "level": "basic",
+          "showInStack": false
         },
         {
           "id": "dart",
           "name": "Dart",
           "icon": "dart",
-          "level": "basic"
+          "level": "basic",
+          "showInStack": false
         }
       ]
     },
@@ -173,6 +191,10 @@
       "label": {
         "pt": "Dados",
         "en": "Data"
+      },
+      "description": {
+        "pt": "Bancos relacionais com PostgreSQL e Supabase, e Firebase em apps.",
+        "en": "Relational databases with PostgreSQL and Supabase, and Firebase in apps."
       },
       "items": [
         {
@@ -191,33 +213,27 @@
           "id": "prisma",
           "name": "Prisma",
           "icon": "prisma",
-          "level": "basic"
+          "level": "basic",
+          "showInStack": false
         },
         {
           "id": "redis",
           "name": "Redis",
           "icon": "redis",
-          "level": "basic"
+          "level": "basic",
+          "showInStack": false
         },
         {
           "id": "bullmq",
           "name": "BullMQ",
-          "level": "basic"
+          "level": "basic",
+          "showInStack": false
         },
         {
           "id": "firebase",
           "name": "Firebase",
           "icon": "firebase",
           "level": "intermediate"
-        },
-        {
-          "id": "git",
-          "name": {
-            "pt": "Git e GitHub",
-            "en": "Git and GitHub"
-          },
-          "icon": "git",
-          "level": "advanced"
         }
       ]
     },
@@ -227,7 +243,10 @@
         "pt": "Infraestrutura e operações",
         "en": "Infrastructure and operations"
       },
-      "showAllOnHome": true,
+      "description": {
+        "pt": "Deploy com Docker em servidor Linux, versionamento com Git e suporte a sistemas em produção.",
+        "en": "Deployment with Docker on a Linux server, version control with Git and support for production systems."
+      },
       "items": [
         {
           "id": "docker",
@@ -239,7 +258,8 @@
           "id": "caddy",
           "name": "Caddy",
           "icon": "caddy",
-          "level": "basic"
+          "level": "basic",
+          "showInStack": false
         },
         {
           "id": "deploy",
@@ -258,6 +278,15 @@
           },
           "icon": "linux",
           "level": "intermediate"
+        },
+        {
+          "id": "git",
+          "name": {
+            "pt": "Git e GitHub",
+            "en": "Git and GitHub"
+          },
+          "icon": "git",
+          "level": "advanced"
         },
         {
           "id": "support",
@@ -281,7 +310,8 @@
           "id": "unity",
           "name": "Unity (C#)",
           "icon": "unity",
-          "level": "basic"
+          "level": "basic",
+          "showInStack": false
         }
       ]
     }

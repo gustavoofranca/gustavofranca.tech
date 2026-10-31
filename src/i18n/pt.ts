@@ -53,7 +53,7 @@ const pt = {
   },
   home: {
     allProjects: "Todos os projetos",
-    fullStack: "Stack completa",
+    fullStack: "Ver stack completa",
     fullTimeline: "Trajetória completa",
     present: "atual",
     contactText: "Tem uma vaga ou um projeto em mente? Me escreva.",
@@ -70,6 +70,8 @@ const pt = {
     courses: "// cursos",
   },
   stack: {
+    // Título da seção de stack (home e Sobre), abaixo do rótulo "// stack".
+    title: "Com o que eu trabalho",
     usedIn: "usado em",
     // Nível de conhecimento: o ponto colorido tem este texto oculto ao lado, e a
     // legenda mostra os três (cor não pode ser o único meio, WCAG 1.4.1).

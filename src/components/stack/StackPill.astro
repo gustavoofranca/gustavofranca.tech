@@ -1,0 +1,40 @@
+---
+import LevelDot from "@/components/stack/LevelDot.astro";
+import TechIcon from "@/components/stack/TechIcon.astro";
+import type { Locale } from "@/lib/i18n";
+import type { StackLevel } from "@/lib/stack";
+
+interface Props {
+  name: string;
+  icon?: string | undefined;
+  level: StackLevel;
+  locale: Locale;
+  // Marca (React, Docker) não passa pelo tradutor do navegador; descrição ("Deploy de
+  // aplicações") passa.
+  brand: boolean;
+  // A home não leva ícone (nem o espaço dele): o sprite disputava banda com a capa
+  // do destaque e passava o LCP do limite (1,60 s contra 1,5 s). Ver DESIGN.md.
+  withIcon: boolean;
+  // "usado em Lumina e Checkpoint": só complemento no hover. A prova fica nos estudos
+  // de caso, então nada depende deste texto.
+  title?: string | undefined;
+}
+
+const { name, icon, level, locale, brand, withIcon, title } = Astro.props;
+---
+
+{/* O ponto aparece antes do nome (order-first), mas no DOM vem depois: o leitor de
+    tela lê "React, nível: avançado". As maiúsculas são só do CSS; o texto fica com a
+    grafia original para o leitor de tela. */}
+<li data-testid="stack-item" class="flex">
+  <span
+    title={title}
+    class="inline-flex min-h-8 items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 font-mono text-xs font-medium tracking-wide text-fg uppercase transition-colors duration-(--duration-fast) hover-fine:border-accent"
+  >
+    {withIcon && <TechIcon slug={icon} />}
+    <span data-testid="stack-name" translate={brand ? "no" : undefined}>
+      {name}
+    </span>
+    <LevelDot level={level} locale={locale} class="order-first" />
+  </span>
+</li>

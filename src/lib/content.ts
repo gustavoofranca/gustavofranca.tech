@@ -1,7 +1,7 @@
 import { getCollection } from "astro:content";
 import type { Locale } from "@/lib/i18n";
 import { buildIconSprite, iconSpriteFile } from "@/lib/iconSprite";
-import { stackName } from "@/lib/stack";
+import { stackName, visibleStackAreas } from "@/lib/stack";
 import {
   assertFeaturedLimit,
   assertKnownStack,
@@ -136,15 +136,15 @@ export async function usedIn(stackId: string, locale: Locale) {
     .map((p) => ({ slug: projectSlug(p.id), title: p.data.title }));
 }
 
-// Stack por área, cada item com os projetos do idioma que o usam. A home filtra os
-// que têm prova; o Sobre mostra todos.
+// Stack como a seção mostra (só showInStack, sem área vazia), cada item com os
+// projetos publicados do idioma que o usam (vão no `title` da pílula, como extra).
 export async function getStackAreas(locale: Locale) {
   const stack = await getStack();
   return Promise.all(
-    stack.areas.map(async (area) => ({
+    visibleStackAreas(stack.areas).map(async (area) => ({
       id: area.id,
       label: area.label[locale],
-      showAllOnHome: area.showAllOnHome,
+      description: area.description[locale],
       items: await Promise.all(
         area.items.map(async (item) => ({
           id: item.id,

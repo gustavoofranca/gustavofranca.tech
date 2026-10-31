@@ -175,6 +175,30 @@ test.describe("com mouse e sem movimento reduzido", () => {
     expect(Math.max(...timings.map((timing) => timing.end))).toBeLessThan(5000);
   });
 
+  test("na stack, o número da área e a borda da pílula acendem em accent com o mouse", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const accent = await page.evaluate(() => {
+      const probe = document.createElement("span");
+      probe.style.setProperty("color", "var(--accent)");
+      document.body.append(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    });
+    const row = page.getByTestId("stack-area").first();
+    const number = row.locator(":scope > span[aria-hidden=true]");
+    await row.scrollIntoViewIfNeeded();
+    await expect(number).not.toHaveCSS("color", accent);
+    await row.getByRole("heading").hover();
+    await expect(number).toHaveCSS("color", accent);
+
+    const pill = row.getByTestId("stack-item").first().locator("> span");
+    await pill.hover();
+    await expect(pill).toHaveCSS("border-top-color", accent);
+  });
+
   test("a linha do tempo acende com o scroll", async ({ page }) => {
     await page.goto("/sobre");
     expect(await animationOf(page, "ol.timeline", "::before")).toBe(

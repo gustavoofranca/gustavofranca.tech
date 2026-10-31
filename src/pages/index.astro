@@ -3,7 +3,7 @@ import ContactCta from "@/components/home/ContactCta.astro";
 import FeaturedProjects from "@/components/home/FeaturedProjects.astro";
 import Hero from "@/components/home/Hero.astro";
 import MiniTimeline from "@/components/home/MiniTimeline.astro";
-import StackByArea from "@/components/home/StackByArea.astro";
+import StackSection from "@/components/stack/StackSection.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { t } from "@/lib/i18n";
 import { personJsonLd } from "@/lib/seo";
@@ -21,7 +21,7 @@ const dict = t(locale);
 >
   <Hero locale={locale} />
   <FeaturedProjects locale={locale} />
-  <StackByArea locale={locale} />
+  <StackSection locale={locale} variant="home" />
   <MiniTimeline locale={locale} />
   <ContactCta locale={locale} />
 </BaseLayout>

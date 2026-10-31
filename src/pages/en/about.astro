@@ -2,7 +2,7 @@
 import Courses from "@/components/about/Courses.astro";
 import Intro from "@/components/about/Intro.astro";
 import Languages from "@/components/about/Languages.astro";
-import StackFull from "@/components/about/StackFull.astro";
+import StackSection from "@/components/stack/StackSection.astro";
 import Timeline from "@/components/about/Timeline.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { t } from "@/lib/i18n";
@@ -25,5 +25,5 @@ const dict = t(locale);
     <Languages locale={locale} />
     <Courses locale={locale} />
   </div>
-  <StackFull locale={locale} />
+  <StackSection locale={locale} variant="about" />
 </BaseLayout>

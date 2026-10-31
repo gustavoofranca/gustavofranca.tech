@@ -49,7 +49,7 @@ const en = {
   },
   home: {
     allProjects: "All projects",
-    fullStack: "Complete stack",
+    fullStack: "See full stack",
     fullTimeline: "Full timeline",
     present: "present",
     contactText: "Have a role or a project in mind? Write to me.",
@@ -66,6 +66,7 @@ const en = {
     courses: "// courses",
   },
   stack: {
+    title: "What I work with",
     usedIn: "used in",
     levelLegend: "Knowledge level legend",
     levelOf: ", level: {level}",

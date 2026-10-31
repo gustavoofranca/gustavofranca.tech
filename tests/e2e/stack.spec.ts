@@ -1,154 +1,230 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+import { t } from "@/lib/i18n";
 
-// Nível de conhecimento na stack: cada tecnologia tem um ponto colorido com o nível
-// em texto para o leitor de tela (cor não é o único meio, WCAG 1.4.1), e a legenda
-// visível mostra os três níveis. O axe dos dois temas está em a11y-and-layout.spec.ts.
-for (const { path, prefix, legend } of [
-  {
-    path: "/",
-    prefix: "nível",
-    legend: ["básico", "intermediário", "avançado"],
-  },
-  {
-    path: "/sobre",
-    prefix: "nível",
-    legend: ["básico", "intermediário", "avançado"],
-  },
-  {
-    path: "/en/",
-    prefix: "level",
-    legend: ["basic", "intermediate", "advanced"],
-  },
-  {
-    path: "/en/about",
-    prefix: "level",
-    legend: ["basic", "intermediate", "advanced"],
-  },
-]) {
-  test(`${path}: toda tecnologia tem ponto de nível e a legenda aparece`, async ({
+// Seção de stack (home e Sobre): áreas numeradas, frase curta e tecnologias em
+// pílulas com ponto de nível. Cada ponto tem o nível em texto para o leitor de tela
+// (cor não é o único meio, WCAG 1.4.1), e a legenda visível mostra os três níveis.
+// O axe dos dois temas está em a11y-and-layout.spec.ts.
+
+const AREAS = {
+  pt: [
+    "Front-end",
+    "Back-end",
+    "CMS e web",
+    "Dados",
+    "Infraestrutura e operações",
+  ],
+  en: [
+    "Front-end",
+    "Back-end",
+    "CMS and web",
+    "Data",
+    "Infrastructure and operations",
+  ],
+} as const;
+
+const NAMES = {
+  pt: [
+    ...["React", "Angular", "Vue", "TypeScript", "JavaScript", "HTML & CSS"],
+    ...["Tailwind CSS", "Node.js", "NestJS", "Python", "Flask", "PHP"],
+    ...["Laravel", "Java", "WordPress", "Strapi", "PostgreSQL", "Supabase"],
+    ...["Firebase", "Docker", "Deploy de aplicações", "Servidores Linux"],
+    ...["Git e GitHub", "Suporte e sustentação"],
+  ],
+  en: [
+    ...["React", "Angular", "Vue", "TypeScript", "JavaScript", "HTML & CSS"],
+    ...["Tailwind CSS", "Node.js", "NestJS", "Python", "Flask", "PHP"],
+    ...["Laravel", "Java", "WordPress", "Strapi", "PostgreSQL", "Supabase"],
+    ...["Firebase", "Docker", "Application deployment", "Linux servers"],
+    ...["Git and GitHub", "Support and maintenance"],
+  ],
+} as const;
+
+// Saíram da seção (decisão do Gustavo), mas continuam nas etiquetas dos projetos.
+const REMOVED = [
+  ...["Flutter", "Dart", "Vite", "Nuxt", "Astro", "Express", "Prisma"],
+  ...["Redis", "BullMQ", "Caddy", "Unity (C#)"],
+];
+
+const PAGES = [
+  { path: "/", locale: "pt", home: true },
+  { path: "/sobre", locale: "pt", home: false },
+  { path: "/en/", locale: "en", home: true },
+  { path: "/en/about", locale: "en", home: false },
+] as const;
+
+function stackSection(page: Page, locale: "pt" | "en") {
+  return page.getByRole("region", { name: t(locale).stack.title });
+}
+
+for (const { path, locale } of PAGES) {
+  const dict = t(locale).stack;
+  const legend = Object.values(dict.levels);
+  const prefix = dict.levelOf
+    .replace(/[:\s]*\{level\}$/, "")
+    .replace(/^,\s*/, "");
+
+  test(`${path}: 5 áreas numeradas, 24 tecnologias com nível e a legenda`, async ({
     page,
   }) => {
     await page.goto(path);
-    const stack = page.getByRole("region", { name: /stack/i });
+    const stack = stackSection(page, locale);
+    await expect(stack).toBeVisible();
+
+    const areas = stack.getByTestId("stack-area");
+    await expect(areas).toHaveCount(5);
+    await expect(stack.getByRole("heading", { level: 3 })).toHaveText([
+      ...AREAS[locale],
+    ]);
+    // Número decorativo: fora da árvore de acessibilidade.
+    const numbers = areas.locator(":scope > span[aria-hidden=true]");
+    await expect(numbers).toHaveText(["01", "02", "03", "04", "05"]);
+
     const items = stack.getByTestId("stack-item");
-    const count = await items.count();
-    expect(count).toBeGreaterThan(0);
+    await expect(items).toHaveCount(24);
+    await expect(stack.getByTestId("stack-name")).toHaveText([
+      ...NAMES[locale],
+    ]);
     for (const item of await items.all()) {
       const dot = item.locator("[data-level]");
       await expect(dot).toHaveCount(1);
       await expect(dot).toBeVisible();
       await expect(dot).toHaveAttribute("aria-hidden", "true");
+      // Um texto de nível por pílula, só para o leitor de tela.
+      await expect(item.locator(".sr-only")).toHaveCount(1);
     }
-    // O nível está na árvore de acessibilidade, uma vez por tecnologia, com o nome
-    // de um dos três níveis da legenda.
+    // O nível está na árvore de acessibilidade, uma vez por tecnologia.
     const tree = await stack.ariaSnapshot();
     const found = legend.map(
       (label) => tree.split(`${prefix}: ${label}`).length - 1,
     );
-    expect(found.reduce((sum, n) => sum + n, 0)).toBe(count);
-    const levels = await items
-      .locator("[data-level]")
-      .evaluateAll((dots) => dots.map((dot) => dot.getAttribute("data-level")));
-    for (const level of levels) {
-      expect(["basic", "intermediate", "advanced"]).toContain(level);
-    }
+    expect(found.reduce((sum, n) => sum + n, 0)).toBe(24);
 
     const legendList = stack.getByTestId("level-legend");
     await expect(legendList).toBeVisible();
     await expect(legendList.getByRole("listitem")).toHaveText(legend);
     await expect(legendList.locator("[data-level]")).toHaveCount(3);
+
+    // "usado em" saiu da lista; fica só no title da pílula e nos estudos de caso.
+    await expect(stack).not.toContainText(/usado em|used in/);
+    for (const name of REMOVED) {
+      await expect(
+        stack.getByTestId("stack-name").filter({ hasText: name }),
+      ).toHaveCount(0);
+    }
   });
-}
 
-test("/en/about mostra a stack em inglês, com a área de infraestrutura", async ({
-  page,
-}) => {
-  await page.goto("/en/about");
-  const stack = page.getByRole("region", { name: /stack/i });
-  await expect(stack).toContainText("Git and GitHub");
-  await expect(stack).not.toContainText("Git e GitHub");
-  await expect(
-    stack.getByRole("heading", { name: "Infrastructure and operations" }),
-  ).toBeVisible();
-  for (const name of [
-    "Docker",
-    "Caddy",
-    "Application deployment",
-    "Linux servers",
-    "Support and maintenance",
-  ]) {
-    await expect(
-      stack.getByTestId("stack-item").filter({ hasText: name }),
-    ).toHaveCount(1);
-  }
-  await expect(stack.getByRole("heading", { name: "Data" })).toBeVisible();
-});
-
-test("/sobre mostra a área de infraestrutura em português", async ({
-  page,
-}) => {
-  await page.goto("/sobre");
-  const stack = page.getByRole("region", { name: /stack/i });
-  await expect(
-    stack.getByRole("heading", { name: "Infraestrutura e operações" }),
-  ).toBeVisible();
-  await expect(stack.getByRole("heading", { name: "Dados" })).toBeVisible();
-  for (const name of [
-    "Git e GitHub",
-    "Deploy de aplicações",
-    "Servidores Linux",
-    "Suporte e sustentação",
-  ]) {
-    await expect(
-      stack.getByTestId("stack-item").filter({ hasText: name }),
-    ).toHaveCount(1);
-  }
-});
-
-for (const { path, practices } of [
-  {
-    path: "/",
-    practices: [
-      "Deploy de aplicações",
-      "Servidores Linux",
-      "Suporte e sustentação",
-    ],
-  },
-  {
-    path: "/en/",
-    practices: [
-      "Application deployment",
-      "Linux servers",
-      "Support and maintenance",
-    ],
-  },
-]) {
-  test(`${path}: a área de infraestrutura aparece inteira na home, sem "usado em" inventado`, async ({
+  test(`${path}: Git fica em infraestrutura e operações, não em dados`, async ({
     page,
   }) => {
     await page.goto(path);
-    const stack = page.getByRole("region", { name: /stack/i });
-    for (const name of practices) {
-      const item = stack.getByTestId("stack-item").filter({ hasText: name });
-      await expect(item).toHaveCount(1);
-      await expect(item).not.toContainText(/usado em|used in/);
-    }
-    // As outras áreas continuam só com o que tem projeto: Laravel não tem.
+    const area = (name: string) =>
+      stackSection(page, locale)
+        .getByTestId("stack-area")
+        .filter({ has: page.getByRole("heading", { name, exact: true }) });
+    const git = locale === "pt" ? "Git e GitHub" : "Git and GitHub";
     await expect(
-      stack.getByTestId("stack-item").filter({ hasText: "Laravel" }),
-    ).toHaveCount(0);
+      area(AREAS[locale][4]).getByTestId("stack-name"),
+    ).toContainText([git]);
+    await expect(area(AREAS[locale][3])).not.toContainText(git);
   });
 }
+
+test("/en/about e /en/ mostram a stack inteira em inglês", async ({ page }) => {
+  for (const path of ["/en/about", "/en/"]) {
+    await page.goto(path);
+    const stack = stackSection(page, "en");
+    await expect(stack).toContainText(
+      "Interfaces in React and Angular, from the Lumina dashboard to the Conexão Metodista app.",
+    );
+    const text = (await stack.textContent()) ?? "";
+    for (const pt of [
+      "Com o que eu trabalho",
+      "nível",
+      "básico",
+      "Dados",
+      "Git e GitHub",
+      "Interfaces em React",
+      "Ver stack completa",
+    ]) {
+      expect(text).not.toContain(pt);
+    }
+    const titles = await stack
+      .locator("[title]")
+      .evaluateAll((els) => els.map((el) => el.getAttribute("title") ?? ""));
+    for (const title of titles) expect(title).not.toMatch(/usado em|nível/);
+  }
+});
+
+test("o title da pílula diz onde a tecnologia foi usada, só quando há projeto", async ({
+  page,
+}) => {
+  await page.goto("/sobre");
+  const pill = (name: string) =>
+    stackSection(page, "pt")
+      .getByTestId("stack-item")
+      .filter({ has: page.getByText(name, { exact: true }) })
+      .locator("[title]")
+      .first();
+  // React aparece em projetos publicados; Laravel não tem projeto publicado.
+  await expect(pill("React")).toHaveAttribute("title", /^usado em .+/);
+  await expect(
+    stackSection(page, "pt")
+      .getByTestId("stack-item")
+      .filter({ hasText: "Laravel" })
+      .locator("[title^='usado em']"),
+  ).toHaveCount(0);
+});
+
+test("as tecnologias que saíram da seção continuam nas etiquetas dos projetos", async ({
+  page,
+}) => {
+  const tags = (locale: "pt" | "en") =>
+    page.getByRole("list", { name: t(locale).projects.stackList });
+  await page.goto("/projetos/checkpoint");
+  for (const name of ["Prisma", "Redis", "BullMQ"]) {
+    await expect(tags("pt")).toContainText(name);
+  }
+  await page.goto("/projetos/lumina");
+  await expect(tags("pt")).toContainText("Vite");
+  await page.goto("/en/projects/checkpoint");
+  await expect(tags("en")).toContainText("Prisma");
+});
+
+for (const { path, locale, target } of [
+  { path: "/", locale: "pt", target: "/sobre#stack" },
+  { path: "/en/", locale: "en", target: "/en/about#stack" },
+] as const) {
+  test(`${path}: o link da home leva à stack completa`, async ({ page }) => {
+    await page.goto(path);
+    const link = stackSection(page, locale).getByRole("link", {
+      name: t(locale).home.fullStack,
+    });
+    await expect(link).toHaveAttribute("href", target);
+    await link.click();
+    await expect(page).toHaveURL(new RegExp(`${target}$`));
+    await expect(stackSection(page, locale)).toBeInViewport();
+  });
+}
+
+test("o Sobre não repete o link para a stack completa", async ({ page }) => {
+  await page.goto("/sobre");
+  await expect(
+    stackSection(page, "pt").getByRole("link", {
+      name: t("pt").home.fullStack,
+    }),
+  ).toHaveCount(0);
+});
 
 test("os ícones são decorativos e vêm do sprite externo, que tem todos os <symbol>", async ({
   page,
   request,
 }) => {
   await page.goto("/sobre");
-  const icons = page
-    .getByRole("region", { name: /stack/i })
-    .locator("[data-testid=stack-item] svg");
-  expect(await icons.count()).toBeGreaterThan(0);
+  const icons = stackSection(page, "pt").locator(
+    "[data-testid=stack-item] svg",
+  );
+  await expect(icons).toHaveCount(24);
   const hrefs = new Set<string>();
   for (const icon of await icons.all()) {
     await expect(icon).toHaveAttribute("aria-hidden", "true");
@@ -172,13 +248,8 @@ test("os ícones são decorativos e vêm do sprite externo, que tem todos os <sy
 
 // Ícone só na stack completa: na home o sprite disputava banda com a capa do
 // destaque e passava o LCP do limite de 1,5 s (DESIGN.md).
-for (const { path, icons } of [
-  { path: "/", icons: false },
-  { path: "/en/", icons: false },
-  { path: "/sobre", icons: true },
-  { path: "/en/about", icons: true },
-]) {
-  test(`${path}: ícones de stack ${icons ? "presentes" : "ausentes, sem pedir o sprite"}`, async ({
+for (const { path, locale, home } of PAGES) {
+  test(`${path}: ícones de stack ${home ? "ausentes, sem pedir o sprite" : "presentes"}`, async ({
     page,
   }) => {
     const spriteRequests: string[] = [];
@@ -189,13 +260,11 @@ for (const { path, icons } of [
     });
     await page.goto(path);
     await page.waitForLoadState("load");
-    const items = page
-      .getByRole("region", { name: /stack/i })
-      .getByTestId("stack-item");
-    expect(await items.count()).toBeGreaterThan(0);
+    const items = stackSection(page, locale).getByTestId("stack-item");
+    await expect(items).toHaveCount(24);
     const svgs = items.locator("svg");
-    if (icons) {
-      expect(await svgs.count()).toBeGreaterThan(0);
+    if (!home) {
+      await expect(svgs).toHaveCount(24);
       expect(spriteRequests.length).toBeGreaterThan(0);
       return;
     }

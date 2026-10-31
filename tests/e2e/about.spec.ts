@@ -70,27 +70,18 @@ for (const [path, label] of [
   });
 }
 
-test("a stack completa inclui tecnologias sem projeto, só com o nome", async ({
+test('o Sobre mostra a mesma stack da home, sem "usado em" na lista', async ({
   page,
 }) => {
-  await page.goto("/sobre");
-  const stack = page.getByRole("region", { name: /stack/i });
-  const item = (name: string) =>
-    stack.getByRole("listitem").filter({ hasText: name });
-  // Com projeto publicado: mostra onde foi usada.
-  await expect(item("Angular")).toContainText("usado em");
-  // Sem projeto publicado (conferido em src/content/projects): aparece, sem "usado em".
-  await expect(item("Laravel")).toHaveCount(1);
-  await expect(item("Laravel")).not.toContainText("usado em");
-
-  // Na home só entra o que tem prova; o Sobre lista mais tecnologias.
-  const aboutCount = await stack.getByRole("listitem").count();
-  await page.goto("/");
-  const homeCount = await page
-    .getByRole("region", { name: /stack/i })
-    .getByRole("listitem")
-    .count();
-  expect(aboutCount).toBeGreaterThan(homeCount);
+  const names = async (path: string) => {
+    await page.goto(path);
+    const stack = page.getByRole("region", { name: "Com o que eu trabalho" });
+    await expect(stack).not.toContainText("usado em");
+    return stack.getByTestId("stack-name").allTextContents();
+  };
+  const about = await names("/sobre");
+  expect(about).toHaveLength(24);
+  expect(await names("/")).toEqual(about);
 });
 
 test("sem o PDF do CV, não há botão de baixar", async ({ page }) => {

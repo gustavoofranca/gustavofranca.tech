@@ -1,0 +1,95 @@
+---
+import LevelLegend from "@/components/stack/LevelLegend.astro";
+import StackPill from "@/components/stack/StackPill.astro";
+import { getStackAreas } from "@/lib/content";
+import { formatList, t, type Locale } from "@/lib/i18n";
+import { routePath } from "@/lib/routes";
+
+interface Props {
+  locale: Locale;
+  // Home: sem ícones (LCP, ver DESIGN.md) e com o link para a stack do Sobre.
+  // Sobre: com ícones e sem o link.
+  variant: "home" | "about";
+}
+
+const { locale, variant } = Astro.props;
+const dict = t(locale);
+const areas = await getStackAreas(locale);
+const isHome = variant === "home";
+// Rótulo "// stack": as barras são sotaque visual, o leitor de tela lê só a palavra.
+const eyebrow = dict.sections.stack.replace(/^\/\/\s*/, "");
+---
+
+<section
+  id="stack"
+  aria-labelledby="stack-title"
+  class="mx-auto w-full max-w-5xl scroll-mt-6 px-4 pb-16 sm:px-6 md:pb-24"
+>
+  <div class="flex flex-wrap items-end justify-between gap-x-6 gap-y-4">
+    <div>
+      <p class="font-mono text-sm text-faint">
+        <span aria-hidden="true">// </span>
+        {eyebrow}
+      </p>
+      <h2
+        id="stack-title"
+        class="mt-2 text-4xl font-semibold tracking-tight text-balance"
+      >
+        {dict.stack.title}
+      </h2>
+    </div>
+    <LevelLegend locale={locale} />
+  </div>
+
+  <ol class="mt-7 border-t border-dashed border-accent/30">
+    {areas.map((area, index) => (
+      <li
+        data-testid="stack-area"
+        class="group grid grid-cols-[2.5rem_minmax(0,1fr)] items-center gap-x-4 gap-y-4 border-b border-dashed border-accent/30 py-6 md:grid-cols-[4.5rem_minmax(0,1fr)_minmax(0,1.25fr)] md:gap-x-6 md:py-7"
+      >
+        {/* Número decorativo: a ordem já vem da <ol>. Acende com o mouse na linha. */}
+        <span
+          aria-hidden="true"
+          class="self-start pt-1 font-mono text-lg font-medium text-faint group-hover-fine:text-accent motion-safe:transition-colors motion-safe:duration-(--duration-base) motion-safe:ease-(--ease-out-expo) md:self-center md:pt-0 md:text-2xl"
+        >
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <div>
+          <h3 class="text-2xl font-semibold tracking-tight text-balance">
+            {area.label}
+          </h3>
+          <p class="mt-1.5 max-w-[46ch] font-mono text-sm text-muted">
+            {area.description}
+          </p>
+        </div>
+        <ul class="col-span-full flex flex-wrap gap-2 md:col-span-1 md:justify-end">
+          {area.items.map((item) => (
+            <StackPill
+              name={item.name}
+              brand={item.brand}
+              icon={item.icon}
+              level={item.level}
+              locale={locale}
+              withIcon={!isHome}
+              title={
+                item.projects.length > 0
+                  ? `${dict.stack.usedIn} ${formatList(item.projects, locale)}`
+                  : undefined
+              }
+            />
+          ))}
+        </ul>
+      </li>
+    ))}
+  </ol>
+
+  {isHome && (
+    <a
+      href={`${routePath("about", locale)}#stack`}
+      class="mt-6 inline-flex min-h-10 items-center gap-1.5 rounded-(--radius-control) text-sm text-accent transition-colors duration-(--duration-fast) hover-fine:text-fg"
+    >
+      {dict.home.fullStack}
+      <span aria-hidden="true">→</span>
+    </a>
+  )}
+</section>

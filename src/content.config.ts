@@ -1,7 +1,7 @@
 import { defineCollection } from "astro:content";
 import { file, glob } from "astro/loaders";
 import { z } from "astro/zod";
-import { STACK_LEVELS } from "@/lib/stack";
+import { stackSchema } from "@/lib/stack";
 
 const month = z
   .string()
@@ -60,27 +60,8 @@ const stack = defineCollection({
   loader: file("src/content/stack.json", {
     parser: (text) => [{ id: "stack", ...JSON.parse(text) }],
   }),
-  schema: z.object({
-    areas: z.array(
-      z.object({
-        id: z.string(),
-        label: bilingual,
-        // A home mostra só tecnologia usada em projeto publicado. Área de prática
-        // (infraestrutura e operações) não tem projeto que a prove e aparece inteira.
-        showAllOnHome: z.boolean().default(false),
-        items: z.array(
-          z.object({
-            id: z.string(),
-            // Nome próprio é igual nos dois idiomas; descrição ("Git e GitHub") é bilíngue.
-            name: z.union([z.string(), bilingual]),
-            // Slug do Simple Icons ou "lucide:<nome>" (src/lib/genericIcons.ts).
-            icon: z.string().optional(),
-            level: z.enum(STACK_LEVELS),
-          }),
-        ),
-      }),
-    ),
-  }),
+  // Regras (showInStack, frase obrigatória da área visível) em src/lib/stack.ts, com teste.
+  schema: stackSchema,
 });
 
 // Texto do Sobre que não é linha do tempo: história, idiomas e cursos. Os nomes de

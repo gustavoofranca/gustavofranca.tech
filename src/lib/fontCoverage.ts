@@ -16,6 +16,7 @@ type Node = DefaultTreeAdapterTypes.Node;
 export const SYSTEM_FALLBACK_CODE_POINTS: ReadonlySet<number> = new Set([
   0x2011, // ‑ hífen sem quebra ("full‑stack")
   0x2190, // ← voltar
+  0x2192, // → ver stack completa
   0x2318, // ⌘ atalho da paleta
   0x2713, // ✓ terminal
   0x276f, // ❯ prompt do terminal
