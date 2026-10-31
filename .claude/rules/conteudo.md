@@ -22,7 +22,7 @@ paths:
 ## Veracidade
 - Nada sobre o Gustavo é inventado: cargo, datas, papel, números, clientes. Faltou informação → `TODO(gustavo): <o que falta>`. O build de produção falha se encontrar `TODO(gustavo)`.
 - Projeto em equipe diz que é em equipe e o que foi feito por ele.
-- Nome de empresa ou cliente só aparece se ele autorizou (empresa atual: pendente).
+- Nome de empresa ou cliente só aparece se ele autorizou (K13 Web: autorizado em 2026-10-30).
 
 ## Estudo de caso (ordem fixa)
 Resumo + stack + links → Contexto/problema → Meu papel → Arquitetura (diagrama + decisões com "por quê") → Desafios e soluções → Resultado (prints/vídeo) → O que eu faria diferente.

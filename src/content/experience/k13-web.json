@@ -1,0 +1,18 @@
+{
+  "kind": "work",
+  "org": {
+    "pt": "K13 Web",
+    "en": "K13 Web"
+  },
+  "role": {
+    "pt": "Desenvolvedor full-stack júnior",
+    "en": "Junior full-stack developer"
+  },
+  "start": "2026-08",
+  "end": null,
+  "description": {
+    "pt": "Atuo no desenvolvimento e na manutenção de sites e sistemas.",
+    "en": "I develop and maintain websites and systems."
+  },
+  "stack": []
+}
