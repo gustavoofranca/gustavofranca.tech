@@ -121,6 +121,7 @@
         {
           "id": "java",
           "name": "Java",
+          "icon": "openjdk",
           "level": "basic"
         }
       ]
