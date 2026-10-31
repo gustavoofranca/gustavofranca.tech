@@ -118,7 +118,7 @@ O `-p 127.0.0.1:...` é só para teste local. Em produção a porta não é publ
 - [0001. Astro com ilhas React](docs/adr/0001-astro-com-ilhas-react.md)
 - [0002. CSP nativa do Astro, com hash dos scripts inline gerado no build](docs/adr/0002-csp.md)
 - [0003. Orçamento de performance: como medir e o que mudou para cumprir](docs/adr/0003-orcamento-de-performance.md)
-- [0004. Movimento e interação: CSS nativo, um script de 0,4 KB e cada efeito com o seu desligamento](docs/adr/0004-movimento-e-interacao.md)
+- [0004. Movimento e interação: CSS nativo, um script de 0,5 KB e cada efeito com o seu desligamento](docs/adr/0004-movimento-e-interacao.md)
 
 ## Pendências conhecidas
 
