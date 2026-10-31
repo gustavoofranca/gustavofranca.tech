@@ -155,19 +155,88 @@ test.describe("com mouse e sem movimento reduzido", () => {
     );
   });
 
-  test("o hover no terminal pisca o cursor sem recomeçar a digitação", async ({
+  test("o hover no terminal pisca o cursor sem recomeçar a digitação nem mostrá-lo antes", async ({
     page,
   }) => {
     await page.goto("/");
-    await page.getByTestId("hero-terminal").hover();
-    const names = await page
-      .locator(".cursor")
-      .evaluate((el) =>
+    const terminal = page.getByTestId("hero-terminal");
+    // Início de cada animação da sequência (digitação e entradas), por alvo e nome.
+    const sequence = () =>
+      terminal.evaluate((el) =>
         el
-          .getAnimations()
-          .map((a) => (a instanceof CSSAnimation ? a.animationName : "")),
+          .getAnimations({ subtree: true })
+          .filter(
+            (a): a is CSSAnimation =>
+              a instanceof CSSAnimation &&
+              ["type", "appear"].includes(a.animationName),
+          )
+          .map((a) => {
+            const target =
+              a.effect instanceof KeyframeEffect ? a.effect.target : null;
+            return `${target?.className ?? "?"}|${a.animationName}|${String(a.startTime)}`;
+          }),
       );
-    expect(names).toContain("blink-again");
+    const before = await sequence();
+    expect(before.length).toBeGreaterThan(0);
+
+    await terminal.hover();
+    const state = await page.locator(".cursor").evaluate((cursor) => {
+      const own = cursor
+        .getAnimations()
+        .find((a) => a instanceof CSSAnimation && a.animationName === "appear");
+      const delay = Number(own?.effect?.getTiming().delay ?? 0);
+      return {
+        // O cursor ainda espera a digitação acabar: tem que continuar invisível.
+        waiting: own !== undefined && Number(own.currentTime ?? 0) < delay,
+        opacity: getComputedStyle(cursor).opacity,
+        blink: cursor
+          .getAnimations({ subtree: true })
+          .some(
+            (a) =>
+              a instanceof CSSAnimation &&
+              a.animationName === "blink" &&
+              a.effect instanceof KeyframeEffect &&
+              a.effect.pseudoElement === "::before",
+          ),
+      };
+    });
+    expect(state.blink).toBe(true);
+    expect(state.waiting ? state.opacity : "0").toBe("0");
+
+    // Nada da sequência recomeçou: o que ainda roda tem o mesmo início de antes.
+    for (const entry of await sequence()) expect(before).toContain(entry);
+  });
+
+  test("depois do mouse, o foco do teclado mostra a luz parada no topo", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const card = page.getByTestId("project-card").nth(1);
+    await card.scrollIntoViewIfNeeded();
+    await card.hover({ position: { x: 40, y: 200 } });
+    await card.hover({ position: { x: 70, y: 230 } });
+    await expect
+      .poll(() => card.evaluate((el) => el.style.getPropertyValue("--light-x")))
+      .not.toBe("");
+
+    await page.mouse.move(2, 2);
+    // A posição só volta ao topo depois que a luz termina de apagar.
+    await expect.poll(() => card.getAttribute("style")).toBe("");
+
+    await card.locator("h3 a").focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    await expect(card.locator("h3 a")).toBeFocused();
+    expect(
+      await card.evaluate((el) =>
+        getComputedStyle(el).getPropertyValue("--light-x"),
+      ),
+    ).toBe("50%");
+    await expect
+      .poll(() =>
+        card.evaluate((el) => getComputedStyle(el, "::after").opacity),
+      )
+      .toBe("1");
   });
 });
 
@@ -192,6 +261,25 @@ test("transição entre páginas declarada e cabeçalho parado", async ({
     "site-header",
   );
 });
+
+// Só um elemento visível por página pode ter o nome; dois, e o navegador pula a
+// transição. A 404 tem dois cabeçalhos (PT e EN) e o script esconde um.
+for (const path of ["/", "/en/", "/sobre", "/nao-existe", "/en/nao-existe"]) {
+  test(`${path}: um só cabeçalho com view-transition-name`, async ({
+    page,
+  }) => {
+    await page.goto(path);
+    const named = await page.evaluate(
+      () =>
+        [...document.querySelectorAll("body *")].filter(
+          (el) =>
+            getComputedStyle(el).viewTransitionName === "site-header" &&
+            el.checkVisibility(),
+        ).length,
+    );
+    expect(named).toBe(1);
+  });
+}
 
 test("o item da página atual no menu tem o sublinhado cheio", async ({
   page,
