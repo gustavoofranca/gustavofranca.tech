@@ -100,7 +100,7 @@ docker run --init -p 127.0.0.1:4321:4321 --env-file .env portfolio
 O `-p 127.0.0.1:...` é só para teste local. Em produção a porta não é publicada no host (ver [Pendências conhecidas](#pendências-conhecidas)).
 
 - Multi-stage, Node 24 Alpine fixado por digest, usuário `node` (não root), `HEALTHCHECK` em `/`.
-- O estágio final instala só `dependencies` (`npm ci --omit=dev`). Ali fica só o que o servidor (`dist/server`) importa em tempo de execução, mais o Astro e as integrações; o que só roda no build (Tailwind, fontes, `satori`, `@resvg/resvg-js`, `cmdk`, `clsx`, `tailwind-merge`) é `devDependencies`. O `clsx` também aparece em `dist/server`, mas vem do próprio Astro, que o declara como dependência. Pacote novo: confira os imports de `dist/server` antes de decidir onde ele entra.
+- O estágio final instala só `dependencies` (`npm ci --omit=dev`). Ali fica só o que o servidor (`dist/server`) importa em tempo de execução, mais o Astro e as integrações; o que só roda no build (Tailwind, fontes, `satori`, `@resvg/resvg-js`, `cmdk`, `clsx`, `tailwind-merge`, `simple-icons`) é `devDependencies`. O `clsx` também aparece em `dist/server`, mas vem do próprio Astro, que o declara como dependência. Pacote novo: confira os imports de `dist/server` antes de decidir onde ele entra.
 - `NODE_ENV=production` vem da imagem e é obrigatório: com ele, `MAIL_TRANSPORT=json` é recusado (as mensagens seriam descartadas em silêncio).
 - Segredos só em tempo de execução (`--env-file` ou `env_file` no compose), nunca como `--build-arg`. O `.dockerignore` só deixa entrar o necessário para o build.
 - O build usa `CONTENT_STRICT=true` e **falha enquanto houver `TODO(gustavo)`** no conteúdo; isso é o esperado. Para testar localmente: `--build-arg CONTENT_STRICT=false`.
