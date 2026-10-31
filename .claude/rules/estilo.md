@@ -29,6 +29,8 @@ A direção visual está decidida: **Variante 1 — minimal escuro + terminal + 
 - Só `transform` e `opacity` em animação (nada que cause layout).
 - `prefers-reduced-motion: reduce` → tudo estático, conteúdo completo visível.
 - Conteúdo nunca começa com `opacity: 0` esperando JS ou scroll: a primeira pintura já mostra tudo.
+- Fora do hero, só resposta a hover, foco e scroll, e só os efeitos listados no `DESIGN.md` › Movimento (ADR 0004). Cada um desliga sozinho com movimento reduzido (o reset de `global.css` não alcança scroll-driven, view transition nem JS); hover dentro de `hover-fine:` / `(hover: hover) and (pointer: fine)`.
+- Animação de scroll em propriedades longas (`animation-name`, `animation-timeline`…), nunca no atalho `animation`: o minificador gera um valor que o Chrome rejeita.
 
 ## Componentes e padrões visuais
 - Cartão (borda + fundo) só para o que é objeto separado (projeto, terminal). Seções não viram cartão.
