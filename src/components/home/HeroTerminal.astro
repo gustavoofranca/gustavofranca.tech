@@ -131,11 +131,21 @@ const TONE = { key: "text-accent-2", string: "text-code-string" } as const;
     background: var(--accent);
   }
 
+  /* O bloco é o ::before: o piscar do hover (H4) anima só ele, e a opacidade do pai
+     (appear/blink abaixo) multiplica. Durante a digitação o pai está em 0 e o hover não
+     consegue mostrar o cursor antes da hora, em nenhum motor. */
   .cursor {
+    position: relative;
     display: inline-block;
     width: 1ch;
     height: 1.1em;
     vertical-align: -0.2em;
+  }
+
+  .cursor::before {
+    content: "";
+    position: absolute;
+    inset: 0;
     background: var(--accent);
   }
 
@@ -172,21 +182,10 @@ const TONE = { key: "text-accent-2", string: "text-code-string" } as const;
 
   /* H4: o terminal "acorda" com o mouse em cima. Os botões de janela ganham as cores
      do macOS (utilitários no markup; cor não é movimento, vale com movimento reduzido)
-     e o cursor pisca mais 4 vezes e para (disparado pelo usuário, acaba em 4 s). As duas
-     primeiras animações se repetem iguais para o navegador mantê-las (casam pelo nome) e
-     não recomeçar a digitação; só blink-again é nova a cada hover. */
+     e o cursor pisca mais 4 vezes e para (disparado pelo usuário, acaba em 4 s). */
   @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
-    .terminal:hover .cursor {
-      animation:
-        appear 1ms var(--t2-end) backwards,
-        blink 1s steps(1) calc(var(--t2-end) + 1ms) 4,
-        blink-again 1s steps(1) 4;
-    }
-  }
-
-  @keyframes blink-again {
-    50% {
-      opacity: 0;
+    .terminal:hover .cursor::before {
+      animation: blink 1s steps(1) 4;
     }
   }
 
