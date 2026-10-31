@@ -145,6 +145,36 @@ test.describe("com mouse e sem movimento reduzido", () => {
     expect(timing).toEqual(["available-pulse", "3"]);
   });
 
+  test("a sequência automática do terminal pisca o cursor uma vez e acaba antes de 5 s", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    // Fim de cada animação da sequência (atraso + duração × repetições), em ms. O
+    // piscar do hover é do ::before e não conta: é disparado pelo usuário.
+    const timings = await page.getByTestId("hero-terminal").evaluate((el) =>
+      el
+        .getAnimations({ subtree: true })
+        .filter(
+          (a): a is CSSAnimation =>
+            a instanceof CSSAnimation &&
+            ["type", "appear", "blink"].includes(a.animationName),
+        )
+        .map((a) => {
+          const timing = a.effect?.getTiming();
+          return {
+            name: a.animationName,
+            iterations: Number(timing?.iterations),
+            end:
+              Number(timing?.delay ?? 0) +
+              Number(timing?.duration ?? 0) * Number(timing?.iterations ?? 1),
+          };
+        }),
+    );
+    const blink = timings.filter((timing) => timing.name === "blink");
+    expect(blink.map((timing) => timing.iterations)).toEqual([1]);
+    expect(Math.max(...timings.map((timing) => timing.end))).toBeLessThan(5000);
+  });
+
   test("a linha do tempo acende com o scroll", async ({ page }) => {
     await page.goto("/sobre");
     expect(await animationOf(page, "ol.timeline", "::before")).toBe(

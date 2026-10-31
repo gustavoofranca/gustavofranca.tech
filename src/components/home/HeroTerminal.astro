@@ -172,11 +172,12 @@ const TONE = { key: "text-accent-2", string: "text-code-string" } as const;
       animation: appear 1ms var(--t2-end) backwards;
     }
 
-    /* Pisca 4 vezes e para (WCAG 2.2.2: nada piscando por mais de 5 s). */
+    /* Pisca uma vez e para: a sequência inteira acaba em ~4,3 s (WCAG 2.2.2: nada
+       se move sozinho por mais de 5 s). */
     .cursor {
       animation:
         appear 1ms var(--t2-end) backwards,
-        blink 1s steps(1) calc(var(--t2-end) + 1ms) 4;
+        blink 1s steps(1) calc(var(--t2-end) + 1ms) 1;
     }
   }
 
