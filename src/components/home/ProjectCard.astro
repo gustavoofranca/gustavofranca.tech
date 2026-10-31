@@ -25,22 +25,28 @@ const hidden = data.stack.length - tags.length;
 const href = routePath("project", locale, projectSlug(project.id));
 ---
 
+{/* Sem overflow-hidden no cartão: a borda acesa (::after) fica em cima da borda, que o
+    corte esconderia. Quem corta é a moldura da capa e a camada da luz. */}
 <article
   data-testid="project-card"
+  data-card-light
   data-kind={data.kind}
   data-stack={data.stack.join(" ")}
-  class="relative flex h-full flex-col overflow-hidden rounded-(--radius-card) border border-line bg-surface transition-colors duration-(--duration-fast) hover:border-accent has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-accent"
+  class="card group relative isolate flex h-full flex-col rounded-(--radius-card) border border-line bg-surface transition-colors duration-(--duration-fast) hover:border-accent/40 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-accent"
 >
-  <Picture
-    src={data.cover}
-    alt={data.coverAlt}
-    formats={["avif", "webp"]}
-    widths={[400, 800]}
-    sizes="(min-width: 768px) 20rem, 100vw"
-    loading={priority ? "eager" : "lazy"}
-    fetchpriority={priority ? "high" : "auto"}
-    class="aspect-16/10 w-full border-b border-line object-cover object-top"
-  />
+  <span aria-hidden="true" class="card-glow"></span>
+  <div class="overflow-hidden rounded-t-[calc(var(--radius-card)-1px)] border-b border-line">
+    <Picture
+      src={data.cover}
+      alt={data.coverAlt}
+      formats={["avif", "webp"]}
+      widths={[400, 800]}
+      sizes="(min-width: 768px) 20rem, 100vw"
+      loading={priority ? "eager" : "lazy"}
+      fetchpriority={priority ? "high" : "auto"}
+      class="aspect-16/10 w-full object-cover object-top transition-transform duration-(--duration-base) ease-(--ease-out-expo) motion-safe:group-has-[a:focus-visible]:scale-[1.03] motion-safe:group-hover-fine:scale-[1.03]"
+    />
+  </div>
   <div class="flex flex-1 flex-col gap-2 p-4">
     <div class="flex items-baseline justify-between gap-3">
       <h3 class="text-base font-semibold">
@@ -69,3 +75,84 @@ const href = routePath("project", locale, projectSlug(project.id));
     </ul>
   </div>
 </article>
+
+<script>
+  // Luz que segue o cursor (I1): um script por página, mesmo com vários cartões.
+  import "@/scripts/cardLight";
+</script>
+
+<style>
+  /* Padrão sem JS (teclado, toque, movimento reduzido): luz no topo, ao centro. */
+  .card {
+    --light-x: 50%;
+    --light-y: 0%;
+  }
+
+  /* Luz de fundo: um círculo do tamanho do cartão, movido só com transform (sem
+     repintar). Fica atrás do texto (z-index -1 dentro do isolate) e a capa opaca a
+     cobre. */
+  .card-glow {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .card-glow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle closest-side,
+      var(--glow-accent),
+      transparent
+    );
+    transform: translate(
+      calc(var(--light-x) - 50%),
+      calc(var(--light-y) - 50%)
+    );
+  }
+
+  /* Borda acesa: anel de 1 px em cima da borda, com o accent forte perto do cursor. */
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    padding: 1px;
+    border-radius: inherit;
+    background: radial-gradient(
+      240px circle at var(--light-x) var(--light-y),
+      var(--accent),
+      transparent 70%
+    );
+    /* A máscara só usa o alfa: qualquer cor opaca serve. */
+    mask:
+      linear-gradient(var(--fg) 0 0) content-box,
+      linear-gradient(var(--fg) 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  /* Acende rápido e apaga devagar. */
+  .card-glow,
+  .card::after {
+    opacity: 0;
+    transition: opacity var(--duration-base) var(--ease-out-expo);
+  }
+
+  .card:has(a:focus-visible) .card-glow,
+  .card:has(a:focus-visible)::after {
+    opacity: 1;
+    transition-duration: var(--duration-fast);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .card:hover .card-glow,
+    .card:hover::after {
+      opacity: 1;
+      transition-duration: var(--duration-fast);
+    }
+  }
+</style>
