@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import ProjectLinks from "@/components/projects/ProjectLinks.astro";
+import ReadingProgress from "@/components/projects/ReadingProgress.astro";
 import StatusBadge from "@/components/projects/StatusBadge.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getStackNames, projectSlug } from "@/lib/content";
@@ -53,6 +54,7 @@ const meta = [
     ),
   ]}
 >
+  <ReadingProgress />
   <article class="mx-auto w-full max-w-5xl px-4 py-12 sm:px-6 md:py-16">
     <header class="max-w-[70ch]">
       <h1 class="text-4xl font-semibold tracking-tight">{data.title}</h1>

@@ -1,0 +1,44 @@
+---
+// S1: barra de progresso de leitura, só nos estudos de caso. Só CSS: anda com o scroll
+// da página (animation-timeline: scroll(root)) e mexe só em transform. Sem suporte
+// (Firefox) ou com movimento reduzido, não aparece: uma barra parada seria mentira.
+// https://developer.chrome.com/docs/css-ui/scroll-driven-animations
+---
+
+<div
+  aria-hidden="true"
+  data-testid="reading-progress"
+  class="reading-progress"
+></div>
+
+<style>
+  .reading-progress {
+    display: none;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reading-progress {
+        display: block;
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 50;
+        height: 2px;
+        background: var(--accent);
+        transform-origin: 0 50%;
+        pointer-events: none;
+        /* Longas, não o atalho: ver global.css. */
+        animation-name: reading-progress;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root);
+      }
+    }
+  }
+
+  @keyframes reading-progress {
+    from {
+      transform: scaleX(0);
+    }
+  }
+</style>
