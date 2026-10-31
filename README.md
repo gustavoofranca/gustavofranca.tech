@@ -60,7 +60,7 @@ Verificação completa antes de commitar: `check`, `lint`, `test`, `build`, `aud
    - `cover` (caminho relativo para o print) e `coverAlt` (descreve o que aparece na imagem).
 4. Escreva o corpo na ordem fixa de `.claude/rules/conteudo.md`: contexto, meu papel, arquitetura (com o porquê), desafios, resultado, o que faria diferente. Nada sobre o Gustavo é inventado: o que faltar vira `TODO(gustavo): <o que falta>`.
 5. Crie `<slug>.en.mdx` com o mesmo frontmatter (`locale: en`) e o texto traduzido. O build exige o par PT/EN.
-6. Se o projeto usa tecnologia nova, acrescente o item na área certa de `src/content/stack.json`.
+6. Se o projeto usa tecnologia nova, acrescente o item na área certa de `src/content/stack.json`. Ele aparece na seção de stack (home e Sobre); para valer só como etiqueta do projeto, use `"showInStack": false`. Área com item visível precisa de `description` (`{ pt, en }`), a frase curta da linha.
 7. Rode `npm run build`, `npm run test:e2e` e `npm run lhci`. A varredura de acessibilidade (`tests/e2e/a11y-and-layout.spec.ts`) já inclui a página nova: a lista de rotas sai dos arquivos de projeto. A imagem Open Graph é gerada no build.
 
 ## Qualidade e orçamentos
