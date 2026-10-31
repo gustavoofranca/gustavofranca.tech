@@ -26,6 +26,9 @@
         height: 2px;
         background: var(--accent);
         transform-origin: 0 50%;
+        /* Base vazia: se a página não rola, a linha do tempo fica inativa e a barra
+           não pode aparecer cheia (progresso falso). */
+        transform: scaleX(0);
         pointer-events: none;
         /* Longas, não o atalho: ver global.css. */
         animation-name: reading-progress;
@@ -39,6 +42,9 @@
   @keyframes reading-progress {
     from {
       transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
     }
   }
 </style>
