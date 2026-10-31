@@ -17,6 +17,9 @@ Variante 1: minimal escuro + terminal + aurora. Todos os valores vivem em `src/s
 | `accent-2`              | `#67e8f9` | `#0e7490` | Segundo destaque (ciano)             |
 | `live`                  | `#4ade80` | `#15803d` | Só para o status "no ar"             |
 | `code-string`           | `#86efac` | `#166534` | Strings no terminal do hero          |
+| `level-basic`           | `#28c840` | `#1f8a34` | Ponto de nível "básico" na stack     |
+| `level-intermediate`    | `#ff9f0a` | `#c26a00` | Ponto de nível "intermediário"       |
+| `level-advanced`        | `#ff5f57` | `#d63a31` | Ponto de nível "avançado"            |
 
 Tokens do hero, sem classe Tailwind (usados como `var(--...)` ou `shadow-(--...)`); a cor já leva o alfa porque cada tema pede outra intensidade:
 
@@ -55,3 +58,9 @@ No tema claro, ciano e verde são mais escuros que os da paleta original (`#06b6
 - Cartão de projeto: o link do título se estica sobre o cartão (`::after`) e o anel de foco aparece no cartão inteiro.
 - Títulos de seção da home são o próprio rótulo mono (`// projetos em destaque`), com as barras ocultas do leitor de tela. Sem rótulo acima de título.
 - Selo "disponível para oportunidades": ponto em `accent-2`, não em `live` (verde só para "no ar").
+
+## Stack: ícones e nível
+
+- Cada tecnologia tem ícone monocromático na cor do texto (`text-muted`), 16 px, em SVG inline gerado no build (`src/components/stack/TechIcon.astro`), sem JS e sem `style=""` (a CSP não libera estilo inline). Marca vem do `simple-icons` (CC0); prática sem marca vem do Lucide (ISC), copiado em `src/lib/genericIcons.ts` e referenciado como `lucide:<nome>`. Item sem ícone mantém o espaço reservado para o nome alinhar.
+- Nível de conhecimento: ponto de 10 px ao lado do nome, no estilo dos botões de janela do macOS (verde básico, laranja intermediário, vermelho avançado). No escuro valem os tons do macOS; no claro eles ficam abaixo de 3:1, então os tokens `level-*` escurecem. Contraste com o fundo (WCAG 1.4.11, mínimo 3:1): escuro 8,9 / 9,7 / 6,7; claro 4,2 / 3,8 / 4,5 (sobre `bg`).
+- Cor não é o único meio (WCAG 1.4.1): cada ponto tem o texto "nível: básico" oculto para leitor de tela, e a legenda visível acima da stack mostra os três níveis.

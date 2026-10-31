@@ -1,5 +1,5 @@
 ---
-import { getStack } from "@/lib/content";
+import { getStackNames } from "@/lib/content";
 import { t, type Locale } from "@/lib/i18n";
 import timing from "@/styles/inline/heroTerminal.css?raw";
 
@@ -17,10 +17,7 @@ const SAMPLE = [
   ["mobile", ["flutter"]],
 ] as const;
 
-const stack = await getStack();
-const names = new Map(
-  stack.areas.flatMap((area) => area.items.map((i) => [i.id, i.name] as const)),
-);
+const names = await getStackNames(locale);
 // Cada linha da saída vira tokens (texto + cor). Só o texto do token preserva
 // espaços: a indentação do markup não vaza para o terminal.
 type Token = { text: string; tone?: "key" | "string" };

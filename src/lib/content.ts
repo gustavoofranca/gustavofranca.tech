@@ -1,5 +1,6 @@
 import { getCollection } from "astro:content";
 import type { Locale } from "@/lib/i18n";
+import { stackName } from "@/lib/stack";
 import {
   assertFeaturedLimit,
   assertKnownStack,
@@ -65,12 +66,14 @@ export async function getStack() {
   return entry.data;
 }
 
-// id → nome de exibição ("nestjs" → "NestJS"), para tags e listas.
-export async function getStackNames() {
+// id → nome de exibição no idioma ("nestjs" → "NestJS"), para tags e listas.
+export async function getStackNames(locale: Locale) {
   const stack = await getStack();
   return new Map(
     stack.areas.flatMap((area) =>
-      area.items.map((item) => [item.id, item.name] as const),
+      area.items.map(
+        (item) => [item.id, stackName(item.name, locale)] as const,
+      ),
     ),
   );
 }
@@ -122,7 +125,9 @@ export async function getStackAreas(locale: Locale) {
       items: await Promise.all(
         area.items.map(async (item) => ({
           id: item.id,
-          name: item.name,
+          name: stackName(item.name, locale),
+          icon: item.icon,
+          level: item.level,
           projects: (await usedIn(item.id, locale)).map((p) => p.title),
         })),
       ),

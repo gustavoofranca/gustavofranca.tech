@@ -14,10 +14,10 @@ type Props = { card: OgInput };
 // Uma imagem por página e por projeto, nos dois idiomas. Os textos vêm dos
 // dicionários e do conteúdo: nada é escrito aqui. A 404 é noindex e não tem imagem.
 export const getStaticPaths = (async () => {
-  const names = await getStackNames();
   const entries = await Promise.all(
     LOCALES.map(async (locale) => {
       const dict = t(locale);
+      const names = await getStackNames(locale);
       const page = (
         key: "projects" | "about" | "contact" | "privacy",
         title: string,

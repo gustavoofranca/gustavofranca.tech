@@ -2,72 +2,286 @@
   "areas": [
     {
       "id": "front",
-      "label": { "pt": "Front-end", "en": "Front-end" },
+      "label": {
+        "pt": "Front-end",
+        "en": "Front-end"
+      },
       "items": [
-        { "id": "react", "name": "React", "icon": "react" },
-        { "id": "angular", "name": "Angular", "icon": "angular" },
-        { "id": "vue", "name": "Vue", "icon": "vuedotjs" },
-        { "id": "nuxt", "name": "Nuxt", "icon": "nuxt" },
-        { "id": "astro", "name": "Astro", "icon": "astro" },
-        { "id": "typescript", "name": "TypeScript", "icon": "typescript" },
-        { "id": "javascript", "name": "JavaScript", "icon": "javascript" },
-        { "id": "html-css", "name": "HTML & CSS", "icon": "html5" },
-        { "id": "tailwind", "name": "Tailwind CSS", "icon": "tailwindcss" },
-        { "id": "vite", "name": "Vite", "icon": "vite" }
+        {
+          "id": "react",
+          "name": "React",
+          "icon": "react",
+          "level": "basic"
+        },
+        {
+          "id": "angular",
+          "name": "Angular",
+          "icon": "angular",
+          "level": "basic"
+        },
+        {
+          "id": "vue",
+          "name": "Vue",
+          "icon": "vuedotjs",
+          "level": "basic"
+        },
+        {
+          "id": "nuxt",
+          "name": "Nuxt",
+          "icon": "nuxt",
+          "level": "basic"
+        },
+        {
+          "id": "astro",
+          "name": "Astro",
+          "icon": "astro",
+          "level": "basic"
+        },
+        {
+          "id": "typescript",
+          "name": "TypeScript",
+          "icon": "typescript",
+          "level": "basic"
+        },
+        {
+          "id": "javascript",
+          "name": "JavaScript",
+          "icon": "javascript",
+          "level": "basic"
+        },
+        {
+          "id": "html-css",
+          "name": "HTML & CSS",
+          "icon": "html5",
+          "level": "basic"
+        },
+        {
+          "id": "tailwind",
+          "name": "Tailwind CSS",
+          "icon": "tailwindcss",
+          "level": "basic"
+        },
+        {
+          "id": "vite",
+          "name": "Vite",
+          "icon": "vite",
+          "level": "basic"
+        }
       ]
     },
     {
       "id": "back",
-      "label": { "pt": "Back-end", "en": "Back-end" },
+      "label": {
+        "pt": "Back-end",
+        "en": "Back-end"
+      },
       "items": [
-        { "id": "nodejs", "name": "Node.js", "icon": "nodedotjs" },
-        { "id": "express", "name": "Express", "icon": "express" },
-        { "id": "nestjs", "name": "NestJS", "icon": "nestjs" },
-        { "id": "python", "name": "Python", "icon": "python" },
-        { "id": "flask", "name": "Flask", "icon": "flask" },
-        { "id": "php", "name": "PHP", "icon": "php" },
-        { "id": "laravel", "name": "Laravel", "icon": "laravel" },
-        { "id": "java", "name": "Java" }
+        {
+          "id": "nodejs",
+          "name": "Node.js",
+          "icon": "nodedotjs",
+          "level": "basic"
+        },
+        {
+          "id": "express",
+          "name": "Express",
+          "icon": "express",
+          "level": "basic"
+        },
+        {
+          "id": "nestjs",
+          "name": "NestJS",
+          "icon": "nestjs",
+          "level": "basic"
+        },
+        {
+          "id": "python",
+          "name": "Python",
+          "icon": "python",
+          "level": "basic"
+        },
+        {
+          "id": "flask",
+          "name": "Flask",
+          "icon": "flask",
+          "level": "basic"
+        },
+        {
+          "id": "php",
+          "name": "PHP",
+          "icon": "php",
+          "level": "basic"
+        },
+        {
+          "id": "laravel",
+          "name": "Laravel",
+          "icon": "laravel",
+          "level": "basic"
+        },
+        {
+          "id": "java",
+          "name": "Java",
+          "level": "basic"
+        }
       ]
     },
     {
       "id": "cms",
-      "label": { "pt": "CMS e web", "en": "CMS and web" },
+      "label": {
+        "pt": "CMS e web",
+        "en": "CMS and web"
+      },
       "items": [
-        { "id": "wordpress", "name": "WordPress", "icon": "wordpress" },
-        { "id": "strapi", "name": "Strapi", "icon": "strapi" }
+        {
+          "id": "wordpress",
+          "name": "WordPress",
+          "icon": "wordpress",
+          "level": "basic"
+        },
+        {
+          "id": "strapi",
+          "name": "Strapi",
+          "icon": "strapi",
+          "level": "basic"
+        }
       ]
     },
     {
       "id": "mobile",
-      "label": { "pt": "Mobile", "en": "Mobile" },
+      "label": {
+        "pt": "Mobile",
+        "en": "Mobile"
+      },
       "items": [
-        { "id": "flutter", "name": "Flutter", "icon": "flutter" },
-        { "id": "dart", "name": "Dart", "icon": "dart" }
+        {
+          "id": "flutter",
+          "name": "Flutter",
+          "icon": "flutter",
+          "level": "basic"
+        },
+        {
+          "id": "dart",
+          "name": "Dart",
+          "icon": "dart",
+          "level": "basic"
+        }
       ]
     },
     {
       "id": "data",
       "label": {
-        "pt": "Dados e infraestrutura",
-        "en": "Data and infrastructure"
+        "pt": "Dados",
+        "en": "Data"
       },
       "items": [
-        { "id": "postgresql", "name": "PostgreSQL", "icon": "postgresql" },
-        { "id": "supabase", "name": "Supabase", "icon": "supabase" },
-        { "id": "prisma", "name": "Prisma", "icon": "prisma" },
-        { "id": "redis", "name": "Redis", "icon": "redis" },
-        { "id": "bullmq", "name": "BullMQ" },
-        { "id": "firebase", "name": "Firebase", "icon": "firebase" },
-        { "id": "docker", "name": "Docker", "icon": "docker" },
-        { "id": "caddy", "name": "Caddy", "icon": "caddy" },
-        { "id": "git", "name": "Git e GitHub", "icon": "git" }
+        {
+          "id": "postgresql",
+          "name": "PostgreSQL",
+          "icon": "postgresql",
+          "level": "basic"
+        },
+        {
+          "id": "supabase",
+          "name": "Supabase",
+          "icon": "supabase",
+          "level": "basic"
+        },
+        {
+          "id": "prisma",
+          "name": "Prisma",
+          "icon": "prisma",
+          "level": "basic"
+        },
+        {
+          "id": "redis",
+          "name": "Redis",
+          "icon": "redis",
+          "level": "basic"
+        },
+        {
+          "id": "bullmq",
+          "name": "BullMQ",
+          "level": "basic"
+        },
+        {
+          "id": "firebase",
+          "name": "Firebase",
+          "icon": "firebase",
+          "level": "basic"
+        },
+        {
+          "id": "git",
+          "name": {
+            "pt": "Git e GitHub",
+            "en": "Git and GitHub"
+          },
+          "icon": "git",
+          "level": "basic"
+        }
+      ]
+    },
+    {
+      "id": "infra",
+      "label": {
+        "pt": "Infraestrutura e operações",
+        "en": "Infrastructure and operations"
+      },
+      "items": [
+        {
+          "id": "docker",
+          "name": "Docker",
+          "icon": "docker",
+          "level": "basic"
+        },
+        {
+          "id": "caddy",
+          "name": "Caddy",
+          "icon": "caddy",
+          "level": "basic"
+        },
+        {
+          "id": "deploy",
+          "name": {
+            "pt": "Deploy de aplicações",
+            "en": "Application deployment"
+          },
+          "icon": "lucide:cloud-upload",
+          "level": "basic"
+        },
+        {
+          "id": "linux",
+          "name": {
+            "pt": "Servidores Linux",
+            "en": "Linux servers"
+          },
+          "icon": "linux",
+          "level": "basic"
+        },
+        {
+          "id": "support",
+          "name": {
+            "pt": "Suporte e sustentação",
+            "en": "Support and maintenance"
+          },
+          "icon": "lucide:headset",
+          "level": "basic"
+        }
       ]
     },
     {
       "id": "other",
-      "label": { "pt": "Outros", "en": "Other" },
-      "items": [{ "id": "unity", "name": "Unity (C#)", "icon": "unity" }]
+      "label": {
+        "pt": "Outros",
+        "en": "Other"
+      },
+      "items": [
+        {
+          "id": "unity",
+          "name": "Unity (C#)",
+          "icon": "unity",
+          "level": "basic"
+        }
+      ]
     }
   ]
 }

@@ -71,6 +71,16 @@ const pt = {
   },
   stack: {
     usedIn: "usado em",
+    // Nível de conhecimento: o ponto colorido tem este texto oculto ao lado, e a
+    // legenda mostra os três (cor não pode ser o único meio, WCAG 1.4.1).
+    levelLegend: "Legenda dos níveis de conhecimento",
+    // {level} é trocado pelo nome do nível.
+    levelOf: "nível: {level}",
+    levels: {
+      basic: "básico",
+      intermediate: "intermediário",
+      advanced: "avançado",
+    },
   },
   about: {
     title: "Sobre mim",

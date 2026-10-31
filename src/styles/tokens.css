@@ -14,6 +14,10 @@
   --accent-2: #67e8f9;
   --live: #4ade80;
   --code-string: #86efac;
+  /* Nível de conhecimento na stack (pontos no estilo dos botões de janela do macOS). */
+  --level-basic: #28c840;
+  --level-intermediate: #ff9f0a;
+  --level-advanced: #ff5f57;
   /* Aurora e grade do hero: cor com alfa embutido, porque cada tema pede intensidade diferente. */
   --aurora-1: rgb(124 58 237 / 0.45);
   --aurora-2: rgb(6 182 212 / 0.3);
@@ -41,6 +45,10 @@
   --accent-2: #0e7490;
   --live: #15803d;
   --code-string: #166534;
+  /* Tons do macOS escurecidos: os originais ficam abaixo de 3:1 no fundo claro (WCAG 1.4.11). */
+  --level-basic: #1f8a34;
+  --level-intermediate: #c26a00;
+  --level-advanced: #d63a31;
   --aurora-1: rgb(139 92 246 / 0.22);
   --aurora-2: rgb(6 182 212 / 0.16);
   --grid-line: rgb(24 24 27 / 0.06);
@@ -63,6 +71,9 @@
     --accent-2: #0e7490;
     --live: #15803d;
     --code-string: #166534;
+    --level-basic: #1f8a34;
+    --level-intermediate: #c26a00;
+    --level-advanced: #d63a31;
     --aurora-1: rgb(139 92 246 / 0.22);
     --aurora-2: rgb(6 182 212 / 0.16);
     --grid-line: rgb(24 24 27 / 0.06);
@@ -83,6 +94,9 @@
   --color-accent-2: var(--accent-2);
   --color-live: var(--live);
   --color-code-string: var(--code-string);
+  --color-level-basic: var(--level-basic);
+  --color-level-intermediate: var(--level-intermediate);
+  --color-level-advanced: var(--level-advanced);
   --font-sans:
     "Inter Variable", "Inter Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-mono:

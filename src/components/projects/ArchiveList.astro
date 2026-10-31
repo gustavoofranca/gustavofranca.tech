@@ -9,7 +9,10 @@ interface Props {
 
 const { locale } = Astro.props;
 const dict = t(locale);
-const [archive, names] = await Promise.all([getArchive(), getStackNames()]);
+const [archive, names] = await Promise.all([
+  getArchive(),
+  getStackNames(locale),
+]);
 ---
 
 <section aria-labelledby="archive-title" class="mt-16 md:mt-24">

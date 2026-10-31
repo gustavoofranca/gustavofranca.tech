@@ -1,0 +1,23 @@
+---
+import LevelDot from "@/components/stack/LevelDot.astro";
+import TechIcon from "@/components/stack/TechIcon.astro";
+import type { Locale } from "@/lib/i18n";
+import type { StackLevel } from "@/lib/stack";
+
+interface Props {
+  name: string;
+  icon?: string | undefined;
+  level: StackLevel;
+  locale: Locale;
+}
+
+const { name, icon, level, locale } = Astro.props;
+---
+
+<span class="flex items-center gap-2">
+  <TechIcon slug={icon} />
+  <span translate="no" class="font-mono text-sm text-fg">
+    {name}
+  </span>
+  <LevelDot level={level} locale={locale} />
+</span>

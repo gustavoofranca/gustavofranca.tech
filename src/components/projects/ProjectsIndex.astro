@@ -3,7 +3,7 @@ import ProjectCard from "@/components/home/ProjectCard.astro";
 import SectionTitle from "@/components/home/SectionTitle.astro";
 import { ProjectFilter } from "@/components/islands/ProjectFilter";
 import ArchiveList from "@/components/projects/ArchiveList.astro";
-import { getProjects, getStack, projectSlug } from "@/lib/content";
+import { getProjects, getStackNames, projectSlug } from "@/lib/content";
 import { t, type Locale } from "@/lib/i18n";
 
 interface Props {
@@ -12,7 +12,10 @@ interface Props {
 
 const { locale } = Astro.props;
 const dict = t(locale);
-const [projects, stack] = await Promise.all([getProjects(locale), getStack()]);
+const [projects, names] = await Promise.all([
+  getProjects(locale),
+  getStackNames(locale),
+]);
 
 // A ilha recebe só o necessário para filtrar; os cartões continuam HTML estático.
 const items = projects.map((p) => ({
@@ -23,10 +26,9 @@ const kinds = (["web", "api", "mobile"] as const)
   .filter((id) => projects.some((p) => p.data.kind === id))
   .map((id) => ({ id, label: dict.projects.kinds[id] }));
 const used = new Set(projects.flatMap((p) => p.data.stack));
-const stacks = stack.areas
-  .flatMap((area) => area.items)
-  .filter((item) => used.has(item.id))
-  .map(({ id, name }) => ({ id, name }))
+const stacks = [...names]
+  .filter(([id]) => used.has(id))
+  .map(([id, name]) => ({ id, name }))
   .sort((a, b) => a.name.localeCompare(b.name));
 ---
 

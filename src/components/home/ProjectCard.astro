@@ -19,7 +19,7 @@ const { data } = project;
 
 // Poucas tags no cartão; a stack completa fica no estudo de caso.
 const MAX_TAGS = 4;
-const names = await getStackNames();
+const names = await getStackNames(locale);
 const tags = data.stack.slice(0, MAX_TAGS).map((id) => names.get(id) ?? id);
 const hidden = data.stack.length - tags.length;
 const href = routePath("project", locale, projectSlug(project.id));

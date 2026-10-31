@@ -10,7 +10,7 @@ paths:
 ## Onde fica cada coisa
 - **Projetos:** `src/content/projects/<slug>.pt.mdx` e `<slug>.en.mdx` (mesmo `slug`, mesmo frontmatter, só os textos mudam). Prints em `src/assets/projects/<slug>/`.
 - **Experiência e formação:** `src/content/experience/*.json`.
-- **Stack:** `src/content/stack.json`, agrupada por área (front, back, cms, mobile, dados/infra), cada item com os projetos em que foi usado.
+- **Stack:** `src/content/stack.json`, agrupada por área (front, back, cms, mobile, dados, infraestrutura e operações, outros). Cada item tem `id`, `name` (texto, ou `{ pt, en }` quando o nome é descrição e precisa de tradução), `icon` opcional e `level` (`basic` | `intermediate` | `advanced`, definido pelo Gustavo). Os projetos em que foi usado saem do `stack` de cada projeto.
 - **Textos de interface:** `src/i18n/pt.ts` e `src/i18n/en.ts`. O `en.ts` é tipado a partir do `pt.ts`, então chave faltando quebra o `astro check`.
 
 ## Schemas

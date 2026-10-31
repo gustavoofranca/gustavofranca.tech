@@ -1,6 +1,7 @@
 import { defineCollection } from "astro:content";
 import { file, glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { STACK_LEVELS } from "@/lib/stack";
 
 const month = z
   .string()
@@ -67,8 +68,11 @@ const stack = defineCollection({
         items: z.array(
           z.object({
             id: z.string(),
-            name: z.string(),
+            // Nome próprio é igual nos dois idiomas; descrição ("Git e GitHub") é bilíngue.
+            name: z.union([z.string(), bilingual]),
+            // Slug do Simple Icons ou "lucide:<nome>" (src/lib/genericIcons.ts).
             icon: z.string().optional(),
+            level: z.enum(STACK_LEVELS),
           }),
         ),
       }),

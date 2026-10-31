@@ -1,0 +1,44 @@
+---
+import { resolveTechIcon } from "@/lib/techIcons";
+
+interface Props {
+  // Slug do Simple Icons ou "lucide:<nome>". Sem slug, o espaço fica reservado
+  // para o nome alinhar com os itens que têm ícone.
+  slug?: string | undefined;
+}
+
+const { slug } = Astro.props;
+const icon = slug === undefined ? undefined : resolveTechIcon(slug);
+if (slug !== undefined && !icon) {
+  throw new Error(
+    `TechIcon: o ícone "${slug}" não existe no Simple Icons nem em src/lib/genericIcons.ts.`,
+  );
+}
+// Atributos de apresentação, não `style=""`: a CSP não libera estilo inline.
+const paint =
+  icon?.kind === "generic"
+    ? ({
+        fill: "none",
+        stroke: "currentColor",
+        "stroke-width": 2,
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
+      } as const)
+    : ({ fill: "currentColor" } as const);
+---
+
+{icon ? (
+  <svg
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+    class="size-4 shrink-0 text-muted"
+    {...paint}
+  >
+    {icon.paths.map((d) => (
+      <path d={d} />
+    ))}
+  </svg>
+) : (
+  <span aria-hidden="true" class="size-4 shrink-0" />
+)}

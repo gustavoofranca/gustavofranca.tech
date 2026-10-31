@@ -1,0 +1,31 @@
+---
+import { t, type Locale } from "@/lib/i18n";
+import type { StackLevel } from "@/lib/stack";
+
+interface Props {
+  level: StackLevel;
+  locale: Locale;
+  // Na legenda o nome do nível já está visível ao lado; no item ele vai oculto.
+  withText?: boolean;
+}
+
+const { level, locale, withText = true } = Astro.props;
+const dict = t(locale).stack;
+const label = dict.levels[level];
+// Classes literais: o Tailwind só gera o que encontra escrito no código.
+const COLOR: Record<StackLevel, string> = {
+  basic: "bg-level-basic",
+  intermediate: "bg-level-intermediate",
+  advanced: "bg-level-advanced",
+};
+---
+
+<span
+  aria-hidden="true"
+  title={withText ? label : undefined}
+  data-level={level}
+  class:list={["size-2.5 shrink-0 rounded-full", COLOR[level]]}
+></span>
+{withText && (
+  <span class="sr-only">{dict.levelOf.replace("{level}", label)}</span>
+)}

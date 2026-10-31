@@ -17,7 +17,7 @@ const { project, locale } = Astro.props;
 const { data } = project;
 const dict = t(locale);
 const slug = projectSlug(project.id);
-const names = await getStackNames();
+const names = await getStackNames(locale);
 
 // Sem data de fim, "atual" só vale para projeto no ar.
 const start = formatMonth(data.period.start, locale);
