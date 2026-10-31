@@ -6,7 +6,7 @@ Registro da regra dos 3 (ver `.claude/rules/erros-recorrentes.md`). Uma linha po
 
 | Padrão | Contagem | Ocorrências (data, contexto) |
 |---|---|---|
-| Entregar pedido amplo sem cobrir todos os itens | 1 | 2026-10-30: busca de skills ficou só no TCC (sem varrer o PC e sem pesquisa na web) e as regras de desenvolvimento não foram criadas |
+| Entregar pedido amplo sem cobrir todos os itens | 2 | 2026-10-30: busca de skills ficou só no TCC (sem varrer o PC e sem pesquisa na web) e as regras de desenvolvimento não foram criadas; 2026-10-30: fila de 4 tarefas (texto, ícones, níveis, deploy) parada esperando resposta sobre um item só, sem avançar nos que estavam claros |
 
 ## Promovidas
 
