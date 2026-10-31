@@ -75,7 +75,7 @@ const pt = {
     // legenda mostra os três (cor não pode ser o único meio, WCAG 1.4.1).
     levelLegend: "Legenda dos níveis de conhecimento",
     // {level} é trocado pelo nome do nível.
-    levelOf: "nível: {level}",
+    levelOf: ", nível: {level}",
     levels: {
       basic: "básico",
       intermediate: "intermediário",

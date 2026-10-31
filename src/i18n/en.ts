@@ -68,7 +68,7 @@ const en = {
   stack: {
     usedIn: "used in",
     levelLegend: "Knowledge level legend",
-    levelOf: "level: {level}",
+    levelOf: ", level: {level}",
     levels: {
       basic: "basic",
       intermediate: "intermediate",

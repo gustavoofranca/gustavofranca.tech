@@ -93,6 +93,10 @@ export function getIconSprite() {
     const file = iconSpriteFile(svg);
     return { svg, file, href: `/icons/${file}` };
   });
+  // Falha não fica guardada: o próximo pedido (no astro dev) tenta de novo.
+  sprite.catch(() => {
+    sprite = undefined;
+  });
   return sprite;
 }
 
@@ -145,6 +149,8 @@ export async function getStackAreas(locale: Locale) {
         area.items.map(async (item) => ({
           id: item.id,
           name: stackName(item.name, locale),
+          // Nome de marca (texto simples) não se traduz; nome descritivo ({ pt, en }) sim.
+          brand: typeof item.name === "string",
           icon: item.icon,
           level: item.level,
           projects: (await usedIn(item.id, locale)).map((p) => p.title),
