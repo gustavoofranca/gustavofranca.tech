@@ -48,17 +48,19 @@ const TONE = { key: "text-accent-2", string: "text-code-string" } as const;
 
 <style is:inline set:html={timing} />
 
-{/* Vitrine decorativa: o conteúdo real (stack e projetos) está na página. */}
+{/* Vitrine decorativa: o conteúdo real (stack e projetos) está na página. As cores dos
+    botões de janela no hover (H4) ficam em utilitários: o CSS do hero precisa caber nos
+    4 KB que o Astro embute no HTML, senão vira um pedido bloqueante a mais na home. */}
 <div
   data-testid="hero-terminal"
   aria-hidden="true"
   translate="no"
-  class="terminal min-w-0 overflow-hidden rounded-(--radius-card) border border-line bg-surface font-mono shadow-(--shadow-terminal)"
+  class="terminal group min-w-0 overflow-hidden rounded-(--radius-card) border border-line bg-surface font-mono shadow-(--shadow-terminal)"
 >
   <div class="flex items-center gap-1.5 border-b border-line px-3 py-2.5 text-sm text-faint">
-    <span class="size-2.5 rounded-full bg-faint/40"></span>
-    <span class="size-2.5 rounded-full bg-faint/40"></span>
-    <span class="size-2.5 rounded-full bg-faint/40"></span>
+    <span class="size-2.5 rounded-full bg-faint/40 transition-colors duration-(--duration-base) ease-(--ease-out-expo) group-hover-fine:bg-(--window-close)"></span>
+    <span class="size-2.5 rounded-full bg-faint/40 transition-colors duration-(--duration-base) ease-(--ease-out-expo) group-hover-fine:bg-(--window-minimize)"></span>
+    <span class="size-2.5 rounded-full bg-faint/40 transition-colors duration-(--duration-base) ease-(--ease-out-expo) group-hover-fine:bg-(--window-zoom)"></span>
     <span class="ml-2 truncate">{terminal.title}</span>
   </div>
 
@@ -165,6 +167,26 @@ const TONE = { key: "text-accent-2", string: "text-code-string" } as const;
       animation:
         appear 1ms var(--t2-end) backwards,
         blink 1s steps(1) calc(var(--t2-end) + 1ms) 4;
+    }
+  }
+
+  /* H4: o terminal "acorda" com o mouse em cima. Os botões de janela ganham as cores
+     do macOS (utilitários no markup; cor não é movimento, vale com movimento reduzido)
+     e o cursor pisca mais 4 vezes e para (disparado pelo usuário, acaba em 4 s). As duas
+     primeiras animações se repetem iguais para o navegador mantê-las (casam pelo nome) e
+     não recomeçar a digitação; só blink-again é nova a cada hover. */
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+    .terminal:hover .cursor {
+      animation:
+        appear 1ms var(--t2-end) backwards,
+        blink 1s steps(1) calc(var(--t2-end) + 1ms) 4,
+        blink-again 1s steps(1) 4;
+    }
+  }
+
+  @keyframes blink-again {
+    50% {
+      opacity: 0;
     }
   }
 

@@ -3,7 +3,10 @@
 // desfocados que derivam uma vez (só transform). Com movimento reduzido, parados.
 ---
 
-<div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
+<div
+  aria-hidden="true"
+  class="aurora pointer-events-none absolute inset-0 -z-10"
+>
   <div class="aurora-grid absolute inset-0"></div>
   <div class="aurora-blob aurora-blob-1"></div>
   <div class="aurora-blob aurora-blob-2"></div>
@@ -56,7 +59,7 @@
     .aurora-blob-1,
     .aurora-blob-2 {
       animation-duration: var(--duration-aurora);
-      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+      animation-timing-function: var(--ease-out-expo);
       animation-iteration-count: 1;
       animation-fill-mode: forwards;
     }
@@ -67,6 +70,31 @@
 
     .aurora-blob-2 {
       animation-name: aurora-drift-2;
+    }
+  }
+
+  /* S3: ao rolar para fora do hero, a aurora sobe e esmaece (no contêiner, porque os
+     brilhos já usam animation para a deriva). No topo da página o progresso é 0: a
+     primeira pintura é a mesma. Esmaecer só melhora o contraste do texto por cima, e
+     subir a afasta dele. Parallax conta como movimento (WCAG 2.3.3): fora com
+     movimento reduzido. */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .aurora {
+        /* Longas, não o atalho: ver global.css. */
+        animation-name: aurora-recede;
+        animation-timing-function: linear;
+        animation-fill-mode: both;
+        animation-timeline: scroll(root);
+        animation-range: 0 70vh;
+      }
+    }
+  }
+
+  @keyframes aurora-recede {
+    to {
+      opacity: 0.35;
+      transform: translateY(-40px);
     }
   }
 

@@ -25,7 +25,7 @@ const buttonClass =
       <p class="inline-flex items-center gap-2 rounded-full border border-line bg-bg/80 px-3 py-1 font-mono text-sm text-muted">
         <span
           aria-hidden="true"
-          class="size-2 rounded-full bg-accent-2 shadow-[0_0_8px_var(--accent-2)]"
+          class="available-dot relative size-2 rounded-full bg-accent-2 shadow-[0_0_8px_var(--accent-2)]"
         ></span>
         {dict.hero.available}
       </p>
@@ -69,3 +69,35 @@ const buttonClass =
     <HeroTerminal locale={locale} />
   </div>
 </section>
+
+<style>
+  /* I3: um anel sai do ponto "disponível" 3 vezes (3,6 s) e para, antes dos 5 s da
+     WCAG 2.2.2. Começa depois de a aurora arrancar, para não competir com ela. Sem a
+     animação, o anel não existe (opacidade 0) e fica o brilho de sempre. */
+  .available-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--accent-2);
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .available-dot::after {
+      animation: available-pulse var(--duration-pulse) var(--ease-out-expo)
+        600ms 3;
+    }
+  }
+
+  @keyframes available-pulse {
+    from {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(2.4);
+    }
+  }
+</style>
