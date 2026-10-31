@@ -51,9 +51,10 @@ const areas = (await getStackAreas(locale))
                 icon={item.icon}
                 level={item.level}
                 locale={locale}
+                withIcon={false}
               />
               {item.projects.length > 0 && (
-                <p class="pl-6 text-sm text-faint">
+                <p class="text-sm text-faint">
                   {dict.stack.usedIn} {formatList(item.projects, locale)}
                 </p>
               )}

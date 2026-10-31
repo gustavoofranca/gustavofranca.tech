@@ -9,13 +9,16 @@ interface Props {
   icon?: string | undefined;
   level: StackLevel;
   locale: Locale;
+  // A home não leva ícone (nem o espaço dele): o sprite disputava banda com a capa
+  // do destaque e passava o LCP do limite (1,60 s contra 1,5 s). Ver DESIGN.md.
+  withIcon?: boolean;
 }
 
-const { name, icon, level, locale } = Astro.props;
+const { name, icon, level, locale, withIcon = true } = Astro.props;
 ---
 
 <span class="flex items-center gap-2">
-  <TechIcon slug={icon} />
+  {withIcon && <TechIcon slug={icon} />}
   <span translate="no" class="font-mono text-sm text-fg">
     {name}
   </span>

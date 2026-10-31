@@ -3,25 +3,25 @@ import { expect, test } from "@playwright/test";
 // Nível de conhecimento na stack: cada tecnologia tem um ponto colorido com o nível
 // em texto para o leitor de tela (cor não é o único meio, WCAG 1.4.1), e a legenda
 // visível mostra os três níveis. O axe dos dois temas está em a11y-and-layout.spec.ts.
-for (const { path, levelText, legend } of [
+for (const { path, prefix, legend } of [
   {
     path: "/",
-    levelText: "nível: básico",
+    prefix: "nível",
     legend: ["básico", "intermediário", "avançado"],
   },
   {
     path: "/sobre",
-    levelText: "nível: básico",
+    prefix: "nível",
     legend: ["básico", "intermediário", "avançado"],
   },
   {
     path: "/en/",
-    levelText: "level: basic",
+    prefix: "level",
     legend: ["basic", "intermediate", "advanced"],
   },
   {
     path: "/en/about",
-    levelText: "level: basic",
+    prefix: "level",
     legend: ["basic", "intermediate", "advanced"],
   },
 ]) {
@@ -39,9 +39,19 @@ for (const { path, levelText, legend } of [
       await expect(dot).toBeVisible();
       await expect(dot).toHaveAttribute("aria-hidden", "true");
     }
-    // O nível está na árvore de acessibilidade, uma vez por tecnologia.
+    // O nível está na árvore de acessibilidade, uma vez por tecnologia, com o nome
+    // de um dos três níveis da legenda.
     const tree = await stack.ariaSnapshot();
-    expect(tree.split(levelText).length - 1).toBe(count);
+    const found = legend.map(
+      (label) => tree.split(`${prefix}: ${label}`).length - 1,
+    );
+    expect(found.reduce((sum, n) => sum + n, 0)).toBe(count);
+    const levels = await items
+      .locator("[data-level]")
+      .evaluateAll((dots) => dots.map((dot) => dot.getAttribute("data-level")));
+    for (const level of levels) {
+      expect(["basic", "intermediate", "advanced"]).toContain(level);
+    }
 
     const legendList = stack.getByTestId("level-legend");
     await expect(legendList).toBeVisible();
@@ -159,3 +169,38 @@ test("os ícones são decorativos e vêm do sprite externo, que tem todos os <sy
     expect(sprite).toContain(`<symbol id="${href.split("#")[1]}"`);
   }
 });
+
+// Ícone só na stack completa: na home o sprite disputava banda com a capa do
+// destaque e passava o LCP do limite de 1,5 s (DESIGN.md).
+for (const { path, icons } of [
+  { path: "/", icons: false },
+  { path: "/en/", icons: false },
+  { path: "/sobre", icons: true },
+  { path: "/en/about", icons: true },
+]) {
+  test(`${path}: ícones de stack ${icons ? "presentes" : "ausentes, sem pedir o sprite"}`, async ({
+    page,
+  }) => {
+    const spriteRequests: string[] = [];
+    page.on("request", (request) => {
+      if (/\/icons\/stack-[^/]*\.svg/.test(request.url())) {
+        spriteRequests.push(request.url());
+      }
+    });
+    await page.goto(path);
+    await page.waitForLoadState("load");
+    const items = page
+      .getByRole("region", { name: /stack/i })
+      .getByTestId("stack-item");
+    expect(await items.count()).toBeGreaterThan(0);
+    const svgs = items.locator("svg");
+    if (icons) {
+      expect(await svgs.count()).toBeGreaterThan(0);
+      expect(spriteRequests.length).toBeGreaterThan(0);
+      return;
+    }
+    await expect(svgs).toHaveCount(0);
+    await expect(page.locator("use")).toHaveCount(0);
+    expect(spriteRequests).toEqual([]);
+  });
+}
