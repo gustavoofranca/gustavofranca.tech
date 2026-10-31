@@ -28,12 +28,12 @@ const entries = (await getExperience()).slice(0, 3);
       {dict.home.fullTimeline}
     </a>
   </div>
-  <ol class="mt-4 max-w-2xl border-l border-line">
+  <ol class="timeline relative mt-4 max-w-2xl border-l border-line">
     {entries.map(({ data }) => (
       <li class="relative pb-8 pl-6 last:pb-0">
         <span
           aria-hidden="true"
-          class="absolute top-2 -left-[5px] size-2.5 rounded-full border border-faint bg-bg"
+          class="timeline-dot absolute top-2 -left-[5px] size-2.5 rounded-full border border-faint bg-bg"
         />
         <p class="font-mono text-sm text-faint">
           <Period start={data.start} end={data.end} locale={locale} />

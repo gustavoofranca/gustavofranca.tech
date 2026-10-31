@@ -23,12 +23,25 @@
   --aurora-2: rgb(6 182 212 / 0.3);
   --grid-line: rgb(255 255 255 / 0.045);
   --shadow-terminal: 0 24px 64px -24px rgb(0 0 0 / 0.9);
+  /* Luz que segue o cursor nos cartões de projeto: accent com alfa, fraca o bastante para
+     não mexer no contraste do texto por cima. */
+  --glow-accent: rgb(167 139 250 / 0.1);
+  /* Botões de janela do macOS no terminal do hero (hover). Decorativos (aria-hidden):
+     os mesmos tons nos dois temas, como no macOS. Não reaproveitam --level-*, que têm
+     outro significado e escurecem no tema claro. */
+  --window-close: #ff5f57;
+  --window-minimize: #febc2e;
+  --window-zoom: #28c840;
   --duration-fast: 150ms;
   --duration-base: 250ms;
   /* Tempo por caractere digitado no terminal do hero e deriva única da aurora
      (abaixo de 5 s: WCAG 2.2.2). */
   --duration-type: 65ms;
   --duration-aurora: 4.5s;
+  /* Um ciclo do pulso do selo "disponível" (3 ciclos e para: WCAG 2.2.2). */
+  --duration-pulse: 1.2s;
+  /* Desaceleração das chegadas (aurora, hover, luz). */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Claro: mesmos tokens, redefinidos. Ciano e verde escurecidos para manter contraste de texto (WCAG AA). */
@@ -53,6 +66,7 @@
   --aurora-2: rgb(6 182 212 / 0.16);
   --grid-line: rgb(24 24 27 / 0.06);
   --shadow-terminal: 0 24px 56px -28px rgb(24 24 27 / 0.28);
+  --glow-accent: rgb(124 58 237 / 0.06);
 }
 
 /* Manter em sincronia com o bloco :root[data-theme="light"] acima (CSS não deixa compartilhar). */
@@ -78,6 +92,7 @@
     --aurora-2: rgb(6 182 212 / 0.16);
     --grid-line: rgb(24 24 27 / 0.06);
     --shadow-terminal: 0 24px 56px -28px rgb(24 24 27 / 0.28);
+    --glow-accent: rgb(124 58 237 / 0.06);
   }
 }
 

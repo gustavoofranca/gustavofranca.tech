@@ -38,7 +38,8 @@ const links = [
 const needsJs = "[html:not([data-theme])_&]:hidden";
 ---
 
-<header class="border-b border-line">
+{/* Nome de view transition: na troca de página o cabeçalho fica parado (global.css). */}
+<header class="border-b border-line [view-transition-name:site-header]">
   <div class="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-1 px-4 py-2 sm:px-6">
     <a
       href={routePath("home", locale)}
@@ -55,6 +56,8 @@ const needsJs = "[html:not([data-theme])_&]:hidden";
       aria-label={dict.a11y.mainNav}
       class="order-last w-full sm:order-none sm:w-auto"
     >
+      {/* Sublinhado de luz (H2): cresce da esquerda no hover e no foco, e fica cheio na
+          página atual, que assim não depende só da cor do texto. */}
       <ul class="flex items-center gap-1 text-sm">
         {links.map((link) => (
           <li>
@@ -66,7 +69,7 @@ const needsJs = "[html:not([data-theme])_&]:hidden";
                   ? "page"
                   : undefined
               }
-              class="inline-flex min-h-10 items-center rounded-(--radius-control) px-3 text-muted transition-colors duration-(--duration-fast) hover:text-fg aria-[current=page]:text-fg"
+              class="relative inline-flex min-h-10 items-center rounded-(--radius-control) px-3 text-muted transition-colors duration-(--duration-fast) after:pointer-events-none after:absolute after:inset-x-3 after:bottom-2 after:h-px after:origin-left after:scale-x-0 after:bg-accent after:transition-transform after:duration-(--duration-base) after:ease-(--ease-out-expo) hover:text-fg focus-visible:after:scale-x-100 hover-fine:after:scale-x-100 aria-[current=page]:text-fg aria-[current=page]:after:scale-x-100"
             >
               {link.label}
             </a>

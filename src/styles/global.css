@@ -1,6 +1,17 @@
 @import "tailwindcss";
 @import "./tokens.css";
 
+/* Hover só com mouse ou trackpad. O `hover:` do Tailwind vale para qualquer
+   `(hover: hover)`; no toque híbrido o estado gruda depois do toque.
+   https://developer.mozilla.org/en-US/docs/Web/CSS/@media/pointer */
+@custom-variant hover-fine {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
 /* Subconjuntos próprios (scripts/subset-fonts.mjs, npm run fonts:subset): só latim, pesos
    400–600 e os recursos OpenType de forma. Cortam ~36 KB das fontes que o Lighthouse conta
    antes da primeira pintura (docs/adr/0003-orcamento-de-performance.md). Peso novo fora de
@@ -65,6 +76,83 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+}
+
+/* O reset de movimento reduzido acima não alcança os efeitos abaixo (scroll-driven e
+   ::view-transition-* não obedecem a animation-duration de `*`): cada um fica dentro de
+   prefers-reduced-motion: no-preference por conta própria. docs/adr/0004-movimento-e-interacao.md */
+
+/* V1: transição nativa entre páginas (sem JS; <ClientRouter /> não funciona com
+   security.csp). Crossfade curto da página; o cabeçalho troca na hora e fica parado.
+   https://developer.chrome.com/docs/web-platform/view-transitions/cross-document */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--duration-base);
+  }
+
+  ::view-transition-old(site-header) {
+    display: none;
+  }
+
+  ::view-transition-new(site-header) {
+    animation: none;
+  }
+}
+
+/* S2: linha do tempo que acende ao rolar (home e Sobre). Sem suporte ou com movimento
+   reduzido, fica o desenho de sempre (borda e pontos). Com suporte, uma linha accent
+   cresce por cima da borda com a ponta no meio da tela, e cada ponto acende ao chegar
+   lá. Nada some: só decoração por cima, em transform e opacity.
+   https://developer.chrome.com/docs/css-ui/scroll-driven-animations */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -1px;
+      width: 1px;
+      background: var(--accent);
+      transform-origin: top;
+      animation-name: timeline-grow;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry-crossing 50vh entry-crossing calc(100% + 50vh);
+    }
+
+    .timeline-dot::after {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation-name: timeline-light;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: view();
+      animation-range: entry-crossing 40vh entry-crossing 50vh;
+    }
+  }
+}
+
+@keyframes timeline-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes timeline-light {
+  from {
+    opacity: 0;
   }
 }
 
