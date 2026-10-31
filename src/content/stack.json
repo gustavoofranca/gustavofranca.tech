@@ -11,19 +11,19 @@
           "id": "react",
           "name": "React",
           "icon": "react",
-          "level": "basic"
+          "level": "advanced"
         },
         {
           "id": "angular",
           "name": "Angular",
           "icon": "angular",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "vue",
           "name": "Vue",
           "icon": "vuedotjs",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "nuxt",
@@ -41,25 +41,25 @@
           "id": "typescript",
           "name": "TypeScript",
           "icon": "typescript",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "javascript",
           "name": "JavaScript",
           "icon": "javascript",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "html-css",
           "name": "HTML & CSS",
           "icon": "html5",
-          "level": "basic"
+          "level": "advanced"
         },
         {
           "id": "tailwind",
           "name": "Tailwind CSS",
           "icon": "tailwindcss",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "vite",
@@ -80,7 +80,7 @@
           "id": "nodejs",
           "name": "Node.js",
           "icon": "nodedotjs",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "express",
@@ -98,7 +98,7 @@
           "id": "python",
           "name": "Python",
           "icon": "python",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "flask",
@@ -110,19 +110,19 @@
           "id": "php",
           "name": "PHP",
           "icon": "php",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "laravel",
           "name": "Laravel",
           "icon": "laravel",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "java",
           "name": "Java",
           "icon": "openjdk",
-          "level": "basic"
+          "level": "intermediate"
         }
       ]
     },
@@ -137,13 +137,13 @@
           "id": "wordpress",
           "name": "WordPress",
           "icon": "wordpress",
-          "level": "basic"
+          "level": "advanced"
         },
         {
           "id": "strapi",
           "name": "Strapi",
           "icon": "strapi",
-          "level": "basic"
+          "level": "intermediate"
         }
       ]
     },
@@ -179,13 +179,13 @@
           "id": "postgresql",
           "name": "PostgreSQL",
           "icon": "postgresql",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "supabase",
           "name": "Supabase",
           "icon": "supabase",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "prisma",
@@ -208,7 +208,7 @@
           "id": "firebase",
           "name": "Firebase",
           "icon": "firebase",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "git",
@@ -217,7 +217,7 @@
             "en": "Git and GitHub"
           },
           "icon": "git",
-          "level": "basic"
+          "level": "advanced"
         }
       ]
     },
@@ -233,7 +233,7 @@
           "id": "docker",
           "name": "Docker",
           "icon": "docker",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "caddy",
@@ -248,7 +248,7 @@
             "en": "Application deployment"
           },
           "icon": "lucide:cloud-upload",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "linux",
@@ -257,7 +257,7 @@
             "en": "Linux servers"
           },
           "icon": "linux",
-          "level": "basic"
+          "level": "intermediate"
         },
         {
           "id": "support",
@@ -266,7 +266,7 @@
             "en": "Support and maintenance"
           },
           "icon": "lucide:headset",
-          "level": "basic"
+          "level": "intermediate"
         }
       ]
     },
