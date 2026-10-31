@@ -103,8 +103,23 @@ test("os ícones são decorativos e não levam estilo inline", async ({
     .getByRole("region", { name: /stack/i })
     .locator("[data-testid=stack-item] svg");
   expect(await icons.count()).toBeGreaterThan(0);
+  const hrefs = new Set<string>();
   for (const icon of await icons.all()) {
     await expect(icon).toHaveAttribute("aria-hidden", "true");
     await expect(icon).not.toHaveAttribute("style");
+    await expect(icon.locator("path")).toHaveCount(0);
+    const href = await icon.locator("use").getAttribute("href");
+    expect(href).toMatch(/^\/icons\/stack-[0-9a-f]{10}\.svg#[\w-]+$/);
+    hrefs.add(href ?? "");
+  }
+  const files = new Set([...hrefs].map((href) => href.split("#")[0] ?? ""));
+  expect(files.size).toBe(1);
+  const [file] = [...files];
+  const response = await request.get(file ?? "");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("image/svg+xml");
+  const sprite = await response.text();
+  for (const href of hrefs) {
+    expect(sprite).toContain(`<symbol id="${href.split("#")[1]}"`);
   }
 });

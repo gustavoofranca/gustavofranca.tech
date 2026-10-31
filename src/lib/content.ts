@@ -1,5 +1,6 @@
 import { getCollection } from "astro:content";
 import type { Locale } from "@/lib/i18n";
+import { buildIconSprite, iconSpriteFile } from "@/lib/iconSprite";
 import { stackName } from "@/lib/stack";
 import {
   assertFeaturedLimit,
@@ -76,6 +77,23 @@ export async function getStackNames(locale: Locale) {
       ),
     ),
   );
+}
+
+// Sprite com todos os ícones de stack.json (src/pages/icons/[file].svg.ts). Uma
+// promessa só por build: o TechIcon pede o endereço para cada item.
+let sprite: Promise<{ svg: string; file: string; href: string }> | undefined;
+
+export function getIconSprite() {
+  sprite ??= getStack().then((stack) => {
+    const svg = buildIconSprite(
+      stack.areas.flatMap((area) =>
+        area.items.flatMap((item) => (item.icon ? [item.icon] : [])),
+      ),
+    );
+    const file = iconSpriteFile(svg);
+    return { svg, file, href: `/icons/${file}` };
+  });
+  return sprite;
 }
 
 export async function getAbout() {

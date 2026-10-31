@@ -33,7 +33,7 @@ A direção visual está decidida: **Variante 1 — minimal escuro + terminal + 
 ## Componentes e padrões visuais
 - Cartão (borda + fundo) só para o que é objeto separado (projeto, terminal). Seções não viram cartão.
 - Estado de foco visível em tudo que é clicável (`focus-visible`, com o token de anel).
-- Ícones: `lucide` para interface, `simple-icons` para marcas de tecnologia. Sem emoji como ícone. Ícone de stack é SVG inline do build via `TechIcon.astro` (`fill="currentColor"`, nunca `style=""`); prática sem marca usa `lucide:<nome>` de `src/lib/genericIcons.ts`.
+- Ícones: `lucide` para interface, `simple-icons` para marcas de tecnologia. Sem emoji como ícone. Ícone de stack vem do sprite externo gerado no build (`TechIcon.astro` com `<use>`, `<symbol>` em `currentColor`, nunca traçado no HTML nem `style=""`); prática sem marca usa `lucide:<nome>` de `src/lib/genericIcons.ts`.
 - Nível na stack: ponto `bg-level-*` com texto oculto e legenda visível (ver `DESIGN.md`); cor nunca sozinha.
 - Imagens via `<Image>`/`<Picture>` do `astro:assets`, com `alt` descritivo, largura/altura definidas e AVIF/WebP.
 

@@ -2,8 +2,8 @@ import * as simpleIcons from "simple-icons";
 import { GENERIC_ICONS } from "@/lib/genericIcons";
 
 // Marca vem preenchida (Simple Icons); genérico vem em linha (Lucide). Os dois usam
-// viewBox 24×24 e a cor do texto. Roda só no build: o HTML leva apenas o traçado
-// dos ícones usados, e nenhum JS vai para o navegador.
+// viewBox 24×24 e a cor do texto. Roda só no build: os traçados vão para o sprite
+// (src/lib/iconSprite.ts), e nenhum JS vai para o navegador.
 export type TechIcon = {
   kind: "brand" | "generic";
   paths: readonly string[];
