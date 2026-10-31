@@ -30,6 +30,22 @@ describe("buildIconSprite", () => {
     );
   });
 
+  it("arredonda os traçados para 1 casa decimal (0,07 px num ícone de 16 px)", () => {
+    const sprite = buildIconSprite(["angular", "lucide:cloud-upload"]);
+    // Simple Icons traz "M16.712 17.711H7.288..." no Angular.
+    expect(sprite).toContain('d="M16.7 17.7H7.3');
+    const numbers = [...sprite.matchAll(/ d="([^"]+)"/g)].flatMap(
+      (m) => m[1]?.match(/\d*\.\d+/g) ?? [],
+    );
+    expect(numbers.length).toBeGreaterThan(0);
+    for (const n of numbers) expect(n).toMatch(/^\d*\.\d$/);
+    // A otimização mexe só no traçado: ids, viewBox e pintura ficam.
+    expect(sprite.match(/<symbol /g)).toHaveLength(2);
+    expect(sprite).toMatch(
+      /<symbol id="lucide-cloud-upload"[^>]*stroke="currentColor"/,
+    );
+  });
+
   it("lança citando os slugs que não existem", () => {
     expect(() => buildIconSprite(["react", "nao-existe", "lucide:x"])).toThrow(
       /nao-existe, lucide:x/,

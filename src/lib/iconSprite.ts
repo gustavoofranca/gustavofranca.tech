@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { optimize } from "svgo";
 import { missingTechIcons, resolveTechIcon } from "@/lib/techIcons";
 
 // Sprite SVG externo com os ícones da stack: um arquivo só, cacheável, em vez de
@@ -9,6 +10,12 @@ import { missingTechIcons, resolveTechIcon } from "@/lib/techIcons";
 export function iconSymbolId(slug: string): string {
   return slug.startsWith("lucide:") ? slug.replace(":", "-") : `si-${slug}`;
 }
+
+// Uma casa decimal no viewBox 24×24 é 0,07 px num ícone de 16 px: invisível. O
+// sprite cai de ~19,6 KB para ~7 KB gzip, e o Sobre volta a passar no LCP (o pedido
+// dele divide banda com as fontes; DESIGN.md). Só o convertPathData: ids, viewBox e
+// pintura ficam como estão.
+const PATH_PRECISION = 1;
 
 // Atributos de apresentação, não `style`: a CSP não libera estilo inline.
 const BRAND_PAINT = 'fill="currentColor"';
@@ -30,7 +37,12 @@ export function buildIconSprite(slugs: readonly string[]): string {
     const paths = icon.paths.map((d) => `<path d="${d}"/>`).join("");
     return `<symbol id="${iconSymbolId(slug)}" viewBox="0 0 24 24" ${paint}>${paths}</symbol>`;
   });
-  return `<svg xmlns="http://www.w3.org/2000/svg">${symbols.join("")}</svg>`;
+  const sprite = `<svg xmlns="http://www.w3.org/2000/svg">${symbols.join("")}</svg>`;
+  return optimize(sprite, {
+    plugins: [
+      { name: "convertPathData", params: { floatPrecision: PATH_PRECISION } },
+    ],
+  }).data;
 }
 
 // Nome com hash do conteúdo: ícone novo gera arquivo novo, então o cache pode ser longo.
