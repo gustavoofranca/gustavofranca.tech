@@ -20,7 +20,7 @@ A direção visual está decidida: **Variante 1 — minimal escuro + terminal + 
 - Responsivo mobile-first. Testar em 360 px, 768 px e 1280 px. Nada de rolagem horizontal na página.
 
 ## Tipografia
-- Inter para texto, JetBrains Mono para detalhes de "dev" (rótulos `// ...`, terminal, atalhos, tags de stack). Mono nunca em parágrafo.
+- Inter para texto, JetBrains Mono para detalhes de "dev" (rótulos `// ...`, terminal, atalhos, tags de stack). Mono nunca em parágrafo; exceção: a frase curta de cada área da stack (aprovada pelo Gustavo, ver `DESIGN.md` › Stack).
 - Fontes auto-hospedadas, com `font-display: swap`: subconjuntos em `src/assets/fonts/` gerados do `@fontsource-variable/*` (`npm run fonts:subset`), só pesos 400–600. Peso ou caractere novo: ampliar `scripts/subset-fonts.mjs` e gerar de novo; `npm run audit:fonts` confere os glifos.
 - Escala tipográfica fixa no `DESIGN.md`; títulos com `text-wrap: balance`; texto corrido com no máximo ~70 caracteres por linha.
 
@@ -35,6 +35,7 @@ A direção visual está decidida: **Variante 1 — minimal escuro + terminal + 
 ## Componentes e padrões visuais
 - Cartão (borda + fundo) só para o que é objeto separado (projeto, terminal). Seções não viram cartão.
 - Estado de foco visível em tudo que é clicável (`focus-visible`, com o token de anel).
+- Lista sem marcador (o preflight do Tailwind tira o `list-style` de toda `<ul>`/`<ol>`) leva `role="list"`: sem ele o VoiceOver/Safari deixa de anunciar a lista. O ESLint aceita esse papel em `ul`/`ol` (`eslint.config.js`).
 - Ícones: `lucide` para interface, `simple-icons` para marcas de tecnologia. Sem emoji como ícone. Ícone de stack só na stack completa (Sobre/About; na home, não, por causa do LCP, ver `DESIGN.md`) e vem do sprite externo gerado no build (`TechIcon.astro` com `<use>`, `<symbol>` em `currentColor`, nunca traçado no HTML nem `style=""`); prática sem marca usa `lucide:<nome>` de `src/lib/genericIcons.ts`.
 - Nível na stack: ponto `bg-level-*` com texto oculto e legenda visível (ver `DESIGN.md`); cor nunca sozinha.
 - Imagens via `<Image>`/`<Picture>` do `astro:assets`, com `alt` descritivo, largura/altura definidas e AVIF/WebP.
