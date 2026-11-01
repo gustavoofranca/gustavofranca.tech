@@ -69,3 +69,20 @@ export function visibleStackAreas(areas: readonly StackArea[]) {
     return [{ ...area, description: area.description, items }];
   });
 }
+
+// Quem mostra uma amostra da stack (o terminal do hero) só pode citar o que a seção
+// de stack mostra: item fora dela (showInStack: false) ou inexistente derruba o build.
+export function assertShownInStack(
+  ids: readonly string[],
+  areas: readonly StackArea[],
+): void {
+  const shown = new Set(
+    visibleStackAreas(areas).flatMap((area) => area.items.map((i) => i.id)),
+  );
+  const missing = ids.filter((id) => !shown.has(id));
+  if (missing.length > 0) {
+    throw new Error(
+      `Fora da seção de stack (showInStack: false ou inexistente em stack.json): ${missing.map((id) => `"${id}"`).join(", ")}.`,
+    );
+  }
+}

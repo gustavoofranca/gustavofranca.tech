@@ -1,6 +1,7 @@
 ---
-import { getStackNames } from "@/lib/content";
+import { getStack, getStackNames } from "@/lib/content";
 import { t, type Locale } from "@/lib/i18n";
+import { assertShownInStack } from "@/lib/stack";
 import timing from "@/styles/inline/heroTerminal.css?raw";
 
 interface Props {
@@ -10,13 +11,18 @@ interface Props {
 const { locale } = Astro.props;
 const { terminal } = t(locale);
 
-// Amostra da stack real (stack.json), curta o bastante para caber em 360 px.
+// Amostra da stack real (stack.json), curta o bastante para caber em 360 px. Só cita
+// o que a seção de stack mostra: item com showInStack: false derruba o build.
 const SAMPLE = [
   ["front", ["react", "angular"]],
   ["back", ["nestjs", "flask"]],
-  ["mobile", ["flutter"]],
+  ["infra", ["docker"]],
 ] as const;
 
+assertShownInStack(
+  SAMPLE.flatMap(([, ids]) => ids),
+  (await getStack()).areas,
+);
 const names = await getStackNames(locale);
 // Cada linha da saída vira tokens (texto + cor). Só o texto do token preserva
 // espaços: a indentação do markup não vaza para o terminal.

@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
+  assertShownInStack,
   STACK_LEVELS,
   stackName,
   stackSchema,
@@ -136,6 +137,33 @@ describe("visibleStackAreas", () => {
     visibleStackAreas(areas);
     expect(areas[0]?.items).toHaveLength(2);
     expect(areas).toHaveLength(3);
+  });
+});
+
+describe("assertShownInStack", () => {
+  const areas = stackSchema.parse({
+    areas: [
+      {
+        id: "front",
+        label,
+        description,
+        items: [item("react"), item("vite", { showInStack: false })],
+      },
+    ],
+  }).areas;
+
+  it("aceita ids que aparecem na seção de stack", () => {
+    expect(() => assertShownInStack(["react"], areas)).not.toThrow();
+  });
+
+  it("lança com o id que saiu da seção (showInStack: false)", () => {
+    expect(() => assertShownInStack(["react", "vite"], areas)).toThrow(
+      /"vite"/,
+    );
+  });
+
+  it("lança com o id que não existe em stack.json", () => {
+    expect(() => assertShownInStack(["cobol"], areas)).toThrow(/"cobol"/);
   });
 });
 
