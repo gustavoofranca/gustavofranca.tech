@@ -28,3 +28,7 @@ export const GENERIC_ICONS: Readonly<Record<string, readonly string[]>> = {
     "M21 16v2a4 4 0 0 1-4 4h-5",
   ],
 };
+
+// Ícone de interface, desenhado inline (não vai para o sprite da stack): a seta do link
+// "Ver stack completa". O caractere → não existe nas fontes do site.
+export const ARROW_RIGHT: readonly string[] = ["M5 12h14", "m12 5 7 7-7 7"];

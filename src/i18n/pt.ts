@@ -76,8 +76,9 @@ const pt = {
     // Nível de conhecimento: o ponto colorido tem este texto oculto ao lado, e a
     // legenda mostra os três (cor não pode ser o único meio, WCAG 1.4.1).
     levelLegend: "Legenda dos níveis de conhecimento",
-    // {level} é trocado pelo nome do nível.
-    levelOf: ", nível: {level}",
+    // {level} é trocado pelo nome do nível. Entre parênteses: o leitor de tela lê
+    // "React (nível: avançado)", sem vírgula solta depois do espaço do nome.
+    levelOf: "(nível: {level})",
     levels: {
       basic: "básico",
       intermediate: "intermediário",

@@ -69,7 +69,7 @@ const en = {
     title: "What I work with",
     usedIn: "used in",
     levelLegend: "Knowledge level legend",
-    levelOf: ", level: {level}",
+    levelOf: "(level: {level})",
     levels: {
       basic: "basic",
       intermediate: "intermediate",

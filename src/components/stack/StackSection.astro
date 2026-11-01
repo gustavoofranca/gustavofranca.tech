@@ -2,6 +2,7 @@
 import LevelLegend from "@/components/stack/LevelLegend.astro";
 import StackPill from "@/components/stack/StackPill.astro";
 import { getStackAreas } from "@/lib/content";
+import { ARROW_RIGHT } from "@/lib/genericIcons";
 import { formatList, t, type Locale } from "@/lib/i18n";
 import { routePath } from "@/lib/routes";
 
@@ -41,7 +42,9 @@ const eyebrow = dict.sections.stack.replace(/^\/\/\s*/, "");
     <LevelLegend locale={locale} />
   </div>
 
-  <ol class="mt-7 border-t border-dashed border-accent/30">
+  {/* role="list": sem list-style (Tailwind), o VoiceOver/Safari deixa de anunciar a
+      lista. Vale para as duas listas abaixo. */}
+  <ol role="list" class="mt-7 border-t border-dashed border-accent/30">
     {areas.map((area, index) => (
       <li
         data-testid="stack-area"
@@ -62,7 +65,10 @@ const eyebrow = dict.sections.stack.replace(/^\/\/\s*/, "");
             {area.description}
           </p>
         </div>
-        <ul class="col-span-full flex flex-wrap gap-2 md:col-span-1 md:justify-end">
+        <ul
+          role="list"
+          class="col-span-full flex flex-wrap gap-2 md:col-span-1 md:justify-end"
+        >
           {area.items.map((item) => (
             <StackPill
               name={item.name}
@@ -89,7 +95,21 @@ const eyebrow = dict.sections.stack.replace(/^\/\/\s*/, "");
       class="mt-6 inline-flex min-h-10 items-center gap-1.5 rounded-(--radius-control) text-sm text-accent transition-colors duration-(--duration-fast) hover-fine:text-fg"
     >
       {dict.home.fullStack}
-      <span aria-hidden="true">→</span>
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="size-4 shrink-0"
+      >
+        {ARROW_RIGHT.map((d) => (
+          <path d={d} />
+        ))}
+      </svg>
     </a>
   )}
 </section>

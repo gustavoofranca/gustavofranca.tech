@@ -43,4 +43,17 @@ export default defineConfig(
   {
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
+  {
+    // O preflight do Tailwind tira o list-style de <ul>/<ol>, e o VoiceOver/Safari
+    // deixa de anunciar a lista; role="list" devolve a semântica (estilo.md). A
+    // própria jsx-a11y documenta esta exceção para listas.
+    // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/main/docs/rules/no-redundant-roles.md
+    files: ["**/*.astro"],
+    rules: {
+      "astro/jsx-a11y/no-redundant-roles": [
+        "error",
+        { ul: ["list"], ol: ["list"] },
+      ],
+    },
+  },
 );

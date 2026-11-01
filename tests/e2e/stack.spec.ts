@@ -60,9 +60,6 @@ function stackSection(page: Page, locale: "pt" | "en") {
 for (const { path, locale } of PAGES) {
   const dict = t(locale).stack;
   const legend = Object.values(dict.levels);
-  const prefix = dict.levelOf
-    .replace(/[:\s]*\{level\}$/, "")
-    .replace(/^,\s*/, "");
 
   test(`${path}: 5 áreas numeradas, 24 tecnologias com nível e a legenda`, async ({
     page,
@@ -96,9 +93,12 @@ for (const { path, locale } of PAGES) {
     // O nível está na árvore de acessibilidade, uma vez por tecnologia.
     const tree = await stack.ariaSnapshot();
     const found = legend.map(
-      (label) => tree.split(`${prefix}: ${label}`).length - 1,
+      (label) => tree.split(dict.levelOf.replace("{level}", label)).length - 1,
     );
     expect(found.reduce((sum, n) => sum + n, 0)).toBe(24);
+    // Nome e nível lidos juntos, sem vírgula solta: "React (nível: avançado)".
+    const react = `React ${dict.levelOf.replace("{level}", dict.levels.advanced)}`;
+    expect(tree).toContain(`listitem: "${react}"`);
 
     const legendList = stack.getByTestId("level-legend");
     await expect(legendList).toBeVisible();
