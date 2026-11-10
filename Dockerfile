@@ -18,7 +18,7 @@
 
 # Node 24 em Alpine, fixado pelo digest. A imagem vai literal no FROM (e não num ARG)
 # porque o Dependabot só reconhece imagem escrita no FROM (.github/dependabot.yml).
-FROM node:24-alpine@sha256:8a32c8cf649a49915a66e81e7a609223c708d0adabf288ee3f4077d765542f85 AS base
+FROM node:26-alpine@sha256:8996bb5821d62a8fd9bb27c1cb07462f3fdce6e47d640c6a881ead0b064ce216 AS base
 
 # Dependências completas, para o build. --ignore-scripts: nenhum pacote de produção
 # precisa de script de instalação (só o lefthook, que instala hooks do Git).
